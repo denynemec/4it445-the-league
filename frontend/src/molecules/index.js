@@ -1,3 +1,2 @@
-export { Field } from './Field';
-export { Quack } from './Quack';
-export { QuackForm } from './QuackForm';
+export { TextInputWithLabel } from './TextInputWithLabel';
+export { TopNavigation } from './TopNavigation';

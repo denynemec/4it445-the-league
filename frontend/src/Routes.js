@@ -1,18 +1,29 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import { AboutPage } from './pages/AboutPage';
-import { HomePage } from './pages/HomePage';
-import { ExampleOnePage } from './pages/ExampleOnePage';
-import { PageNotFound } from './pages/PageNotFound';
+import PATHNAMES from './pathnames';
+import {
+  HomePage,
+  LoginPage,
+  NotFoundPage,
+  RegistrationPage,
+  ResetPassword,
+} from './pages';
 
 export function Routes() {
   return (
     <Switch>
-      <Route path="/" exact component={HomePage} />
-      <Route path="/about" exact component={AboutPage} />
-      <Route path="/example1" exact component={ExampleOnePage} />
-      <Route path="*" component={PageNotFound} />
+      <Route path={PATHNAMES.empty()} exact component={LoginPage} />
+      <Route path={PATHNAMES.login()} exact component={LoginPage} />
+      <Route path={PATHNAMES.resetPassword()} exact component={ResetPassword} />
+      <Route
+        path={PATHNAMES.registration()}
+        exact
+        component={RegistrationPage}
+      />
+      <Route path={PATHNAMES.home()} exact component={HomePage} />
+
+      <Route path="*" component={NotFoundPage} />
     </Switch>
   );
 }
