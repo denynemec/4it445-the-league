@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { Heading } from '../../atoms';
-import { PageLayout } from '../../templates';
+import { NotLoggedInPageLayout } from '../../templates';
 
 export const RegistrationPage = () => (
-  <PageLayout>
+  <NotLoggedInPageLayout>
     <Heading>Registration page</Heading>
 
     <p>Registration page skeleton</p>
-  </PageLayout>
+  </NotLoggedInPageLayout>
 );

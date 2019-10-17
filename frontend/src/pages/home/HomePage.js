@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { Heading } from '../../atoms';
-import { PageLayout } from '../../templates';
+import { LoggedInPageLayout } from '../../templates';
 
 export const HomePage = () => (
-  <PageLayout>
+  <LoggedInPageLayout>
     <Heading>Home page</Heading>
 
     <p>Home page skeleton</p>
-  </PageLayout>
+  </LoggedInPageLayout>
 );

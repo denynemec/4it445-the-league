@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 
-import { Button, Layout, Link } from '../atoms/';
+import { Button, Layout, Link } from '../atoms';
 import { useAuth } from '../utils/auth';
 import PATHNAMES from '../pathnames';
 

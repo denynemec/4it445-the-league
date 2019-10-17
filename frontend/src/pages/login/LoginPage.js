@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 
 import PATHNAMES from '../../pathnames';
 import { Heading, Button, Form, Layout, Link } from '../../atoms';
-import { PageLayout } from '../../templates';
+import { NotLoggedInPageLayout } from '../../templates';
 import { TextInputWithLabel } from '../../molecules';
 import { useLoginState } from './hooks';
 
@@ -18,7 +18,7 @@ const LoginPageBase = ({ history }) => {
   ] = useLoginState(history);
 
   return (
-    <PageLayout>
+    <NotLoggedInPageLayout>
       <Layout flex justify-center pb2>
         <Heading>Login into The League</Heading>
       </Layout>
@@ -53,7 +53,7 @@ const LoginPageBase = ({ history }) => {
           </Button>
         </Layout>
       </Form>
-    </PageLayout>
+    </NotLoggedInPageLayout>
   );
 };
 
