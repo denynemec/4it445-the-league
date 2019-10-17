@@ -90,11 +90,19 @@ function sendRequest(
 
       log(`[api.${method}] error`, url, error);
 
+      let errorText = error.message;
+
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        errorText = error.response.data.error;
+      }
+
       setState(oldState => ({
         ...oldState,
         isLoading: false,
         cancelSource: null,
-        error: error.message,
+        error: errorText,
       }));
     });
 }
