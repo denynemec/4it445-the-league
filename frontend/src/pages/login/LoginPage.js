@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import PATHNAMES from '../../pathnames';
 import { Heading, Button, Form, Layout, Link } from '../../atoms';
 import { NotLoggedInPageLayout } from '../../templates';
-import { TextInputWithLabel } from '../../molecules';
+import { ErrorBox, TextInputWithLabel } from '../../molecules';
 import { useLoginState } from './hooks';
 
 const LoginPageBase = ({ history }) => {
@@ -21,6 +21,12 @@ const LoginPageBase = ({ history }) => {
 
   return (
     <NotLoggedInPageLayout>
+      {loginState.error && (
+        <Layout pb3>
+          <ErrorBox>{loginState.error}</ErrorBox>
+        </Layout>
+      )}
+
       <Layout flex justify-center pb2>
         <Heading>{t('Page.Login.FormHeading')}</Heading>
       </Layout>

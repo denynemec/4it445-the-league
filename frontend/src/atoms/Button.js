@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const baseButtonStyles = 'dib bg-animate pv2 ph4 br-pill bn';
+const baseButtonStyles = 'dib bg-animate pv2 ph4 br-pill bn shadow-1';
 
 const primaryColorClasses = 'white bg-green hover-bg-dark-green';
 const secondaryColorClasses = 'white bg-red hover-bg-dark-red';

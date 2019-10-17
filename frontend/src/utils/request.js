@@ -94,7 +94,7 @@ function sendRequest(
         ...oldState,
         isLoading: false,
         cancelSource: null,
-        error: error,
+        error: error.message,
       }));
     });
 }

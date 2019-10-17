@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import PATHNAMES from './pathnames';
 import {
@@ -9,6 +9,7 @@ import {
   RegistrationPage,
   ResetPassword,
 } from './pages';
+import { useAuth } from './utils';
 
 export function Routes() {
   return (
@@ -21,9 +22,24 @@ export function Routes() {
         exact
         component={RegistrationPage}
       />
-      <Route path={PATHNAMES.home()} exact component={HomePage} />
+
+      {/* Login required routes */}
+      <PrivateRoute path={PATHNAMES.home()} exact component={HomePage} />
 
       <Route path="*" component={NotFoundPage} />
     </Switch>
   );
 }
+
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  const { token } = useAuth();
+
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        token ? <Component {...props} /> : <Redirect to={PATHNAMES.login()} />
+      }
+    />
+  );
+};
