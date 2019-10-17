@@ -10,14 +10,14 @@ import { useLoginState } from './hooks';
 
 const LoginPageBase = ({ history }) => {
   const { t } = useTranslation();
-  const [
+  const {
     username,
     setUsername,
     password,
     setPassword,
     loginState,
     submitLoginForm,
-  ] = useLoginState(history);
+  } = useLoginState(history);
 
   return (
     <NotLoggedInPageLayout>

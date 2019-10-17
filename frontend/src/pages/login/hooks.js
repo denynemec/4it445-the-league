@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
@@ -32,6 +33,7 @@ const useSubmitLogin = ({
   setPasswordError,
 }) => {
   const { signin } = useAuth();
+  const { t } = useTranslation();
   const state = useRequest();
 
   const postLoginOnSuccess = useCallback(
@@ -49,6 +51,7 @@ const useSubmitLogin = ({
       setUsernameError,
       password,
       setPasswordError,
+      t,
     });
 
     if (isLoginFormValid({ username, password })) {
@@ -65,6 +68,7 @@ const useSubmitLogin = ({
     postLoginOnSuccess,
     setUsernameError,
     setPasswordError,
+    t,
   ]);
 
   return [state, submitLoginForm];
@@ -91,12 +95,12 @@ export const useLoginState = history => {
     setPasswordError,
   });
 
-  return [
+  return {
     username,
     setUsername,
     password,
     setPassword,
     loginState,
     submitLoginForm,
-  ];
+  };
 };

@@ -20,7 +20,10 @@
       "PasswordPlaceholder": "Vyplňte heslo",
       "SubmitLoginButton": "Přihlásit se",
       "DidYouForgetPasswordLink": "Zapomněli jste heslo?",
-      "Validations": {}
+      "Validations": {
+        "UsernameRequired": "Uživatelské jméno je povinné",
+        "PasswordRequired": "Heslo je povinné"
+      }
     }
   }
 }

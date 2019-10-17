@@ -3,13 +3,14 @@ export const validateLoginForm = ({
   setUsernameError,
   password,
   setPasswordError,
+  t,
 }) => {
   if (isUndefinedOrEmptyString(username)) {
-    setUsernameError('Username is required');
+    setUsernameError(t('Page.Login.Validations.UsernameRequired'));
   }
 
   if (isUndefinedOrEmptyString(password)) {
-    setPasswordError('Password is required');
+    setPasswordError(t('Page.Login.Validations.PasswordRequired'));
   }
 };
 
