@@ -1,0 +1,29 @@
+{
+  "Molecules": {
+    "HeaderBase": {
+      "HomeLink": "Pasivní sport nikdy nebyl zábavnější"
+    }
+  },
+  "Organisms": {
+    "LoggedInHeader": { "HomeLink": "Domů", "LogoutLink": "Odhlásit" },
+    "NotLoggedInHeader": {
+      "LoginLink": "Přihlásit",
+      "RegisterLink": "Registrovat"
+    }
+  },
+  "Page": {
+    "Login": {
+      "FormHeading": "Přihlášení do aplikace The League",
+      "UsernameLabel": "Uživatelské jméno/Email",
+      "UsernamePlaceholder": "Vyplňte uživatelské jméno",
+      "PasswordLabel": "Heslo",
+      "PasswordPlaceholder": "Vyplňte heslo",
+      "SubmitLoginButton": "Přihlásit se",
+      "DidYouForgetPasswordLink": "Zapomněli jste heslo?",
+      "Validations": {
+        "UsernameRequired": "Uživatelské jméno je povinné",
+        "PasswordRequired": "Heslo je povinné"
+      }
+    }
+  }
+}

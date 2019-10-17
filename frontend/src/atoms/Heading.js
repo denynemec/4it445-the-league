@@ -9,7 +9,7 @@ const HEADING_SIZES = {
   xs: ['h5', 'f6'],
 };
 
-export function Heading({ children, className, size = 'xl', ...rest }) {
+export const Heading = ({ children, className, size = 'xl', ...rest }) => {
   const [Component, headingClasses] =
     HEADING_SIZES[size] || HEADING_SIZES['xl'];
 
@@ -21,4 +21,4 @@ export function Heading({ children, className, size = 'xl', ...rest }) {
       {children}
     </Component>
   );
-}
+};

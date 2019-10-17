@@ -11,7 +11,11 @@ import { useAuth } from './auth';
 import { config } from '../config';
 
 const globalApiInstance = axios.create({
-  baseURL: '/api',
+  baseURL: config.BASE_API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  },
 });
 
 if (config.MOCK_API) {
