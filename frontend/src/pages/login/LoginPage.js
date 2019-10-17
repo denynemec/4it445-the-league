@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import PATHNAMES from '../../pathnames';
 import { Heading, Button, Form, Layout, Link } from '../../atoms';
@@ -8,6 +9,7 @@ import { TextInputWithLabel } from '../../molecules';
 import { useLoginState } from './hooks';
 
 const LoginPageBase = ({ history }) => {
+  const { t } = useTranslation();
   const [
     username,
     setUsername,
@@ -20,14 +22,14 @@ const LoginPageBase = ({ history }) => {
   return (
     <NotLoggedInPageLayout>
       <Layout flex justify-center pb2>
-        <Heading>Login into The League</Heading>
+        <Heading>{t('Page.Login.FormHeading')}</Heading>
       </Layout>
 
       <Form onSubmit={submitLoginForm}>
         <TextInputWithLabel
           name="username"
-          label="Username"
-          placeholder="Enter Username"
+          label={t('Page.Login.UsernameLabel')}
+          placeholder={t('Page.Login.UsernamePlaceholder')}
           value={username.value}
           error={username.error}
           onChange={setUsername}
@@ -36,20 +38,22 @@ const LoginPageBase = ({ history }) => {
         <TextInputWithLabel
           type="password"
           name="password"
-          label="Password"
-          placeholder="Enter Password"
+          label={t('Page.Login.PasswordLabel')}
+          placeholder={t('Page.Login.PasswordPlaceholder')}
           value={password.value}
           error={password.error}
           onChange={setPassword}
         />
 
         <Layout flex justify-end ph2 pb2>
-          <Link to={PATHNAMES.resetPassword()}>Did you forget password?</Link>
+          <Link to={PATHNAMES.resetPassword()}>
+            {t('Page.Login.DidYouForgetPasswordLink')}
+          </Link>
         </Layout>
 
         <Layout flex justify-center>
           <Button submit primary disabled={loginState.isLoading}>
-            Login
+            {t('Page.Login.SubmitLoginButton')}
           </Button>
         </Layout>
       </Form>

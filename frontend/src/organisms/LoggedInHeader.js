@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { Button, Layout, Link } from '../atoms';
 import {
@@ -12,6 +13,7 @@ import PATHNAMES from '../pathnames';
 
 export const LoggedInHeader = () => {
   const { user, signout } = useAuth();
+  const { t } = useTranslation();
 
   const logoutCallback = useCallback(() => {
     signout();
@@ -23,7 +25,7 @@ export const LoggedInHeader = () => {
         <span className="b">{user && user.username}</span>
 
         <Link to={PATHNAMES.home()} className={classNames(navLinkStyle, 'pa3')}>
-          Home
+          {t('Organisms.LoggedInHeader.HomeLink')}
         </Link>
 
         <Link
@@ -31,7 +33,7 @@ export const LoggedInHeader = () => {
           className={classNames(navLinkStyle, 'pa3')}
         >
           <Button className={navButtonStyle} onClick={logoutCallback} unstyled>
-            Logout
+            {t('Organisms.LoggedInHeader.LogoutLink')}
           </Button>
         </Link>
       </Layout>

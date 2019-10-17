@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { Layout, Link } from '../atoms';
 
@@ -12,6 +13,8 @@ export const navButtonStyle = classNames(
 );
 
 export const HeaderBase = ({ homeLinkTo, children }) => {
+  const { t } = useTranslation();
+
   return (
     <nav className="flex justify-between bb b--white-10 bg-dark-green white h3">
       <Link
@@ -19,7 +22,7 @@ export const HeaderBase = ({ homeLinkTo, children }) => {
         noUnderline
         className="b white flex items-center pv2 ph3"
       >
-        The League
+        {t('Molecules.HeaderBase.HomeLink')}
       </Link>
 
       <Layout flex-grow flex items-center>
