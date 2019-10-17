@@ -14,8 +14,7 @@ code {
 
 /* Custom color Tachyons classes */
 
-.dodger-blue,
-.dodger-blue:visited {
+.dodger-blue {
   color: #3e95ff;
 }
 
@@ -27,18 +26,16 @@ code {
 }
 
 .hover-bg-dodger-blue:focus,
-.hover-bg-dodger-blue:active,
 .hover-bg-dodger-blue:hover {
   background-color: #3e95ff;
 }
 
 .hover-dodger-blue:hover,
-.hover-dodger-blue:visited:hover {
+.hover-dodger-blue:focus {
   color: #3e95ff;
 }
 
-.neon-blue,
-.neon-blue:visited {
+.neon-blue {
   color: #713eff;
 }
 
@@ -51,18 +48,16 @@ code {
 }
 
 .hover-bg-neon-blue:focus,
-.hover-bg-neon-blue:active,
 .hover-bg-neon-blue:hover {
   background-color: #713eff;
 }
 
 .hover-neon-blue:hover,
-.hover-neon-blue:visited:hover {
+.hover-neon-blue:focus {
   color: #713eff;
 }
 
-.spring-green,
-.spring-green:visited {
+.spring-green {
   color: #3effa8;
 }
 
@@ -75,12 +70,11 @@ code {
 }
 
 .hover-bg-spring-green:focus,
-.hover-bg-spring-green:active,
 .hover-bg-spring-green:hover {
   background-color: #3effa8;
 }
 
 .hover-spring-green:hover,
-.hover-spring-green:visited:hover {
+.hover-spring-green:focus {
   color: #3effa8;
 }
