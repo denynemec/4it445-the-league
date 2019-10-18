@@ -19,7 +19,6 @@ const LoggedInHeaderBase = ({ history }) => {
   const logoutCallback = useCallback(() => {
     signout();
     history.push(PATHNAMES.login());
-    window.location.reload();
   }, [history, signout]);
 
   return (

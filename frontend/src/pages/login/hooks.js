@@ -40,7 +40,6 @@ const useSubmitLogin = ({
     ({ data: { user, token } }) => {
       signin({ user, token });
       history.push(PATHNAMES.home());
-      window.location.reload();
     },
     [signin, history],
   );
