@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { withRouter } from 'react-router-dom';
 
 import { Button, Layout, Link } from '../atoms';
 import {
@@ -11,13 +12,14 @@ import {
 import { useAuth } from '../utils/auth';
 import PATHNAMES from '../pathnames';
 
-export const LoggedInHeader = () => {
+const LoggedInHeaderBase = ({ history }) => {
   const { user, signout } = useAuth();
   const { t } = useTranslation();
 
   const logoutCallback = useCallback(() => {
     signout();
-  }, [signout]);
+    history.push(PATHNAMES.login());
+  }, [history, signout]);
 
   return (
     <HeaderBase homeLinkTo={PATHNAMES.home()}>
@@ -28,15 +30,16 @@ export const LoggedInHeader = () => {
           {t('Organisms.LoggedInHeader.HomeLink')}
         </Link>
 
-        <Link
-          to={PATHNAMES.login()}
-          className={classNames(navLinkStyle, 'pa3')}
+        <Button
+          className={classNames(navButtonStyle, 'pointer')}
+          onClick={logoutCallback}
+          unstyled
         >
-          <Button className={navButtonStyle} onClick={logoutCallback} unstyled>
-            {t('Organisms.LoggedInHeader.LogoutLink')}
-          </Button>
-        </Link>
+          {t('Organisms.LoggedInHeader.LogoutLink')}
+        </Button>
       </Layout>
     </HeaderBase>
   );
 };
+
+export const LoggedInHeader = withRouter(LoggedInHeaderBase);

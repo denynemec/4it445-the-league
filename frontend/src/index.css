@@ -11,3 +11,70 @@ code {
 .pre-line {
   white-space: pre-line;
 }
+
+/* Custom color Tachyons classes */
+
+.dodger-blue {
+  color: #3e95ff;
+}
+
+.bg-dodger-blue {
+  background-color: #3e95ff;
+}
+.b--dodger-blue {
+  border-color: #3e95ff;
+}
+
+.hover-bg-dodger-blue:focus,
+.hover-bg-dodger-blue:hover {
+  background-color: #3e95ff;
+}
+
+.hover-dodger-blue:hover,
+.hover-dodger-blue:focus {
+  color: #3e95ff;
+}
+
+.neon-blue {
+  color: #713eff;
+}
+
+.bg-neon-blue {
+  background-color: #713eff;
+}
+
+.b--neon-blue {
+  border-color: #713eff;
+}
+
+.hover-bg-neon-blue:focus,
+.hover-bg-neon-blue:hover {
+  background-color: #713eff;
+}
+
+.hover-neon-blue:hover,
+.hover-neon-blue:focus {
+  color: #713eff;
+}
+
+.spring-green {
+  color: #3effa8;
+}
+
+.bg-spring-green {
+  background-color: #3effa8;
+}
+
+.b--spring-green {
+  border-color: #3effa8;
+}
+
+.hover-bg-spring-green:focus,
+.hover-bg-spring-green:hover {
+  background-color: #3effa8;
+}
+
+.hover-spring-green:hover,
+.hover-spring-green:focus {
+  color: #3effa8;
+}
