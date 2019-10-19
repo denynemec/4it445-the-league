@@ -16,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 app.post('/api/auth/login', (req, res, next) => {
+  // test
   const {
     body: { username, password },
   } = req;
