@@ -16,7 +16,7 @@ export const TextInputWithLabel = ({
   );
 
   return (
-    <Label className="flex flex-column ph2 pv3 fw6">
+    <Label className="flex flex-column ph2 pv2 fw6 w-100 border-box">
       {label}
       <TextInput onChange={memoizedOnChange} {...inputProps} />
       {error && <Error>{error}</Error>}

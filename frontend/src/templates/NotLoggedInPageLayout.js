@@ -1,11 +1,14 @@
 import React from 'react';
 
-import { MainSection } from '../atoms';
+import { MainSectionWithErrorBox } from '../molecules';
 import { NotLoggedInHeader } from '../organisms';
 
-export const NotLoggedInPageLayout = ({ children }) => (
+export const NotLoggedInPageLayout = ({ children, errorList }) => (
   <>
     <NotLoggedInHeader />
-    <MainSection>{children}</MainSection>
+
+    <MainSectionWithErrorBox errorList={errorList || []}>
+      {children}
+    </MainSectionWithErrorBox>
   </>
 );

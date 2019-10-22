@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { isNewLobbyFormValid, validateNewLobbyForm } from './validations';
 
 import ENDPOINTS from '../../endpoints';
+import PATHNAMES from '../../pathnames';
 import { useRequest } from '../../utils';
 
 const useInputState = () => {
@@ -28,6 +29,11 @@ const useSubmitNewLobby = ({ history, lobbyName, setLobbyNameError }) => {
   const { t } = useTranslation();
   const state = useRequest();
 
+  const onSuccess = useCallback(
+    ({ data: { id } }) => history.push(PATHNAMES.LOBBY_DETAIL(id)),
+    [history],
+  );
+
   const submitNewLobbyForm = useCallback(() => {
     validateNewLobbyForm({
       lobbyName,
@@ -38,10 +44,11 @@ const useSubmitNewLobby = ({ history, lobbyName, setLobbyNameError }) => {
     if (isNewLobbyFormValid({ lobbyName })) {
       state.request(ENDPOINTS.newLobby(), {
         method: 'POST',
+        onSuccess,
         data: { lobbyName },
       });
     }
-  }, [lobbyName, setLobbyNameError, state, t]);
+  }, [lobbyName, setLobbyNameError, state, t, onSuccess]);
 
   return [state, submitNewLobbyForm];
 };

@@ -18,27 +18,22 @@ const pool = mariadb.createPool({
 });
 
 const getConnection = async () => {
-    let conn;
-    try {
-      conn = await pool.getConnection();
-      return conn;
-    } catch (err) {
-      throw err;
-    }
-  };
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    return conn;
+  } catch (err) {
+    throw err;
+  }
+};
 
-  
 export const addDbToRequest = async (req, res, next) => {
-    const connection = await getConnection();
-    req[DB_CONNECTION_KEY] = connection;
-  
-    next();
-  
-    if (req[DB_CONNECTION_KEY]) {
-      req[DB_CONNECTION_KEY].end();
-    }
-  };
+  const connection = await getConnection();
+  req[DB_CONNECTION_KEY] = connection;
 
-  
-  
+  next();
 
+  if (req[DB_CONNECTION_KEY]) {
+    req[DB_CONNECTION_KEY].end();
+  }
+};

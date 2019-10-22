@@ -10,7 +10,11 @@
       "LoginLink": "Přihlásit",
       "RegisterLink": "Registrovat"
     },
+    "Modal": {
+      "DefaultConfirmButtonLabel": "Ok"
+    },
     "NewLobbyForm": {
+      "ModalHeaderLabel": "Vytvořit skupinu pro událost {{eventName}}",
       "LobbyName": "Jméno nové skupiny",
       "LobbyNamePlaceholder": "Vyplňte jméno skupiny",
       "SubmitNewLobbyForm": "Vytvořit skupinu",
@@ -32,6 +36,20 @@
         "UsernameRequired": "Uživatelské jméno je povinné",
         "PasswordRequired": "Heslo je povinné"
       }
+    },
+    "Home": {
+      "GoToGroupDetailButton": "Detail skupiny",
+      "EventName": "Událost: {{eventName}}",
+      "GamGroupHeader": "Moje skupiny",
+      "LobbyFilter": "Jméno skupiny",
+      "LobbyFilterPlaceholder": "Zadej jméno skupiny",
+      "EventFilter": "Jméno události",
+      "EventFilterPlaceholder": "Zadej jméno události",
+      "AddNewLobbyButton": "Vytvořit skupinu",
+      "GoToEventDetailButton": "Detail události",
+      "EventHeader": "Moje události",
+      "EventStartDateLabel": "Začátek:",
+      "EventEndDateLabel": "Konec:"
     }
   }
 }
