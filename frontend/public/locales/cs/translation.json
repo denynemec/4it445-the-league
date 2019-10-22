@@ -9,6 +9,14 @@
     "NotLoggedInHeader": {
       "LoginLink": "Přihlásit",
       "RegisterLink": "Registrovat"
+    },
+    "NewLobbyForm": {
+      "LobbyName": "Jméno nové skupiny",
+      "LobbyNamePlaceholder": "Vyplňte jméno skupiny",
+      "SubmitNewLobbyForm": "Vytvořit skupinu",
+      "Validations": {
+        "LobbyNameRequired": "Jméno skupiny je povinné"
+      }
     }
   },
   "Page": {
