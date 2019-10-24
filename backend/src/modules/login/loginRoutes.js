@@ -11,7 +11,6 @@ router.post('/', async (req, res, next) => {
     const {
       body: { username, password },
     } = req;
-console.log(req.body);
     if (!username) {
       handleError({ code: 400, error: '400: Bad request - empty username', res });
   
@@ -32,8 +31,8 @@ console.log(req.body);
 
     
     if (!user) {
-        res.status(500);
-        res.json({ error: true, msg: 'Not authenticated!' });
+        res.status(401);
+        res.json({ error: true, msg: 'User not found.' });
         return;
     }
   
