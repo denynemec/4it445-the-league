@@ -11,7 +11,7 @@ router.post('/', async (req, res, next) => {
     const {
       body: { username, password },
     } = req;
-
+console.log(req.body);
     if (!username) {
       handleError({ code: 400, error: '400: Bad request - empty username', res });
   
@@ -42,6 +42,11 @@ router.post('/', async (req, res, next) => {
       user: user,
     });
   });
+
+  const handleError = ({ code, error, res }) => {
+    res.status(code);
+    res.json({ error });
+   };
   
   export default router;
   
