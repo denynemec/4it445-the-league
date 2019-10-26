@@ -46,6 +46,7 @@ New JavaScript features (ES2015) are "enabled" for for all modern browsers with 
 
 - `ssh -L 4242:localhost:3306 USERNAME@vse.handson.pro`
 - Change port of DB to 4242 in .env file
+- For GUI access use [phpMyAdmin](http://phpmyadmin.vse.handson.pro/)
 
 ## BE
 
