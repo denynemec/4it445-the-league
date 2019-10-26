@@ -11,8 +11,8 @@ import { useLoginState } from './hooks';
 const LoginPageBase = ({ history }) => {
   const { t } = useTranslation();
   const {
-    username,
-    setUsername,
+    email,
+    setEmail,
     password,
     setPassword,
     loginState,
@@ -28,12 +28,12 @@ const LoginPageBase = ({ history }) => {
 
         <Form onSubmit={submitLoginForm}>
           <TextInputWithLabel
-            name="username"
-            label={t('Page.Login.UsernameLabel')}
-            placeholder={t('Page.Login.UsernamePlaceholder')}
-            value={username.value}
-            error={username.error}
-            onChange={setUsername}
+            name="email"
+            label={t('Page.Login.EmailLabel')}
+            placeholder={t('Page.Login.EmailPlaceholder')}
+            value={email.value}
+            error={email.error}
+            onChange={setEmail}
           />
 
           <TextInputWithLabel

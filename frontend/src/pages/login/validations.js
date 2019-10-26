@@ -1,12 +1,12 @@
 export const validateLoginForm = ({
-  username,
-  setUsernameError,
+  email,
+  setEmailError,
   password,
   setPasswordError,
   t,
 }) => {
-  if (isUndefinedOrEmptyString(username)) {
-    setUsernameError(t('Page.Login.Validations.UsernameRequired'));
+  if (isUndefinedOrEmptyString(email)) {
+    setEmailError(t('Page.Login.Validations.EmailRequired'));
   }
 
   if (isUndefinedOrEmptyString(password)) {
@@ -17,5 +17,5 @@ export const validateLoginForm = ({
 const isUndefinedOrEmptyString = value =>
   value === '' || typeof value === 'undefined';
 
-export const isLoginFormValid = ({ username, password }) =>
-  !isUndefinedOrEmptyString(username) && !isUndefinedOrEmptyString(password);
+export const isLoginFormValid = ({ email, password }) =>
+  !isUndefinedOrEmptyString(email) && !isUndefinedOrEmptyString(password);
