@@ -29,12 +29,12 @@ router.post(
       `SELECT user_id, nickname, password FROM users WHERE email = '${email}' AND active = true LIMIT 1;`,
     );
 
-    const { password: passwordHash, user_id, ...userData } = dbResponse[0];
-
-    if (!user) {
+    if (!dbResponse[0]) {
       // Fot not found user, we should return same error as for bad password to not allowed guesing emails/emails
       return res.status(401).json({ error: '401: Not authenticated.' });
     }
+
+    const { password: passwordHash, user_id, ...userData } = dbResponse[0];
 
     bcrypt.compare(password, passwordHash, function(err, result) {
       if (result) {
@@ -42,7 +42,7 @@ router.post(
 
         res.json({
           token,
-          userData,
+          user: userData,
         });
       } else {
         res.status(401).json({ error: '401: Not authenticated.' });

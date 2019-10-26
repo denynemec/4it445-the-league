@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const { JWT_TOKEN_SECRET } = process.env;
+const JWT_TOKEN_SECRET = 'JWT_TOKEN_SECRET';
 
 // generate JWT token with no expiration
 export const getJwtToken = payload => jwt.sign(payload, JWT_TOKEN_SECRET);
