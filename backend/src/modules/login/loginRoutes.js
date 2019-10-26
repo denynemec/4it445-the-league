@@ -26,23 +26,23 @@ router.post(
     } = req;
 
     const dbResponse = await dbConnection.query(
-      `SELECT user_id, nickname, firstname, lastname, email, password FROM users WHERE email = '${email}' AND active = true LIMIT 1;`,
+      `SELECT user_id, nickname, password FROM users WHERE email = '${email}' AND active = true LIMIT 1;`,
     );
 
-    const user = dbResponse[0];
+    const { password: passwordHash, user_id, ...userData } = dbResponse[0];
 
     if (!user) {
       // Fot not found user, we should return same error as for bad password to not allowed guesing emails/emails
       return res.status(401).json({ error: '401: Not authenticated.' });
     }
 
-    bcrypt.compare(password, user.password, function(err, result) {
+    bcrypt.compare(password, passwordHash, function(err, result) {
       if (result) {
-        const token = getJwtToken(user);
+        const token = getJwtToken({ userId: user_id });
 
         res.json({
           token,
-          user,
+          userData,
         });
       } else {
         res.status(401).json({ error: '401: Not authenticated.' });
