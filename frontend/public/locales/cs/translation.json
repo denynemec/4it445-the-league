@@ -26,14 +26,14 @@
   "Page": {
     "Login": {
       "FormHeading": "Přihlášení do aplikace The League",
-      "UsernameLabel": "Uživatelské jméno/Email",
-      "UsernamePlaceholder": "Vyplňte uživatelské jméno",
+      "EmailLabel": "Email",
+      "EmailPlaceholder": "Vyplňte email",
       "PasswordLabel": "Heslo",
       "PasswordPlaceholder": "Vyplňte heslo",
       "SubmitLoginButton": "Přihlásit se",
       "DidYouForgetPasswordLink": "Zapomněli jste heslo?",
       "Validations": {
-        "UsernameRequired": "Uživatelské jméno je povinné",
+        "EmailRequired": "Email je povinný",
         "PasswordRequired": "Heslo je povinné"
       }
     },

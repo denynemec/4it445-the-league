@@ -27,9 +27,9 @@ const useInputStateMemoizedCallback = setInputState => {
 
 const useSubmitLogin = ({
   history,
-  username,
+  email,
   password,
-  setUsernameError,
+  setEmailError,
   setPasswordError,
 }) => {
   const { signin } = useAuth();
@@ -46,26 +46,26 @@ const useSubmitLogin = ({
 
   const submitLoginForm = useCallback(() => {
     validateLoginForm({
-      username,
-      setUsernameError,
+      email,
+      setEmailError,
       password,
       setPasswordError,
       t,
     });
 
-    if (isLoginFormValid({ username, password })) {
+    if (isLoginFormValid({ email, password })) {
       state.request(ENDPOINTS.login(), {
         method: 'POST',
         onSuccess: postLoginOnSuccess,
-        data: { username, password },
+        data: { email, password },
       });
     }
   }, [
-    username,
+    email,
     password,
     state,
     postLoginOnSuccess,
-    setUsernameError,
+    setEmailError,
     setPasswordError,
     t,
   ]);
@@ -74,11 +74,11 @@ const useSubmitLogin = ({
 };
 
 export const useLoginState = history => {
-  const [username, setUsernameState] = useInputState();
+  const [email, setEmailState] = useInputState();
   const {
-    setValue: setUsername,
-    setError: setUsernameError,
-  } = useInputStateMemoizedCallback(setUsernameState);
+    setValue: setEmail,
+    setError: setEmailError,
+  } = useInputStateMemoizedCallback(setEmailState);
 
   const [password, setPasswordState] = useInputState();
   const {
@@ -88,15 +88,15 @@ export const useLoginState = history => {
 
   const [loginState, submitLoginForm] = useSubmitLogin({
     history,
-    username: username.value,
+    email: email.value,
     password: password.value,
-    setUsernameError,
+    setEmailError,
     setPasswordError,
   });
 
   return {
-    username,
-    setUsername,
+    email,
+    setEmail,
     password,
     setPassword,
     loginState,

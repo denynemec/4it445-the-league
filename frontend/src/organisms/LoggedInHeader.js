@@ -24,7 +24,7 @@ const LoggedInHeaderBase = ({ history }) => {
   return (
     <HeaderBase homeLinkTo={PATHNAMES.home()}>
       <Layout flex-grow flex items-center>
-        <span className="b">{user && user.username}</span>
+        <span className="b">{user && user.email}</span>
 
         <Link to={PATHNAMES.home()} className={classNames(navLinkStyle, 'pa3')}>
           {t('Organisms.LoggedInHeader.HomeLink')}
