@@ -1,3 +1,4 @@
+export { ActivateUserPage } from './activateUser';
 export { HomePage } from './home';
 export { LoginPage } from './login';
 export { NotFoundPage } from './notFound';

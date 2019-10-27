@@ -58,6 +58,12 @@
         "passwordConfirmationNotvalid": "Hesla se musí shodovat"
       }
     },
+    "ActivateUser": {
+      "FormHeading": "Aktivace uživatele",
+      "SubmitActivateUserButton": "Aktivovat uživatele",
+      "NicknameLabel": "Nickname",
+      "NicknamePlaceholder": "Vyplňte nickname"
+    },
     "Home": {
       "GoToGroupDetailButton": "Detail skupiny",
       "EventName": "Událost: {{eventName}}",

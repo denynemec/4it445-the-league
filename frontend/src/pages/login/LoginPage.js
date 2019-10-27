@@ -64,8 +64,8 @@ export const LoginPage = () => {
             <Field
               type="text"
               name="email"
-              label={t('Page.Login.UsernameLabel')}
-              placeholder={t('Page.Login.UsernamePlaceholder')}
+              label={t('Page.Login.EmailLabel')}
+              placeholder={t('Page.Login.EmailPlaceholder')}
             />
 
             <Field

@@ -9,6 +9,7 @@ import {
   RegistrationPage,
   ResetPassword,
   GroupDetail,
+  ActivateUserPage,
 } from './pages';
 import { useAuth } from './utils';
 
@@ -24,6 +25,11 @@ export function Routes() {
         component={RegistrationPage}
       />
       <Route path={PATHNAMES.groupDetail()} exact component={GroupDetail} />
+      <Route
+        path={PATHNAMES.activateUser()}
+        exact
+        component={ActivateUserPage}
+      />
 
       {/* Login required routes */}
       <PrivateRoute path={PATHNAMES.home()} exact component={HomePage} />

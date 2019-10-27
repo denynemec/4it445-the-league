@@ -1,13 +1,18 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
-
 import { check, validationResult } from 'express-validator';
+import Hashids from 'hashids/cjs';
 
 import { DB_CONNECTION_KEY } from '../../libs/connection';
 import { formatErrors } from '../../utils/errors';
 import { getJwtToken } from '../../utils/jwtToken';
 
 const router = Router();
+
+const HASHIDS_SECRET_KEY = 'HASHIDS_SECRET_KEY';
+const HASHIDS_PADDING = 15;
+
+const hashids = new Hashids(HASHIDS_SECRET_KEY, HASHIDS_PADDING);
 
 router.post(
   '/login',
@@ -30,7 +35,7 @@ router.post(
     );
 
     if (!dbResponse[0]) {
-      // Fot not found user, we should return same error as for bad password to not allowed guesing emails/emails
+      // For not found user, we should return same error as for bad password to not allowed guesing emails/emails
       return res.status(401).json({ error: '401: Not authenticated.' });
     }
 
@@ -47,6 +52,48 @@ router.post(
       } else {
         res.status(401).json({ error: '401: Not authenticated.' });
       }
+    });
+  },
+);
+
+router.put(
+  '/activate-user',
+  [
+    check('userHash')
+      .not()
+      .isEmpty(),
+    check('nickname')
+      .not()
+      .isEmpty(),
+  ],
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: formatErrors(errors),
+      });
+    }
+
+    const dbConnection = req[DB_CONNECTION_KEY];
+    const {
+      body: { userHash, nickname },
+    } = req;
+
+    const userId = hashids.decode(userHash);
+
+    const dbResponse = await dbConnection.query(
+      `UPDATE users SET nickname = '${nickname}', active = true WHERE user_id = '${userId}' AND active = false;`,
+    );
+
+    if (dbResponse.affectedRows === 0) {
+      return res.status(422).json({ error: '422: Not existing user' });
+    }
+
+    const token = getJwtToken({ userId });
+
+    res.json({
+      token,
+      user: { nickname },
     });
   },
 );

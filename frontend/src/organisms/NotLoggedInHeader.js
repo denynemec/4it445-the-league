@@ -14,7 +14,7 @@ export const NotLoggedInHeader = () => {
   const { t } = useTranslation();
 
   return (
-    <HeaderBase homeLinkTo={PATHNAMES.home()}>
+    <HeaderBase homeLinkTo={PATHNAMES.login()}>
       <Layout flex-grow flex items-center>
         <Link
           to={PATHNAMES.login()}
