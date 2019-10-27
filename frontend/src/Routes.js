@@ -8,6 +8,7 @@ import {
   NotFoundPage,
   RegistrationPage,
   ResetPassword,
+  ActivateUserPage,
 } from './pages';
 import { useAuth } from './utils';
 
@@ -21,6 +22,11 @@ export function Routes() {
         path={PATHNAMES.registration()}
         exact
         component={RegistrationPage}
+      />
+      <Route
+        path={PATHNAMES.activateUser()}
+        exact
+        component={ActivateUserPage}
       />
 
       {/* Login required routes */}

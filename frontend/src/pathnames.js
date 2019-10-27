@@ -2,6 +2,7 @@ export default {
   empty: () => '/',
   login: () => '/login',
   registration: () => '/registration',
+  activateUser: () => '/activate-user',
   resetPassword: () => '/reset-password',
   home: () => '/home',
   settings: () => '/settings',
