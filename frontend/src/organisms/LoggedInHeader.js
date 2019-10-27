@@ -2,6 +2,8 @@ import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { Button, Layout, Link } from '../atoms';
 import {
@@ -35,7 +37,12 @@ const LoggedInHeaderBase = ({ history }) => {
           onClick={logoutCallback}
           unstyled
         >
-          {t('Organisms.LoggedInHeader.LogoutLink')}
+          <Layout flex flex-row>
+            {t('Organisms.LoggedInHeader.LogoutLink')}
+            <Layout pl2>
+              <FontAwesomeIcon icon={faSignOutAlt} />
+            </Layout>
+          </Layout>
         </Button>
       </Layout>
     </HeaderBase>
