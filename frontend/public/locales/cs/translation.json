@@ -37,6 +37,23 @@
         "PasswordRequired": "Heslo je povinné"
       }
     },
+    "Registration": {
+      "FormHeading": "Registrace",
+      "EmailLabel": "Email",
+      "EmailPlaceholder": "Vyplňte email",
+      "PasswordConfirmationLabel": "Zopakujte heslo",
+      "PasswordConfirmationPlaceholder": "Zopakujte heslo",
+      "PasswordLabel": "Heslo",
+      "PasswordPlaceholder": "Vyplňte heslo",
+      "SubmitRegistrationButton": "Registrovat se",
+      "AlreadyRegistred": "Již máte účet? Přihlaste se.",
+      "Validations": {
+        "EmailRequired": "Email je povinný",
+        "PasswordRequired": "Heslo je povinné",
+        "passwordConfirmationRequired": "Zopakování hesla je povinné",
+        "passwordConfirmationNotvalid": "Hesla se musí shodovat"
+      }
+    },
     "Home": {
       "GoToGroupDetailButton": "Detail skupiny",
       "EventName": "Událost: {{eventName}}",
