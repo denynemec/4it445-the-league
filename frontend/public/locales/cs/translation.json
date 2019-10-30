@@ -17,6 +17,8 @@
       "ModalHeaderLabel": "Vytvořit skupinu pro událost {{eventName}}",
       "LobbyName": "Jméno nové skupiny",
       "LobbyNamePlaceholder": "Vyplňte jméno skupiny",
+      "LobbySize": "Maximální velikost skupiny",
+      "LobbySizePlaceholder": "Zadejte maximální počet členů",
       "SubmitNewLobbyForm": "Vytvořit skupinu",
       "Validations": {
         "LobbyNameRequired": "Jméno skupiny je povinné"
@@ -28,6 +30,8 @@
       "FormHeading": "Přihlášení do aplikace The League",
       "EmailLabel": "Email",
       "EmailPlaceholder": "Vyplňte email",
+      "UsernameLabel": "Uživatelské jméno",
+      "UsernamePlaceholder": "Vyplňte uživatelské jméno",
       "PasswordLabel": "Heslo",
       "PasswordPlaceholder": "Vyplňte heslo",
       "SubmitLoginButton": "Přihlásit se",
