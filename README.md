@@ -1,6 +1,8 @@
 # [4IT445: Agilní vývoj webových aplikací](http://4it445.vse.cz/) na [VŠE](https://www.vse.cz/)
 
-## [4IT445 Docs](./docs/)
+## The League 4
+
+Fantasy league app created by Team 4 as semestral project.
 
 ## JavaScript
 
@@ -38,13 +40,26 @@ New JavaScript features (ES2015) are "enabled" for for all modern browsers with 
 - **[React docs](https://reactjs.org/docs/getting-started.html)**
 - frontend app is created using [create-react-app](https://create-react-app.dev/)
 
-## Server Setup
+### Local development
 
-## SSH
+## DB - SSH tunel
 
-- `ssh username@vse.handson.pro`
-- frontend code: `cd ~/code/cviceni/frontend`
+- `ssh -L 4242:localhost:3306 USERNAME@vse.handson.pro`
+- Change port of DB to 4242 in .env file
+- For GUI access use [phpMyAdmin](http://phpmyadmin.vse.handson.pro/)
 
-### Domains
+## BE
 
-- [dev.frontend.**username**.vse.handson.pro](http://dev.frontend.username.vse.handson.pro)
+```bash
+cd backend/
+yarn install
+yarn dev
+```
+
+## FE
+
+```bash
+cd frontend/
+yarn install
+yarn dev
+```

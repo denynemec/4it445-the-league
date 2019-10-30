@@ -21,7 +21,7 @@ export const validateRegistrationForm = ({
     );
   }
 
-  if (passwordConfirmation != password) {
+  if (passwordConfirmation !== password) {
     setPasswordConfirmationError(
       t('Page.Registration.Validations.passwordConfirmationNotvalid'),
     );

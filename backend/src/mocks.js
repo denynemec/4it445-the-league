@@ -1,19 +1,19 @@
 export const users = [
   {
     id: 1,
-    username: 'Young Gatchell',
+    email: 'Young Gatchell',
   },
   {
     id: 2,
-    username: 'Gatchell Young',
+    email: 'Gatchell Young',
   },
   {
     id: 3,
-    username: 'John Doe',
+    email: 'John Doe',
   },
   {
     id: 4,
-    username: 'Jane Roe',
+    email: 'Jane Roe',
   },
 ];
 
