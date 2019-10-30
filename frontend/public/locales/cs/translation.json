@@ -71,6 +71,15 @@
       "EventHeader": "Moje události",
       "EventStartDateLabel": "Začátek:",
       "EventEndDateLabel": "Konec:"
+    },
+    "GroupDetail": {
+      "GroupHeader": "Detail skupiny {{name}}",
+      "BasicInformationHeader": "Základní informace",
+      "PlayersJoined": "Připojený hráči:",
+      "MaxPlayers": "Maximálni počet hráčů:",
+      "GameEvent": "Událost:",
+      "PlayersHeader": "Hráči",
+      "GameRules": "Herní pravidla"
     }
   }
 }
