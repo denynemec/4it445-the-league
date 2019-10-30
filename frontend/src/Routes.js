@@ -8,6 +8,7 @@ import {
   NotFoundPage,
   RegistrationPage,
   ResetPassword,
+  GroupDetail,
 } from './pages';
 import { useAuth } from './utils';
 
@@ -22,10 +23,10 @@ export function Routes() {
         exact
         component={RegistrationPage}
       />
+      <Route path={PATHNAMES.groupDetail()} exact component={GroupDetail} />
 
       {/* Login required routes */}
       <PrivateRoute path={PATHNAMES.home()} exact component={HomePage} />
-
       <Route path="*" component={NotFoundPage} />
     </Switch>
   );
