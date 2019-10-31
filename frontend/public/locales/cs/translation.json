@@ -57,6 +57,10 @@
     "ActivateUser": {
       "FormHeading": "Aktivace uživatele",
       "SubmitActivateUserButton": "Aktivovat uživatele",
+      "FirstNameLabel": "Jméno",
+      "FirstNamePlaceholder": "Zadejte jméno",
+      "LastNameLabel": "Příjmení",
+      "LastNamePlaceholder": "Zadejte příjmení",
       "NicknameLabel": "Nickname",
       "NicknamePlaceholder": "Vyplňte nickname"
     },

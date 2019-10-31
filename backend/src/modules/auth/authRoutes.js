@@ -1,19 +1,11 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import { check, validationResult } from 'express-validator';
-import Hashids from 'hashids/cjs';
-import nodemailer from 'nodemailer';
 
 import { DB_CONNECTION_KEY } from '../../libs/connection';
-import { formatErrors } from '../../utils/errors';
-import { getJwtToken } from '../../utils/jwtToken';
+import { getJwtToken, formatErrors, Hashids, sendEmail } from '../../utils';
 
 const router = Router();
-
-const HASHIDS_SECRET_KEY = 'HASHIDS_SECRET_KEY';
-const HASHIDS_PADDING = 15;
-
-const hashids = new Hashids(HASHIDS_SECRET_KEY, HASHIDS_PADDING);
 
 router.post(
   '/login',
@@ -104,7 +96,7 @@ router.post(
           [email, hash, false, '', '', ''],
         );
 
-        const newUserHashId = hashids.encode(dbResponse.insertId);
+        const newUserHashId = Hashids.encode(dbResponse.insertId);
 
         const registrationConfirmFeAppLink = `${
           req.headers['x-the-league-app-publicurl']
@@ -113,32 +105,18 @@ router.post(
         // TOFIX need to fix send to email service - then remove console.log(...)
         console.log(registrationConfirmFeAppLink);
 
-        const mailOptions = {
-          from: 'mail',
-          to: `${email}`,
-          subject: 'The League Registration Confirmation',
+        sendEmail({
+          emailTo: email,
+          text: 'The League',
           html: `<link href='${registrationConfirmFeAppLink}'>Pro potvrzení registrace klikněte na tento link... </link>`,
-        };
-
-        const transporter = nodemailer.createTransport({
-          host: 'smtp.ethereal.email',
-          port: 587,
-          auth: {
-            user: 'johnson.mohr@ethereal.email',
-            pass: 'fJKjVZUHzBtqdXVhs1',
-          },
-        });
-
-        transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {
+          onSuccess: () => res.json({ email }),
+          onError: () => {
             console.error(error);
 
             return res
               .status(500)
               .json({ error: '500: Internal Server Error' });
-          } else {
-            return res.json({ email });
-          }
+          },
         });
       } else {
         return res.status(500).json({ error: '500: Internal Server Error' });
@@ -176,7 +154,7 @@ router.put(
       body: { userHash, nickname, firstName, lastName },
     } = req;
 
-    const userId = hashids.decode(userHash);
+    const userId = Hashids.decode(userHash);
 
     const dbResponse = await dbConnection.query(
       `UPDATE users SET nickname = '${nickname}', firstname = '${firstName}', lastname = '${lastName}', active = true WHERE user_id = '${userId}' AND active = false;`,
