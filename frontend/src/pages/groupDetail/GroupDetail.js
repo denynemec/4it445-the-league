@@ -1,30 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { withRouter } from 'react-router-dom';
 
 import { Heading, Layout, LoadingSpinner, Label } from '../../atoms';
-import { TextInputWithLabel } from '../../molecules';
-import { LoggedInPageLayout } from '../../templates';
-import { useFetchData } from './hooks';
 
-const GroupDetailBase = ({ name, history }) => {
+import { LoggedInPageLayout } from '../../templates';
+
+export const GroupDetail = ({ name }) => {
   const { t } = useTranslation();
 
-  const { eventListState, lobbyListState } = useFetchData();
-
-  const [filterLobby, setFilterLobby] = useState('');
-  const [filterEvent, setFilterEvent] = useState('');
-
-  const errorList = [
-    { id: 1, error: eventListState.error },
-    { id: 2, error: lobbyListState.error },
-  ];
+  const errorList = [];
 
   return (
     <LoggedInPageLayout errorList={errorList}>
-      {(eventListState.isLoading || lobbyListState.isLoading) && (
-        <LoadingSpinner />
-      )}
+      {/* {lobbyListState.isLoading && <LoadingSpinner />}
+
       <Layout flex justify-between items-center>
         <Heading size="xl" className="flex self-bottom">
           {t('Page.GroupDetail.GroupHeader', { name })}
@@ -43,9 +32,7 @@ const GroupDetailBase = ({ name, history }) => {
         <Heading size="md" className="flex self-bottom">
           {t('Page.GroupDetail.GameRules')}
         </Heading>
-      </Layout>
+      </Layout> */}
     </LoggedInPageLayout>
   );
 };
-
-export const GroupDetail = withRouter(GroupDetailBase);

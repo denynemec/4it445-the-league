@@ -32,7 +32,7 @@ const HomePageBase = ({ history }) => {
           <>
             <Layout flex justify-between items-center>
               <Heading size="md" className="flex self-bottom">
-                {t('Page.Home.GamGroupHeader')}
+                {t('Page.Home.GameGroupHeader')}
               </Heading>
 
               <Layout w-40>

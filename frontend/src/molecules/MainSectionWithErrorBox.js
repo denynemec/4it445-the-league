@@ -1,20 +1,11 @@
 import React from 'react';
 
-import { ErrorBox, Layout, MainSection } from '../atoms';
+import { ErrorBox, MainSection } from '../atoms';
 
-export const MainSectionWithErrorBox = ({ children, errorList }) => {
-  const filteredErrorList = errorList.filter(
-    ({ error }) => typeof error !== 'undefined' && error !== null,
-  );
+export const MainSectionWithErrorBox = ({ children, errorList }) => (
+  <MainSection>
+    <ErrorBox className="pb3" errorList={errorList} />
 
-  return (
-    <MainSection>
-      {filteredErrorList.length !== 0 && (
-        <Layout pb3>
-          <ErrorBox errorList={filteredErrorList} />
-        </Layout>
-      )}
-      {children}
-    </MainSection>
-  );
-};
+    {children}
+  </MainSection>
+);

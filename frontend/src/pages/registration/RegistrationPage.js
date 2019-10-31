@@ -1,63 +1,96 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Form, Formik } from 'formik';
+import * as yup from 'yup';
 
 import PATHNAMES from '../../pathnames';
-import { Heading, Button, Form, Layout, Link } from '../../atoms';
+import ENDPOINTS from '../../endpoints';
+import { Heading, Button, Layout, Link, InfoBox } from '../../atoms';
 import { NotLoggedInPageLayout } from '../../templates';
-import { TextInputWithLabel } from '../../molecules';
-import { useRegistrationState } from './hooks';
+import { useRequest } from '../../utils';
+import { Field } from '../../organisms';
 
-const RegistrationPageBase = ({ history }) => {
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email()
+    .required()
+    .label('Email'),
+  password: yup
+    .string()
+    .required()
+    .label('Password'),
+  passwordConfirmation: yup
+    .string()
+    .required()
+    .oneOf([yup.ref('password')], 'Both passwords must match')
+    .label('Password Confirmation'),
+});
+
+export const RegistrationPage = () => {
   const { t } = useTranslation();
-  const {
-    email,
-    setEmail,
-    password,
-    passwordConfirmation,
-    setPassword,
-    setPasswordConfirmation,
-    RegistrationState,
-    submitRegistrationForm,
-  } = useRegistrationState(history);
+
+  const registrationState = useRequest();
+
+  const [emailSentState, setEmailSentState] = useState('');
+
+  const onSuccess = useCallback(
+    ({ data: { email } }) => {
+      setEmailSentState(t('Page.Registration.EmailSent', { email }));
+    },
+    [setEmailSentState, t],
+  );
+
+  useEffect(() => {
+    if (registrationState.isLoading) {
+      setEmailSentState('');
+    }
+  }, [registrationState.isLoading]);
+
+  const onSubmitMemoized = useCallback(
+    ({ email, password }) => {
+      registrationState.request(ENDPOINTS.registration(), {
+        method: 'POST',
+        onSuccess,
+        data: { email, password },
+      });
+    },
+    [registrationState, onSuccess],
+  );
 
   return (
     <NotLoggedInPageLayout
-      errorList={[{ id: 1, error: RegistrationState.error }]}
+      errorList={[{ id: 1, error: registrationState.error }]}
     >
-      <Layout flex self-center flex-column w-75>
-        <Layout flex justify-center pb2>
-          <Heading>{t('Page.Registration.FormHeading')}</Heading>
-        </Layout>
+      <Heading className="flex justify-center pb2">
+        {t('Page.Registration.FormHeading')}
+      </Heading>
 
-        <Form onSubmit={submitRegistrationForm}>
-          <TextInputWithLabel
+      <Formik
+        initialValues={{ email: '', password: '', passwordConfirmation: '' }}
+        validationSchema={schema}
+        onSubmit={onSubmitMemoized}
+      >
+        <Form>
+          <Field
+            type="text"
             name="email"
             label={t('Page.Registration.EmailLabel')}
             placeholder={t('Page.Registration.EmailPlaceholder')}
-            value={email.value}
-            error={email.error}
-            onChange={setEmail}
           />
 
-          <TextInputWithLabel
+          <Field
             type="password"
             name="password"
             label={t('Page.Registration.PasswordLabel')}
             placeholder={t('Page.Registration.PasswordPlaceholder')}
-            value={password.value}
-            error={password.error}
-            onChange={setPassword}
           />
 
-          <TextInputWithLabel
+          <Field
             type="password"
             name="passwordConfirmation"
             label={t('Page.Registration.PasswordConfirmationLabel')}
             placeholder={t('Page.Registration.PasswordConfirmationPlaceholder')}
-            value={passwordConfirmation.value}
-            error={passwordConfirmation.error}
-            onChange={setPasswordConfirmation}
           />
 
           <Layout flex justify-end ph2 pb2>
@@ -67,14 +100,16 @@ const RegistrationPageBase = ({ history }) => {
           </Layout>
 
           <Layout flex justify-center>
-            <Button submit primary disabled={RegistrationState.isLoading}>
+            <Button submit primary disabled={registrationState.isLoading}>
               {t('Page.Registration.SubmitRegistrationButton')}
             </Button>
           </Layout>
         </Form>
-      </Layout>
+      </Formik>
+
+      {emailSentState && (
+        <InfoBox className="mt4" infoList={[{ id: 1, info: emailSentState }]} />
+      )}
     </NotLoggedInPageLayout>
   );
 };
-
-export const RegistrationPage = withRouter(RegistrationPageBase);

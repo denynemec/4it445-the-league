@@ -28,11 +28,11 @@ export const ActivateUserPage = () => {
   );
 
   const onSubmitMemoized = useCallback(
-    ({ nickname }) => {
+    ({ nickname, firstName, lastName }) => {
       activateUserState.request(ENDPOINTS.activateUser(), {
         method: 'PUT',
         onSuccess: activateUserOnSuccess,
-        data: { nickname, userHash },
+        data: { nickname, firstName, lastName, userHash },
       });
     },
     [activateUserState, activateUserOnSuccess, userHash],
@@ -49,32 +49,44 @@ export const ActivateUserPage = () => {
     <NotLoggedInPageLayout
       errorList={[{ id: 1, error: activateUserState.error }]}
     >
-      <Layout flex self-center flex-column w-75>
-        <Layout flex justify-center pb2>
-          <Heading>{t('Page.ActivateUser.FormHeading')}</Heading>
-        </Layout>
+      <Heading className="flex justify-center pb2">
+        {t('Page.ActivateUser.FormHeading')}
+      </Heading>
 
-        <Formik
-          initialValues={{ nickname: '' }}
-          validationSchema={schema}
-          onSubmit={onSubmitMemoized}
-        >
-          <Form>
-            <Field
-              type="text"
-              name="nickname"
-              label={t('Page.ActivateUser.NicknameLabel')}
-              placeholder={t('Page.ActivateUser.NicknamePlaceholder')}
-            />
+      <Formik
+        initialValues={{ nickname: '', firstName: '', lastName: '' }}
+        validationSchema={schema}
+        onSubmit={onSubmitMemoized}
+      >
+        <Form>
+          <Field
+            type="text"
+            name="firstName"
+            label={t('Page.ActivateUser.FirstNameLabel')}
+            placeholder={t('Page.ActivateUser.FirstNamePlaceholder')}
+          />
 
-            <Layout flex justify-center>
-              <Button submit primary disabled={activateUserState.isLoading}>
-                {t('Page.ActivateUser.SubmitActivateUserButton')}
-              </Button>
-            </Layout>
-          </Form>
-        </Formik>
-      </Layout>
+          <Field
+            type="text"
+            name="lastName"
+            label={t('Page.ActivateUser.LastNameLabel')}
+            placeholder={t('Page.ActivateUser.LastNamePlaceholder')}
+          />
+
+          <Field
+            type="text"
+            name="nickname"
+            label={t('Page.ActivateUser.NicknameLabel')}
+            placeholder={t('Page.ActivateUser.NicknamePlaceholder')}
+          />
+
+          <Layout flex justify-center>
+            <Button submit primary disabled={activateUserState.isLoading}>
+              {t('Page.ActivateUser.SubmitActivateUserButton')}
+            </Button>
+          </Layout>
+        </Form>
+      </Formik>
     </NotLoggedInPageLayout>
   );
 };

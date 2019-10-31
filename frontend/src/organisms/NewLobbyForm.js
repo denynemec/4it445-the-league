@@ -1,14 +1,13 @@
 import React, { useCallback } from 'react';
 import * as yup from 'yup';
-import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 
-import ENDPOINTS from '../../endpoints';
-import { Button, Layout, ErrorBox } from '../../atoms';
-import { Field } from '../../organisms';
-import { Modal } from '../../molecules';
-import { useRequest } from '../../utils';
+import ENDPOINTS from '../endpoints';
+import { Button, Layout, ErrorBox } from '../atoms';
+import { Field } from '../organisms';
+import { Modal } from '../molecules';
+import { useRequest } from '../utils';
 
 const schema = yup.object().shape({
   lobbyName: yup
@@ -19,11 +18,10 @@ const schema = yup.object().shape({
 
 export const NewLobbyForm = ({ isOpen, onCloseClick, eventName }) => {
   const { t } = useTranslation();
-  const history = useHistory();
   const newLobbyState = useRequest();
 
   const onSubmitMemoized = useCallback(
-    ({ lobbyName, lobbySize }) => {
+    ({ lobbyName }) => {
       newLobbyState.request(ENDPOINTS.newLobby(), {
         method: 'POST',
         data: { lobbyName },
@@ -45,7 +43,7 @@ export const NewLobbyForm = ({ isOpen, onCloseClick, eventName }) => {
       )}
 
       <Formik
-        initialValues={{ LobbyName: '' }}
+        initialValues={{ lobbyName: '' }}
         validationSchema={schema}
         onSubmit={onSubmitMemoized}
       >
