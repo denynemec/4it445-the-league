@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Heading, Layout, Button } from '../../atoms';
-import PATHNAMES from '../../pathnames';
+import { Heading, Layout, Button } from '../atoms';
+import PATHNAMES from '../pathnames';
 
 export const LayoutedLobby = ({
   eventName,
@@ -11,12 +12,12 @@ export const LayoutedLobby = ({
   maxUsers,
   minimumUsers,
   name,
-  history,
 }) => {
   const { t } = useTranslation();
+  const history = useHistory();
 
   const onGoToDetailClick = useCallback(
-    () => history.push(PATHNAMES.LOBBY_DETAIL(id)),
+    () => history.push(PATHNAMES.getLobbyDetail(id)),
     [history, id],
   );
 
@@ -42,7 +43,7 @@ export const LayoutedLobby = ({
       <Layout pt2>{t('Page.Home.EventName', { eventName })}</Layout>
 
       <Layout pt3>
-        <Button className="w-100" primary onClick={onGoToDetailClick}>
+        <Button className="w-100 pt3" primary onClick={onGoToDetailClick}>
           {t('Page.Home.GoToGroupDetailButton')}
         </Button>
       </Layout>

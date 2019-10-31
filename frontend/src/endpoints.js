@@ -10,4 +10,6 @@ export default {
   getSettings: () => `${apiPrefix}/settings/settings`,
   updateSettings: () => `${apiPrefix}/settings/update-settings`,
   updatePassword: () => `${apiPrefix}/settings/update-password`,
+  getEventDetail: id => `${apiPrefix}/event/${id}`,
+  getLobbyDetail: id => `${apiPrefix}/lobby/${id}`,
 };

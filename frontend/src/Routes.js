@@ -8,7 +8,8 @@ import {
   NotFoundPage,
   RegistrationPage,
   ResetPassword,
-  GroupDetail,
+  EventDetail,
+  LobbyDetail,
   ActivateUserPage,
   SettingsPage,
 } from './pages';
@@ -25,7 +26,6 @@ export function Routes() {
         exact
         component={RegistrationPage}
       />
-      <Route path={PATHNAMES.groupDetail()} exact component={GroupDetail} />
       <Route
         path={PATHNAMES.activateUser()}
         exact
@@ -38,6 +38,16 @@ export function Routes() {
         path={PATHNAMES.settings()}
         exact
         component={SettingsPage}
+      />
+      <PrivateRoute
+        path={PATHNAMES.eventDetail()}
+        exact
+        component={EventDetail}
+      />
+      <PrivateRoute
+        path={PATHNAMES.lobbyDetail()}
+        exact
+        component={LobbyDetail}
       />
 
       {/* Not found route */}

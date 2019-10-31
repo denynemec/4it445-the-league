@@ -1,9 +1,11 @@
 import React, { useCallback } from 'react';
 import * as yup from 'yup';
+import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../endpoints';
+import PATHNAMES from '../pathnames';
 import { Button, Layout, ErrorBox } from '../atoms';
 import { Field } from '../organisms';
 import { Modal } from '../molecules';
@@ -18,16 +20,20 @@ const schema = yup.object().shape({
 
 export const NewLobbyForm = ({ isOpen, onCloseClick, eventName }) => {
   const { t } = useTranslation();
+  const history = useHistory();
   const newLobbyState = useRequest();
 
   const onSubmitMemoized = useCallback(
     ({ lobbyName }) => {
       newLobbyState.request(ENDPOINTS.newLobby(), {
         method: 'POST',
+        onSuccess: ({ data: { lobbyId } }) => {
+          history.push(PATHNAMES.getLobbyDetail(lobbyId));
+        },
         data: { lobbyName },
       });
     },
-    [newLobbyState],
+    [newLobbyState, history],
   );
 
   return (
@@ -38,9 +44,7 @@ export const NewLobbyForm = ({ isOpen, onCloseClick, eventName }) => {
       onCloseClick={onCloseClick}
       isDisabled={newLobbyState.isLoading}
     >
-      {newLobbyState.error && (
-        <ErrorBox errorList={[{ id: 1, error: newLobbyState.error }]} />
-      )}
+      <ErrorBox errorList={[{ id: 1, error: newLobbyState.error }]} />
 
       <Formik
         initialValues={{ lobbyName: '' }}

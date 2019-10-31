@@ -6,7 +6,8 @@ export default {
   resetPassword: () => '/reset-password',
   home: () => '/home',
   settings: () => '/settings',
-  groupDetail: () => '/groupdetail',
-  LOBBY_DETAIL: id => `lobby/${id}`,
-  EVENT_DETAIL: id => `event/${id}`,
+  eventDetail: () => '/event/:eventId',
+  lobbyDetail: () => '/lobby/:lobbyId',
+  getEventDetail: id => `/event/${id}`,
+  getLobbyDetail: id => `/lobby/${id}`,
 };

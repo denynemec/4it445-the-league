@@ -22,6 +22,10 @@
       "LobbyName": "Jméno nové skupiny",
       "LobbyNamePlaceholder": "Vyplňte jméno skupiny",
       "SubmitNewLobbyForm": "Vytvořit skupinu"
+    },
+    "LobbyList": {
+      "LobbyFilter": "Jméno skupiny",
+      "LobbyFilterPlaceholder": "Zadej jméno skupiny"
     }
   },
   "Page": {
@@ -59,14 +63,12 @@
     "Home": {
       "GoToGroupDetailButton": "Detail skupiny",
       "EventName": "Událost: {{eventName}}",
-      "GameGroupHeader": "Moje skupiny",
-      "LobbyFilter": "Jméno skupiny",
-      "LobbyFilterPlaceholder": "Zadej jméno skupiny",
+      "LobbyHeader": "Moje skupiny",
       "EventFilter": "Jméno události",
       "EventFilterPlaceholder": "Zadej jméno události",
       "AddNewLobbyButton": "Vytvořit skupinu",
       "GoToEventDetailButton": "Detail události",
-      "EventHeader": "Moje události",
+      "EventHeader": "Události",
       "EventStartDateLabel": "Začátek:",
       "EventEndDateLabel": "Konec:"
     },
@@ -93,14 +95,12 @@
         "SubmitPasswordSettingsButton": "Změnit heslo"
       }
     },
-    "GroupDetail": {
-      "GroupHeader": "Detail skupiny {{name}}",
-      "BasicInformationHeader": "Základní informace",
-      "PlayersJoined": "Připojený hráči:",
-      "MaxPlayers": "Maximálni počet hráčů:",
-      "GameEvent": "Událost:",
-      "PlayersHeader": "Hráči",
-      "GameRules": "Herní pravidla"
+    "EventDetail": {
+      "Heading": "Událost {{name}}",
+      "EventStartDateLabel": "Začátek:",
+      "EventEndDateLabel": "Konec:",
+      "AddNewLobbyButton": "Vytvořit skupinu",
+      "LobbyHeader": "Skupiny"
     }
   }
 }
