@@ -50,45 +50,43 @@ export const LoginPage = () => {
 
   return (
     <NotLoggedInPageLayout errorList={[{ id: 1, error: loginState.error }]}>
-      <Layout flex self-center flex-column w-75>
-        <Layout flex justify-center pb2>
-          <Heading>{t('Page.Login.FormHeading')}</Heading>
-        </Layout>
+      <Heading className="flex justify-center pb2">
+        {t('Page.Login.FormHeading')}
+      </Heading>
 
-        <Formik
-          initialValues={{ email: '', password: '' }}
-          validationSchema={schema}
-          onSubmit={onSubmitMemoized}
-        >
-          <Form>
-            <Field
-              type="text"
-              name="email"
-              label={t('Page.Login.UsernameLabel')}
-              placeholder={t('Page.Login.UsernamePlaceholder')}
-            />
+      <Formik
+        initialValues={{ email: '', password: '' }}
+        validationSchema={schema}
+        onSubmit={onSubmitMemoized}
+      >
+        <Form>
+          <Field
+            type="text"
+            name="email"
+            label={t('Page.Login.EmailLabel')}
+            placeholder={t('Page.Login.EmailPlaceholder')}
+          />
 
-            <Field
-              type="password"
-              name="password"
-              label={t('Page.Login.PasswordLabel')}
-              placeholder={t('Page.Login.PasswordPlaceholder')}
-            />
+          <Field
+            type="password"
+            name="password"
+            label={t('Page.Login.PasswordLabel')}
+            placeholder={t('Page.Login.PasswordPlaceholder')}
+          />
 
-            <Layout flex justify-end ph2 pb2>
-              <Link to={PATHNAMES.resetPassword()}>
-                {t('Page.Login.DidYouForgetPasswordLink')}
-              </Link>
-            </Layout>
+          <Layout flex justify-end ph2 pb2>
+            <Link to={PATHNAMES.resetPassword()}>
+              {t('Page.Login.DidYouForgetPasswordLink')}
+            </Link>
+          </Layout>
 
-            <Layout flex justify-center>
-              <Button submit primary disabled={loginState.isLoading}>
-                {t('Page.Login.SubmitLoginButton')}
-              </Button>
-            </Layout>
-          </Form>
-        </Formik>
-      </Layout>
+          <Layout flex justify-center>
+            <Button submit primary disabled={loginState.isLoading}>
+              {t('Page.Login.SubmitLoginButton')}
+            </Button>
+          </Layout>
+        </Form>
+      </Formik>
     </NotLoggedInPageLayout>
   );
 };

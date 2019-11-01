@@ -1,5 +1,9 @@
+export { ActivateUserPage } from './activateUser';
+export { EventDetail } from './eventDetail';
 export { HomePage } from './home';
+export { LobbyDetail } from './lobbyDetail';
 export { LoginPage } from './login';
 export { NotFoundPage } from './notFound';
 export { RegistrationPage } from './registration';
 export { ResetPassword } from './resetPassword';
+export { SettingsPage } from './settings';

@@ -4,11 +4,12 @@ import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 
-import ENDPOINTS from '../../endpoints';
-import { Button, Layout, ErrorBox } from '../../atoms';
-import { Field } from '../../organisms';
-import { Modal } from '../../molecules';
-import { useRequest } from '../../utils';
+import ENDPOINTS from '../endpoints';
+import PATHNAMES from '../pathnames';
+import { Button, Layout, ErrorBox } from '../atoms';
+import { Field } from '../organisms';
+import { Modal } from '../molecules';
+import { useRequest } from '../utils';
 
 const schema = yup.object().shape({
   lobbyName: yup
@@ -23,13 +24,16 @@ export const NewLobbyForm = ({ isOpen, onCloseClick, eventName }) => {
   const newLobbyState = useRequest();
 
   const onSubmitMemoized = useCallback(
-    ({ lobbyName, lobbySize }) => {
+    ({ lobbyName }) => {
       newLobbyState.request(ENDPOINTS.newLobby(), {
         method: 'POST',
+        onSuccess: ({ data: { lobbyId } }) => {
+          history.push(PATHNAMES.getLobbyDetail(lobbyId));
+        },
         data: { lobbyName },
       });
     },
-    [newLobbyState],
+    [newLobbyState, history],
   );
 
   return (
@@ -40,12 +44,10 @@ export const NewLobbyForm = ({ isOpen, onCloseClick, eventName }) => {
       onCloseClick={onCloseClick}
       isDisabled={newLobbyState.isLoading}
     >
-      {newLobbyState.error && (
-        <ErrorBox errorList={[{ id: 1, error: newLobbyState.error }]} />
-      )}
+      <ErrorBox errorList={[{ id: 1, error: newLobbyState.error }]} />
 
       <Formik
-        initialValues={{ LobbyName: '' }}
+        initialValues={{ lobbyName: '' }}
         validationSchema={schema}
         onSubmit={onSubmitMemoized}
       >

@@ -15,6 +15,7 @@ const globalApiInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
+    'x-the-league-app-publicUrl': config.PUBLIC_URL,
   },
 });
 

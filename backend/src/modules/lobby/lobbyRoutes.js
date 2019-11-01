@@ -9,7 +9,11 @@ router.get('/list', (req, res, next) => {
 });
 
 router.post('/newLobby', (req, res, next) => {
-  res.json({ id: 1 });
+  res.json({ lobbyId: 1 });
+});
+
+router.get('/:lobbyId', (req, res, next) => {
+  res.json({});
 });
 
 export default router;

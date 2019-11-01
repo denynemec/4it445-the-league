@@ -3,6 +3,7 @@ export { Error } from './Error';
 export { ErrorBox } from './ErrorBox';
 export { Form } from './Form';
 export { Heading } from './Heading';
+export { InfoBox } from './InfoBox';
 export { Label } from './Label';
 export { Layout } from './Layout';
 export { Link } from './Link';

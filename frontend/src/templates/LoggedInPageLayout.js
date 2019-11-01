@@ -7,7 +7,7 @@ export const LoggedInPageLayout = ({ children, errorList }) => (
   <>
     <LoggedInHeader />
 
-    <MainSectionWithErrorBox errorList={errorList}>
+    <MainSectionWithErrorBox errorList={errorList || []}>
       {children}
     </MainSectionWithErrorBox>
   </>

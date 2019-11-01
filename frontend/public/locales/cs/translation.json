@@ -5,7 +5,11 @@
     }
   },
   "Organisms": {
-    "LoggedInHeader": { "HomeLink": "Domů", "LogoutLink": "Odhlásit" },
+    "LoggedInHeader": {
+      "HomeLink": "Domů",
+      "SettingsLink": "Nastavení",
+      "LogoutLink": "Odhlásit"
+    },
     "NotLoggedInHeader": {
       "LoginLink": "Přihlásit",
       "RegisterLink": "Registrovat"
@@ -17,12 +21,11 @@
       "ModalHeaderLabel": "Vytvořit skupinu pro událost {{eventName}}",
       "LobbyName": "Jméno nové skupiny",
       "LobbyNamePlaceholder": "Vyplňte jméno skupiny",
-      "LobbySize": "Maximální velikost skupiny",
-      "LobbySizePlaceholder": "Zadejte maximální počet členů",
-      "SubmitNewLobbyForm": "Vytvořit skupinu",
-      "Validations": {
-        "LobbyNameRequired": "Jméno skupiny je povinné"
-      }
+      "SubmitNewLobbyForm": "Vytvořit skupinu"
+    },
+    "LobbyList": {
+      "LobbyFilter": "Jméno skupiny",
+      "LobbyFilterPlaceholder": "Zadej jméno skupiny"
     }
   },
   "Page": {
@@ -30,8 +33,6 @@
       "FormHeading": "Přihlášení do aplikace The League",
       "EmailLabel": "Email",
       "EmailPlaceholder": "Vyplňte email",
-      "UsernameLabel": "Uživatelské jméno",
-      "UsernamePlaceholder": "Vyplňte uživatelské jméno",
       "PasswordLabel": "Heslo",
       "PasswordPlaceholder": "Vyplňte heslo",
       "SubmitLoginButton": "Přihlásit se",
@@ -51,26 +52,59 @@
       "PasswordPlaceholder": "Vyplňte heslo",
       "SubmitRegistrationButton": "Registrovat se",
       "AlreadyRegistred": "Již máte účet? Přihlaste se.",
-      "Validations": {
-        "EmailRequired": "Email je povinný",
-        "PasswordRequired": "Heslo je povinné",
-        "passwordConfirmationRequired": "Zopakování hesla je povinné",
-        "passwordConfirmationNotvalid": "Hesla se musí shodovat"
-      }
+      "EmailSent": "Pro dokončení registrace aktivujte svůj účet pomocí linku ve Vašem emailu ({{email}})."
+    },
+    "ActivateUser": {
+      "FormHeading": "Aktivace uživatele",
+      "SubmitActivateUserButton": "Aktivovat uživatele",
+      "FirstNameLabel": "Jméno",
+      "FirstNamePlaceholder": "Zadejte jméno",
+      "LastNameLabel": "Příjmení",
+      "LastNamePlaceholder": "Zadejte příjmení",
+      "NicknameLabel": "Nickname",
+      "NicknamePlaceholder": "Vyplňte nickname"
     },
     "Home": {
       "GoToGroupDetailButton": "Detail skupiny",
       "EventName": "Událost: {{eventName}}",
-      "GamGroupHeader": "Moje skupiny",
-      "LobbyFilter": "Jméno skupiny",
-      "LobbyFilterPlaceholder": "Zadej jméno skupiny",
+      "LobbyHeader": "Moje skupiny",
       "EventFilter": "Jméno události",
       "EventFilterPlaceholder": "Zadej jméno události",
       "AddNewLobbyButton": "Vytvořit skupinu",
       "GoToEventDetailButton": "Detail události",
-      "EventHeader": "Moje události",
+      "EventHeader": "Události",
       "EventStartDateLabel": "Začátek:",
       "EventEndDateLabel": "Konec:"
+    },
+    "Settings": {
+      "PageHeading": "Nastavení",
+      "BaseSettings": {
+        "FormHeading": "Základní informace",
+        "FirstNameLabel": "Jméno",
+        "FirstNamePlaceholder": "Zadejte jméno",
+        "LastNameLabel": "Příjmení",
+        "LastNamePlaceholder": "Zadejte příjmení",
+        "NicknameLabel": "Nickname",
+        "NicknamePlaceholder": "Vyplňte nickname",
+        "SubmitSettingsButton": "Uložit"
+      },
+      "PasswordSettings": {
+        "FormHeading": "Změna hesla",
+        "OldPasswordLabel": "Staré heslo",
+        "OldPasswordPlaceholder": "Zadejte staré heslo",
+        "NewPasswordLabel": "Nové heslo",
+        "NewPasswordPlaceholder": "Zadejte nové heslo",
+        "NewPasswordConfirmationLabel": "Zopakujte heslo",
+        "NewPasswordConfirmationPlaceholder": "Zopakujte heslo",
+        "SubmitPasswordSettingsButton": "Změnit heslo"
+      }
+    },
+    "EventDetail": {
+      "Heading": "Událost {{name}}",
+      "EventStartDateLabel": "Začátek:",
+      "EventEndDateLabel": "Konec:",
+      "AddNewLobbyButton": "Vytvořit skupinu",
+      "LobbyHeader": "Skupiny"
     }
   }
 }

@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { Heading, Layout, LoadingSpinner } from '../../atoms';
 import { TextInputWithLabel } from '../../molecules';
+import { LobbyList } from '../../organisms';
 import { LoggedInPageLayout } from '../../templates';
 import { useFetchData } from './hooks';
-import { LayoutedLobby } from './LayoutedLobby';
 import { LayoutedEvent } from './LayoutedEvent';
 
-const HomePageBase = ({ history }) => {
+export const HomePage = () => {
   const { t } = useTranslation();
+
+  const history = useHistory();
 
   const { eventListState, lobbyListState } = useFetchData();
 
-  const [filterLobby, setFilterLobby] = useState('');
   const [filterEvent, setFilterEvent] = useState('');
 
   const errorList = [
@@ -27,40 +28,16 @@ const HomePageBase = ({ history }) => {
       {(eventListState.isLoading || lobbyListState.isLoading) && (
         <LoadingSpinner />
       )}
+
       <Layout flex flex-column>
-        {!lobbyListState.error && !lobbyListState.isLoading && (
-          <>
-            <Layout flex justify-between items-center>
-              <Heading size="md" className="flex self-bottom">
-                {t('Page.Home.GamGroupHeader')}
-              </Heading>
+        <LobbyList
+          lobbyList={lobbyListState.data || []}
+          header={t('Page.Home.LobbyHeader')}
+        />
 
-              <Layout w-40>
-                <TextInputWithLabel
-                  name="lobbyFilter"
-                  label={t('Page.Home.LobbyFilter')}
-                  placeholder={t('Page.Home.LobbyFilterPlaceholder')}
-                  value={filterLobby}
-                  onChange={setFilterLobby}
-                />
-              </Layout>
-            </Layout>
+        <Layout bb pb4 mb3 />
 
-            <Layout flex flex-wrap pt3 bb pb4 mb3>
-              {lobbyListState.data
-                .filter(({ name }) =>
-                  name.toLowerCase().includes(filterLobby.toLowerCase()),
-                )
-                .map(lobby => (
-                  <LayoutedLobby key={lobby.id} history={history} {...lobby} />
-                ))}
-            </Layout>
-          </>
-        )}
-
-        {/* Event list */}
-
-        {!eventListState.error && !eventListState.isLoading && (
+        {eventListState.data && (
           <>
             <Layout flex justify-between items-center>
               <Heading size="md" className="flex self-bottom">
@@ -73,8 +50,8 @@ const HomePageBase = ({ history }) => {
                   label={t('Page.Home.EventFilter')}
                   placeholder={t('Page.Home.EventFilterPlaceholder')}
                   value={filterEvent}
-                  onChange={setFilterEvent}
-                />{' '}
+                  onChange={event => setFilterEvent(event.target.value)}
+                />
               </Layout>
             </Layout>
 
@@ -93,5 +70,3 @@ const HomePageBase = ({ history }) => {
     </LoggedInPageLayout>
   );
 };
-
-export const HomePage = withRouter(HomePageBase);

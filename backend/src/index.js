@@ -2,7 +2,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import cors from 'cors';
 
-import loginRoutes from './loginRoutes';
+import unSecureRoutes from './unSecureRoutes';
 import secureRoutes from './secureRoutes';
 import { verifyJwtToken } from './utils/jwtToken';
 
@@ -32,7 +32,7 @@ app.use('/testDb', async (req, res, next) => {
 });
 
 // unsecured routes for login, registration, etc.
-app.use(loginRoutes);
+app.use(unSecureRoutes);
 
 app.use(verifyJwtToken);
 
