@@ -4,11 +4,12 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 export const sendEmail = async ({
   html,
   text,
+  subject,
   emailTo,
   onSuccess = () => {},
   onError = () => {},
 }) => {
-  const msg = getMailOptions({ html, text, emailTo });
+  const msg = getMailOptions({ html, text, subject, emailTo });
 
   const result = await sgMail.send(msg, (error) => {
     if (error) {
@@ -20,10 +21,10 @@ export const sendEmail = async ({
 };
 
 
-const getMailOptions = ({ html, text, emailTo }) => ({
+const getMailOptions = ({ html, text, subject, emailTo }) => ({
   to: emailTo,
   from: 'notification@theleague4.com',
-  subject: 'The League Registration Confirmation',
+  subject: subject,
   text,
   html,
 });

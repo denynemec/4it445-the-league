@@ -107,8 +107,9 @@ router.post(
 
         sendEmail({
           emailTo: email,
+          subject: 'The League Registration Confirmation',
           text: 'The League 4',
-          html: `<a href='${registrationConfirmFeAppLink}'>Pro potvrzení registrace klikněte na tento link... </a>`,
+          html: `<strong>The League 4</strong> <br /> <a href='${registrationConfirmFeAppLink}'>Pro potvrzení registrace klikněte na tento link... </a>`,
           onSuccess: () => res.json({ email }),
           onError: () => {
             console.error(error);
