@@ -34,13 +34,6 @@ export const RegistrationPage = () => {
 
   const [emailSentState, setEmailSentState] = useState('');
 
-  const onSuccess = useCallback(
-    ({ data: { email } }) => {
-      setEmailSentState(t('Page.Registration.EmailSent', { email }));
-    },
-    [setEmailSentState, t],
-  );
-
   useEffect(() => {
     if (registrationState.isLoading) {
       setEmailSentState('');
@@ -48,14 +41,17 @@ export const RegistrationPage = () => {
   }, [registrationState.isLoading]);
 
   const onSubmitMemoized = useCallback(
-    ({ email, password }) => {
+    ({ email, password }, { resetForm }) => {
       registrationState.request(ENDPOINTS.registration(), {
         method: 'POST',
-        onSuccess,
+        onSuccess: ({ data: { email } }) => {
+          resetForm();
+          setEmailSentState(t('Page.Registration.EmailSent', { email }));
+        },
         data: { email, password },
       });
     },
-    [registrationState, onSuccess],
+    [registrationState, t],
   );
 
   return (

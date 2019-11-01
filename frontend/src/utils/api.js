@@ -9,13 +9,16 @@ import axios from 'axios';
 
 import { useAuth } from './auth';
 import { config } from '../config';
+import PATHNAMES from '../pathnames';
+
+const activateUserUrl = `${config.PUBLIC_URL}${PATHNAMES.getActivateUser()}`;
 
 const globalApiInstance = axios.create({
   baseURL: config.BASE_API_URL,
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
-    'x-the-league-app-publicUrl': config.PUBLIC_URL,
+    'x-the-league-app-activate-user-url': activateUserUrl,
   },
 });
 

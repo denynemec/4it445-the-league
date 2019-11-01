@@ -29,7 +29,8 @@ router.post(
     } = req;
 
     const dbResponse = await dbConnection.query(
-      'SELECT user_id, nickname, password FROM users WHERE email = ? AND active = true LIMIT 1;', [email],
+      'SELECT user_id, nickname, password FROM users WHERE email = ? AND active = true LIMIT 1;',
+      [email],
     );
 
     if (!dbResponse[0]) {
@@ -79,7 +80,8 @@ router.post(
 
     // validate if email is already registered
     const dbResponseUserWithEmail = await dbConnection.query(
-      'SELECT user_id FROM users WHERE email = ?;',[email],
+      'SELECT user_id FROM users WHERE email = ?;',
+      [email],
     );
 
     if (dbResponseUserWithEmail[0]) {
@@ -88,8 +90,8 @@ router.post(
         .json({ error: '422: This email is already registered' });
     }
 
-    bcrypt.hash(password, 10, async (err, hash) => {
-      if (!err) {
+    bcrypt.hash(password, 10, async (error, hash) => {
+      if (!error) {
         const dbResponse = await dbConnection.query(
           `INSERT INTO users (user_id, email, password, active, created_at, updated_at) 
       VALUES (NULL, ?, ?, ?, NOW(), NOW());`,
@@ -99,11 +101,8 @@ router.post(
         const newUserHashId = Hashids.encode(dbResponse.insertId);
 
         const registrationConfirmFeAppLink = `${
-          req.headers['x-the-league-app-publicurl']
-        }/activate-user/${newUserHashId}`;
-
-        // TOFIX need to fix send to email service - then remove console.log(...)
-        console.log(registrationConfirmFeAppLink);
+          req.headers['x-the-league-app-activate-user-url']
+        }/${newUserHashId}`;
 
         sendEmail({
           emailTo: email,
@@ -158,7 +157,8 @@ router.put(
     const userId = Hashids.decode(userHash);
 
     const dbResponse = await dbConnection.query(
-      'UPDATE users SET nickname = ?, firstname = ?, lastname = ?, active = true, updated_at = NOW() WHERE user_id = ? AND active = false;', [nickname, firstName, lastName, userId],
+      'UPDATE users SET nickname = ?, firstname = ?, lastname = ?, active = true, updated_at = NOW() WHERE user_id = ? AND active = false;',
+      [nickname, firstName, lastName, userId],
     );
 
     if (dbResponse.affectedRows === 0) {
@@ -171,6 +171,22 @@ router.put(
       token,
       user: { nickname },
     });
+  },
+);
+
+router.post(
+  '/reset-password',
+  [
+    check('email')
+      .not()
+      .isEmpty(),
+  ],
+  (req, res, next) => {
+    const {
+      body: { email, password },
+    } = req;
+
+    res.json({ email });
   },
 );
 

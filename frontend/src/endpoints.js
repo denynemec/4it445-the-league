@@ -12,4 +12,5 @@ export default {
   updatePassword: () => `${apiPrefix}/settings/update-password`,
   getEventDetail: id => `${apiPrefix}/event/${id}`,
   getLobbyDetail: id => `${apiPrefix}/lobby/${id}`,
+  resetPassword: () => `${apiPrefix}/auth/reset-password`,
 };
