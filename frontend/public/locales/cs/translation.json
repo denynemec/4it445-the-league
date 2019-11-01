@@ -105,6 +105,13 @@
       "EventEndDateLabel": "Konec:",
       "AddNewLobbyButton": "Vytvořit skupinu",
       "LobbyHeader": "Skupiny"
+    },
+    "ResetPassword": {
+      "FormHeading": "Zapomenuté heslo",
+      "EmailLabel": "Email",
+      "EmailPlaceholder": "Vyplňte email",
+      "SubmitResetPasswordButton": "Odeslat",
+      "EmailSent": "Link pro změnu hesla byl odeslán na email {{email}}"
     }
   }
 }
