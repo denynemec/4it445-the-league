@@ -29,7 +29,7 @@ router.post(
     } = req;
 
     const dbResponse = await dbConnection.query(
-      `SELECT user_id, nickname, password FROM users WHERE email = '${email}' AND active = true LIMIT 1;`,
+      'SELECT user_id, nickname, password FROM users WHERE email = ? AND active = true LIMIT 1;', [email],
     );
 
     if (!dbResponse[0]) {
@@ -79,7 +79,7 @@ router.post(
 
     // validate if email is already registered
     const dbResponseUserWithEmail = await dbConnection.query(
-      `SELECT user_id FROM users WHERE email = '${email}';`,
+      'SELECT user_id FROM users WHERE email = ?;',[email],
     );
 
     if (dbResponseUserWithEmail[0]) {
@@ -91,9 +91,9 @@ router.post(
     bcrypt.hash(password, 10, async (err, hash) => {
       if (!err) {
         const dbResponse = await dbConnection.query(
-          `INSERT INTO users (user_id, email, password, active, nickname, firstname, lastname) 
-      VALUES (NULL, ?, ?, ?, ?, ?, ?);`,
-          [email, hash, false, '', '', ''],
+          `INSERT INTO users (user_id, email, password, active) 
+      VALUES (NULL, ?, ?, ?);`,
+          [email, hash, false],
         );
 
         const newUserHashId = Hashids.encode(dbResponse.insertId);
@@ -107,8 +107,9 @@ router.post(
 
         sendEmail({
           emailTo: email,
-          text: 'The League',
-          html: `<link href='${registrationConfirmFeAppLink}'>Pro potvrzení registrace klikněte na tento link... </link>`,
+          subject: 'The League Registration Confirmation',
+          text: 'The League 4',
+          html: `<strong>The League 4</strong> <br /> <a href='${registrationConfirmFeAppLink}'>Pro potvrzení registrace klikněte na tento link... </a>`,
           onSuccess: () => res.json({ email }),
           onError: () => {
             console.error(error);
@@ -157,7 +158,7 @@ router.put(
     const userId = Hashids.decode(userHash);
 
     const dbResponse = await dbConnection.query(
-      `UPDATE users SET nickname = '${nickname}', firstname = '${firstName}', lastname = '${lastName}', active = true WHERE user_id = '${userId}' AND active = false;`,
+      'UPDATE users SET nickname = ?, firstname = ?, lastname = ?, active = true WHERE user_id = ? AND active = false;', [nickname, firstName, lastName, userId],
     );
 
     if (dbResponse.affectedRows === 0) {
