@@ -157,7 +157,7 @@ router.put(
     const userId = Hashids.decode(userHash);
 
     const dbResponse = await dbConnection.query(
-      'UPDATE users SET nickname = ?, firstname = ?, lastname = ?, active = true WHERE user_id = ? AND active = false;',[nickname, firstName, lastName],
+      'UPDATE users SET nickname = ?, firstname = ?, lastname = ?, active = true WHERE user_id = ? AND active = false;', [nickname, firstName, lastName, userId],
     );
 
     if (dbResponse.affectedRows === 0) {
