@@ -91,7 +91,7 @@ router.post(
     bcrypt.hash(password, 10, async (err, hash) => {
       if (!err) {
         const dbResponse = await dbConnection.query(
-          `INSERT INTO users (user_id, email, password, active, nickname, firstname, lastname) 
+          `INSERT INTO users (user_id, email, password, active, nickname, firstname, lastname)
       VALUES (NULL, ?, ?, ?, ?, ?, ?);`,
           [email, hash, false, '', '', ''],
         );
@@ -170,6 +170,22 @@ router.put(
       token,
       user: { nickname },
     });
+  },
+);
+
+router.post(
+  '/reset-password',
+  [
+    check('email')
+      .not()
+      .isEmpty(),
+  ],
+  (req, res, next) => {
+    const {
+      body: { email, password },
+    } = req;
+
+    res.json({ email });
   },
 );
 
