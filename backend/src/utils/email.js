@@ -11,7 +11,7 @@ export const sendEmail = async ({
 }) => {
   const msg = getMailOptions({ html, text, subject, emailTo });
 
-  const result = await sgMail.send(msg, (error) => {
+  await sgMail.send(msg, error => {
     if (error) {
       onError();
     } else {
@@ -20,11 +20,10 @@ export const sendEmail = async ({
   });
 };
 
-
 const getMailOptions = ({ html, text, subject, emailTo }) => ({
   to: emailTo,
   from: 'notification@theleague4.com',
-  subject: subject,
+  subject,
   text,
   html,
 });
