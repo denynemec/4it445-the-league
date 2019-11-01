@@ -90,8 +90,8 @@ router.post(
         .json({ error: '422: This email is already registered' });
     }
 
-    bcrypt.hash(password, 10, async (err, hash) => {
-      if (!err) {
+    bcrypt.hash(password, 10, async (error, hash) => {
+      if (!error) {
         const dbResponse = await dbConnection.query(
           `INSERT INTO users (user_id, email, password, active) 
       VALUES (NULL, ?, ?, ?);`,
