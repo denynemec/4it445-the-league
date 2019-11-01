@@ -91,8 +91,8 @@ router.post(
     bcrypt.hash(password, 10, async (err, hash) => {
       if (!err) {
         const dbResponse = await dbConnection.query(
-          `INSERT INTO users (user_id, email, password, active) 
-      VALUES (NULL, ?, ?, ?);`,
+          `INSERT INTO users (user_id, email, password, active, created_at, updated_at) 
+      VALUES (NULL, ?, ?, ?, NOW(), NOW());`,
           [email, hash, false],
         );
 
@@ -158,7 +158,7 @@ router.put(
     const userId = Hashids.decode(userHash);
 
     const dbResponse = await dbConnection.query(
-      'UPDATE users SET nickname = ?, firstname = ?, lastname = ?, active = true WHERE user_id = ? AND active = false;', [nickname, firstName, lastName, userId],
+      'UPDATE users SET nickname = ?, firstname = ?, lastname = ?, active = true, updated_at = NOW() WHERE user_id = ? AND active = false;', [nickname, firstName, lastName, userId],
     );
 
     if (dbResponse.affectedRows === 0) {
