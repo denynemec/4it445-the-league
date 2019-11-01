@@ -174,4 +174,20 @@ router.put(
   },
 );
 
+router.post(
+  '/reset-password',
+  [
+    check('email')
+      .not()
+      .isEmpty(),
+  ],
+  (req, res, next) => {
+    const {
+      body: { email, password },
+    } = req;
+
+    res.json({ email });
+  },
+);
+
 export default router;
