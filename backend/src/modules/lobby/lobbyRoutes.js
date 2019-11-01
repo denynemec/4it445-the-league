@@ -16,4 +16,8 @@ router.get('/:lobbyId', (req, res, next) => {
   res.json({});
 });
 
+router.get('/:lobbyId/fetchDraft', (req, res, next) => {
+  res.json({ draft: 1 });
+});
+
 export default router;

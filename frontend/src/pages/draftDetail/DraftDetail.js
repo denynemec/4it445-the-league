@@ -7,17 +7,19 @@ import { LoadingSpinner } from '../../atoms';
 import { LoggedInPageLayout } from '../../templates';
 import { useFetchRequest } from '../../utils';
 
-export const LobbyDetail = () => {
+export const DraftDetail = () => {
   // const { t } = useTranslation();
   const { lobbyId } = useParams();
 
-  const lobbyState = useFetchRequest(ENDPOINTS.fetchDraft(lobbyId));
+  const fetchDraftState = useFetchRequest(ENDPOINTS.fetchDraft(lobbyId));
+
+  console.log(fetchDraftState);
 
   return (
-    <LoggedInPageLayout errorList={[{ id: 1, error: lobbyState.error }]}>
-      {lobbyState.isLoading && <LoadingSpinner />}
+    <LoggedInPageLayout errorList={[{ id: 1, error: fetchDraftState.error }]}>
+      {fetchDraftState.isLoading && <LoadingSpinner />}
 
-      {lobbyState.data && 'Lobby detail page skeleton '}
+      {fetchDraftState.data && 'test'}
     </LoggedInPageLayout>
   );
 };
