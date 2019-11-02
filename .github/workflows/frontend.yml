@@ -14,16 +14,14 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '10.x'
-    - name: ESLint checks
-      uses: gimenete/eslint-action@1.0
     - name: Format
-      run: |
-           cd ./frontend
-           yarn format
+      working-directory: ./frontend
+      run: yarn format
     - name: Install Dependencies
-      run: |
-           cd ./frontend
-           yarn install
+      working-directory: ./frontends
+      run: yarn install
+    - name: Build
+      run: yarn build
       env:
         BROWSER: false
         REACT_EDITOR: none
