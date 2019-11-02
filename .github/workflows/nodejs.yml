@@ -17,9 +17,9 @@ jobs:
     - name: ESLint checks
       uses: gimenete/eslint-action@1.0
     - name: Format
-      run: yarn format
+      run: cd ./frontend && yarn format
     - name: Install Dependencies
-      run: yarn install
+      run: cd ./frontend && yarn install
       env:
         BROWSER: false
         REACT_EDITOR: none
