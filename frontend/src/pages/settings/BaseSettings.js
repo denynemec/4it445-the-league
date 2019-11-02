@@ -1,27 +1,16 @@
 import React, { useCallback } from 'react';
-import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../../endpoints';
 import { Heading, Button, ErrorBox, Layout, LoadingSpinner } from '../../atoms';
 import { Field } from '../../organisms';
-import { useRequest, useAuth, useFetchRequest } from '../../utils';
-
-const schema = yup.object().shape({
-  nickname: yup
-    .string()
-    .required()
-    .label('Nickname'),
-  firstName: yup
-    .string()
-    .required()
-    .label('FirstName'),
-  lastName: yup
-    .string()
-    .required()
-    .label('LastName'),
-});
+import {
+  useRequest,
+  useAuth,
+  useFetchRequest,
+  translatedValidations,
+} from '../../utils';
 
 export const BaseSettings = () => {
   const { t } = useTranslation();
@@ -41,6 +30,14 @@ export const BaseSettings = () => {
     },
     [updateBaseSettingsState, signin, token, user],
   );
+
+  const { object, requiredString } = translatedValidations(t);
+
+  const schema = object({
+    nickname: requiredString,
+    firstName: requiredString,
+    lastName: requiredString,
+  });
 
   return (
     <>

@@ -8,44 +8,50 @@ import PATHNAMES from '../pathnames';
 import { Button, Layout, ErrorBox } from '../atoms';
 import { Field } from '../organisms';
 import { Modal } from '../molecules';
-import { useRequest, translatedValidations } from '../utils';
-
-const schema = ({ t, minEmails, maxEmail }) => {
-  const { object, uniqueMinMaxEmails, requiredString } = translatedValidations(
-    t,
-  );
-
-  return object({
-    lobbyName: requiredString,
-    emails: uniqueMinMaxEmails({ min: minEmails, max: minEmails }),
-  });
-};
+import {
+  useRequest,
+  translatedValidations,
+  emailsStringToEmailArray,
+} from '../utils';
 
 export const NewLobbyForm = ({
   isOpen,
   onCloseClick,
   eventName,
-  minEmails,
-  maxEmails,
+  minUsers,
+  maxUsers,
 }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const newLobbyState = useRequest();
 
-  const minMaxEmails = { min: minEmails, max: maxEmails };
+  const minEmails = minUsers - 1;
+  const maxEmails = maxUsers - 1;
 
   const onSubmitMemoized = useCallback(
-    ({ lobbyName }) => {
+    ({ lobbyName, emails }) => {
       newLobbyState.request(ENDPOINTS.newLobby(), {
         method: 'POST',
         onSuccess: ({ data: { lobbyId } }) => {
           history.push(PATHNAMES.getLobbyDetail(lobbyId));
         },
-        data: { lobbyName },
+        data: {
+          lobbyName,
+          emails: Object.values(emailsStringToEmailArray(emails)),
+        },
       });
     },
     [newLobbyState, history],
   );
+
+  const { object, uniqueMinMaxEmails, requiredString } = translatedValidations(
+    t,
+  );
+
+  const schema = object({
+    lobbyName: requiredString,
+    emails: uniqueMinMaxEmails({ min: minEmails, max: maxEmails }),
+  });
 
   return (
     <Modal
@@ -59,7 +65,7 @@ export const NewLobbyForm = ({
 
       <Formik
         initialValues={{ lobbyName: '', emails: '' }}
-        validationSchema={schema({ t, ...minMaxEmails })}
+        validationSchema={schema}
         onSubmit={onSubmitMemoized}
       >
         <Form>
@@ -74,10 +80,10 @@ export const NewLobbyForm = ({
             type="textarea"
             name="emails"
             label={t('Organisms.NewLobbyForm.Emails')}
-            placeholder={t(
-              'Organisms.NewLobbyForm.EmailsPlaceholder',
-              minMaxEmails,
-            )}
+            placeholder={t('Organisms.NewLobbyForm.EmailsPlaceholder', {
+              min: minEmails,
+              max: maxEmails,
+            })}
           />
 
           <Layout flex justify-center>

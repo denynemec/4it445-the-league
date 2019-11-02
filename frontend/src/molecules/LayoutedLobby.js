@@ -10,7 +10,7 @@ export const LayoutedLobby = ({
   id,
   joinedUsers,
   maxUsers,
-  minimumUsers,
+  minUsers,
   name,
 }) => {
   const { t } = useTranslation();
@@ -23,7 +23,7 @@ export const LayoutedLobby = ({
 
   let groupUserIndicatorColorClass = 'bg-spring-green';
 
-  if (joinedUsers < minimumUsers) {
+  if (joinedUsers < minUsers) {
     groupUserIndicatorColorClass = 'bg-yellow';
   } else if (joinedUsers === maxUsers) {
     groupUserIndicatorColorClass = 'bg-red';

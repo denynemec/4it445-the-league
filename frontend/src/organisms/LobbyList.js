@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Heading, Layout } from '../atoms';
 import { LayoutedLobby, TextInputWithLabel } from '../molecules';
+import { valueContains } from '../utils';
 
 export const LobbyList = ({ lobbyList, header }) => {
   const { t } = useTranslation();
@@ -30,9 +31,7 @@ export const LobbyList = ({ lobbyList, header }) => {
 
         <Layout flex flex-wrap pt3>
           {lobbyList
-            .filter(({ name }) =>
-              name.toLowerCase().includes(filterLobby.toLowerCase()),
-            )
+            .filter(({ name }) => valueContains(name, filterLobby))
             .map(lobby => (
               <LayoutedLobby key={lobby.id} {...lobby} />
             ))}

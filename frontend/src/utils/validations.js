@@ -1,5 +1,7 @@
 import * as yup from 'yup';
 
+import { emailsStringToEmailArray } from './';
+
 export const translatedValidations = t => ({
   email: email(t),
   requiredString: requiredString(t),
@@ -27,21 +29,13 @@ const uniqueMinMaxEmails = t => ({ min, max }) =>
   requiredString(t).test('uniqueMinMaxEmails', '', function(emails = '') {
     const { path, createError } = this;
 
-    const rawEmails = emails
-      .split(',')
-      .map(email => email.trim())
-      .filter(email => !!email);
+    const rawEmails = emailsStringToEmailArray(emails);
 
     const emailsSet = new Set(rawEmails);
 
     if (
       rawEmails
-        .map(email =>
-          yup
-            .string()
-            .email()
-            .isValidSync(email),
-        )
+        .map(email_ => email(t).isValidSync(email_))
         .filter(booleanValue => !booleanValue).length !== 0
     ) {
       return createError({
