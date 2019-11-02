@@ -21,7 +21,9 @@
       "ModalHeaderLabel": "Vytvořit skupinu pro událost {{eventName}}",
       "LobbyName": "Jméno nové skupiny",
       "LobbyNamePlaceholder": "Vyplňte jméno skupiny",
-      "SubmitNewLobbyForm": "Vytvořit skupinu"
+      "SubmitNewLobbyForm": "Vytvořit skupinu",
+      "Emails": "Emaily pro ostatní členy skupiny",
+      "EmailsPlaceholder": "Zadejte emaily oddělené ',' - minimálně {{min}} a maximálně {{max}}"
     },
     "LobbyList": {
       "LobbyFilter": "Jméno skupiny",
@@ -113,5 +115,13 @@
       "SubmitResetPasswordButton": "Odeslat",
       "EmailSent": "Link pro změnu hesla byl odeslán na email {{email}}"
     }
+  },
+  "Validations": {
+    "Required": "Povinný údaj",
+    "Email": "Neplatný email",
+    "PasswordsDontMatch": "Hesla se neshodují",
+    "EmailsContainNotEmail": "Některý ze zadaných emailů není validní",
+    "EmailsUnique": "Emaily musí být unikátní",
+    "EmailsMinMax": "Počet emailů musí být minimálně {{min}} a maximálně {{max}}"
   }
 }

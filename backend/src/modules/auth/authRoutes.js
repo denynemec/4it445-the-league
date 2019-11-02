@@ -34,7 +34,7 @@ router.post(
     );
 
     if (!dbResponse[0]) {
-      // For not found user, we should return same error as for bad password to not allowed guesing emails/emails
+      // For not found user, we should return same error as for bad password to not allowed guesing emails
       return res.status(401).json({ error: '401: Not authenticated.' });
     }
 
