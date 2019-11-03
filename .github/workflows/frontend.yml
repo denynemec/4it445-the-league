@@ -19,7 +19,7 @@ jobs:
       run: yarn format
     - name: Install Dependencies
       working-directory: ./frontend
-      run: yarn install
+      run: echo $PWD
     - name: Build
       run: yarn build
       env:
