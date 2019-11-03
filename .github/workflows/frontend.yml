@@ -15,7 +15,7 @@ jobs:
       with:
         node-version: '10.x'
     - name: Format
-      run: echo $PWD
+      run: ls -la ./..
     - name: Install Dependencies
       run: ls -la
     - name: Build
