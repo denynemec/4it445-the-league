@@ -99,12 +99,17 @@
         "SubmitPasswordSettingsButton": "Změnit heslo"
       }
     },
-    "EventDetail": {
-      "Heading": "Událost {{name}}",
-      "EventStartDateLabel": "Začátek:",
-      "EventEndDateLabel": "Konec:",
-      "AddNewLobbyButton": "Vytvořit skupinu",
-      "LobbyHeader": "Skupiny"
+    "PlayersResults": {
+      "ResultHeading": "Výsledky",
+      "PlayersTable": {
+        "Number": "Číslo",
+        "Position": "Pozice",
+        "Name": "Jméno",
+        "Team": "Tým",
+        "Earnings": "Výdelek",
+        "EarningsPercentage": "% na Výdelku",
+        "ProfitLoss": "Ušlý zisk"
+      }
     }
   }
 }

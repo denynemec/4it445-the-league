@@ -13,7 +13,7 @@ router.post('/newLobby', (req, res, next) => {
 });
 
 router.get('/:lobbyId', (req, res, next) => {
-  res.json({});
+  res.json({ playerList: mocks.playerList });
 });
 
 export default router;
