@@ -15,8 +15,7 @@ jobs:
       with:
         node-version: '10.x'
     - name: Format
-      working-directory: ./frontend
-      run: yarn format
+      run: echo $PWD
     - name: Install Dependencies
       working-directory: ./frontend
       run: echo $PWD
