@@ -97,6 +97,9 @@
         "NewPasswordConfirmationLabel": "Zopakujte heslo",
         "NewPasswordConfirmationPlaceholder": "Zopakujte heslo",
         "SubmitPasswordSettingsButton": "Změnit heslo"
+      },
+      "Draft": {
+        "DraftOrderHeading": "Draft order"
       }
     },
     "EventDetail": {
