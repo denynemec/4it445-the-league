@@ -2,7 +2,8 @@
   "Molecules": {
     "HeaderBase": {
       "HomeLink": "Pasivní sport nikdy nebyl zábavnější"
-    }
+    },
+    "LayutedLobby": { "EventName": "Událost: {{eventName}}" }
   },
   "Organisms": {
     "LoggedInHeader": {
@@ -27,7 +28,8 @@
     },
     "LobbyList": {
       "LobbyFilter": "Jméno skupiny",
-      "LobbyFilterPlaceholder": "Zadej jméno skupiny"
+      "LobbyFilterPlaceholder": "Zadej jméno skupiny",
+      "GoToGroupDetailButton": "Detail skupiny"
     }
   },
   "Page": {
@@ -67,8 +69,6 @@
       "NicknamePlaceholder": "Vyplňte nickname"
     },
     "Home": {
-      "GoToGroupDetailButton": "Detail skupiny",
-      "EventName": "Událost: {{eventName}}",
       "LobbyHeader": "Moje skupiny",
       "EventFilter": "Jméno události",
       "EventFilterPlaceholder": "Zadej jméno události",
@@ -114,6 +114,14 @@
       "EmailPlaceholder": "Vyplňte email",
       "SubmitResetPasswordButton": "Odeslat",
       "EmailSent": "Link pro změnu hesla byl odeslán na email {{email}}"
+    },
+    "JoinToLobby": {
+      "Heading": "Pozvánka do skupiny",
+      "UserNotRegistered": "Nemáte u nás zatím účet. Chcete-li přijmout pozvánku do skupiny, klikněte na tlačítko \"Připojit\", následně budete přesměrován na registrační formulář a po dokončení registrace automaticky připojen k této skupině.",
+      "JoinButton": "Připojit se ke skupině"
+    },
+    "NotFound": {
+      "Heading": "Page not found"
     }
   },
   "Validations": {

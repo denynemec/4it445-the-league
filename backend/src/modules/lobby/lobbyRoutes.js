@@ -24,6 +24,53 @@ router.get('/list', async (req, res, next) => {
   res.json(lobbyList);
 });
 
+router.get('/join-to-lobby-detail/:lobbyHash', async (req, res, next) => {
+  const dbConnection = req[DB_CONNECTION_KEY];
+  const { lobbyHash } = req.params;
+
+  // TODO select lobby detail by lobbyHash and return to FE
+
+  res.json({
+    name: 'Lobby name mocked',
+    joinedUsers: 4,
+    maxUsers: 8,
+    eventName: 'Euro 2020',
+    // false - user will be redirected to register form after click to "Join button"
+    // true - user will be logged into app and redirected to home page
+    // different response.body will be then in UPDATE joinToLobby endpoint - different route in this module..
+    userIsRegistered: false,
+  });
+});
+
+router.put(
+  '/join-to-lobby',
+  [
+    check('lobbyHash')
+      .not()
+      .isEmpty(),
+  ],
+  async (req, res, next) => {
+    const dbConnection = req[DB_CONNECTION_KEY];
+    const { lobbyHash } = req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: formatErrors(errors),
+      });
+    }
+
+    // TODO check lobbyHash from DB and if user is already registered
+    // when user is not registered - return only { userIsRegistered: false }
+    // when user is registered - need to generate JWT token and SELECT user info and return:
+    // { userIsRegistered: true,
+    //   token: getJwtToken({ userId: 666 }),
+    //   user: { nickname: "Mocked Nickname" }
+    // }
+    res.json({ userIsRegistered: false });
+  },
+);
+
 router.post(
   '/newLobby',
   [

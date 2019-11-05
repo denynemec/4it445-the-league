@@ -1,0 +1,1 @@
+export { JoinToLobbyPage } from './JoinToLobby';

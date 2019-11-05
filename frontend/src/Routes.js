@@ -12,6 +12,7 @@ import {
   LobbyDetail,
   ActivateUserPage,
   SettingsPage,
+  JoinToLobbyPage,
 } from './pages';
 import { useAuth } from './utils';
 
@@ -31,6 +32,7 @@ export function Routes() {
         exact
         component={ActivateUserPage}
       />
+      <Route path={PATHNAMES.joinToLobby()} exact component={JoinToLobbyPage} />
 
       {/* Login required routes */}
       <PrivateRoute path={PATHNAMES.home()} exact component={HomePage} />

@@ -13,4 +13,7 @@ export default {
   getEventDetail: id => `${apiPrefix}/event/${id}`,
   getLobbyDetail: id => `${apiPrefix}/lobby/${id}`,
   resetPassword: () => `${apiPrefix}/auth/reset-password`,
+  getJoinToLobbyDetail: lobbyHash =>
+    `${apiPrefix}/lobby/join-to-lobby-detail/${lobbyHash}`,
+  joinToLobby: () => `${apiPrefix}/lobby/join-to-lobby`,
 };
