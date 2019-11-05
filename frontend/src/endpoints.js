@@ -13,4 +13,5 @@ export default {
   getEventDetail: id => `${apiPrefix}/event/${id}`,
   getLobbyDetail: id => `${apiPrefix}/lobby/${id}`,
   fetchDraft: id => `${apiPrefix}/lobby/${id}/fetchDraft`,
+  resetPassword: () => `${apiPrefix}/auth/reset-password`,
 };

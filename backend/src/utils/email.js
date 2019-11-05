@@ -1,37 +1,29 @@
-import nodemailer from 'nodemailer';
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export const sendEmail = async ({
   html,
   text,
+  subject,
   emailTo,
   onSuccess = () => {},
   onError = () => {},
 }) => {
-  const { user, pass } = await nodemailer.createTestAccount();
+  const msg = getMailOptions({ html, text, subject, emailTo });
 
-  const mailOptions = getMailOptions({ html, text, emailTo });
-
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    auth: { user, pass },
-  });
-
-  const result = await transporter.sendMail(mailOptions, (error, info) => {
+  await sgMail.send(msg, error => {
     if (error) {
       onError();
     } else {
       onSuccess();
     }
   });
-
-  console.log(result);
 };
 
-const getMailOptions = ({ html, text, emailTo }) => ({
-  from: 'The league',
+const getMailOptions = ({ html, text, subject, emailTo }) => ({
   to: emailTo,
-  subject: 'The League Registration Confirmation',
-  html,
+  from: 'notification@theleague4.com',
+  subject,
   text,
+  html,
 });

@@ -3,6 +3,7 @@ export default {
   login: () => '/login',
   registration: () => '/registration',
   activateUser: () => '/activate-user/:userHash',
+  getActivateUser: () => '/activate-user',
   resetPassword: () => '/reset-password',
   home: () => '/home',
   settings: () => '/settings',
