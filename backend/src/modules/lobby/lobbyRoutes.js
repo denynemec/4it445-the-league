@@ -61,13 +61,15 @@ router.put(
     }
 
     // TODO check lobbyHash from DB and if user is already registered
-    // when user is not registered - return only { userIsRegistered: false }
+    // when user is not registered - return only { userIsRegistered: false, email: 'mockedEmailAddress to prefill into login on login form' }
     // when user is registered - need to generate JWT token and SELECT user info and return:
     // { userIsRegistered: true,
-    //   token: getJwtToken({ userId: 666 }),
-    //   user: { nickname: "Mocked Nickname" }
+    //   ...loginSuccessPayload(666)
     // }
-    res.json({ userIsRegistered: false });
+    res.json({
+      userIsRegistered: false,
+      email: 'mockedEmailAddress to prefill into login on login form',
+    });
   },
 );
 
@@ -87,6 +89,8 @@ router.post(
         error: formatErrors(errors),
       });
     }
+
+    const dbConnection = req[DB_CONNECTION_KEY];
 
     const { eventId, lobbyName, emails } = req.body;
 

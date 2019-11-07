@@ -1,7 +1,10 @@
 export default {
   empty: () => '/',
   login: () => '/login',
-  registration: () => '/registration',
+  registrationWithPrefilledEmail: () => `${registrationBase}/:email`,
+  getRegistrationWithPrefilledEmail: prefilledEmail =>
+    `${registrationBase}/${prefilledEmail}`,
+  registration: () => registrationBase,
   activateUser: () => `${activateUserBase}/:userHash`,
   getActivateUser: () => activateUserBase,
   resetPassword: () => '/reset-password',
@@ -16,7 +19,10 @@ export default {
   joinToLobby: () => `${joinToLobbyBase}/:lobbyHash`,
   getJoinToLobby: () => joinToLobbyBase,
   draftDetail: () => '/lobby/:lobbyId/draft',
+  administration: () => '/administration',
 };
+
+const registrationBase = '/registration';
 
 const activateUserBase = '/activate-user';
 

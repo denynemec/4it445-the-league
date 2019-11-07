@@ -3,11 +3,12 @@
     "HeaderBase": {
       "HomeLink": "Pasivní sport nikdy nebyl zábavnější"
     },
-    "LayutedLobby": { "EventName": "Událost: {{eventName}}" }
+    "LayoutedLobby": { "EventName": "Událost: {{eventName}}" }
   },
   "Organisms": {
     "LoggedInHeader": {
       "HomeLink": "Domů",
+      "AdministrationLink": "Administrace",
       "SettingsLink": "Nastavení",
       "LogoutLink": "Odhlásit"
     },
@@ -33,6 +34,7 @@
     }
   },
   "Page": {
+    "Administration": { "Heading": "Admin rozhraní" },
     "Login": {
       "FormHeading": "Přihlášení do aplikace The League",
       "EmailLabel": "Email",
