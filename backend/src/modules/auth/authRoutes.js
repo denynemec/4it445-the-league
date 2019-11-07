@@ -259,20 +259,6 @@ router.put(
         return res.status(500).json({ error: '500: Internal Server Error' });
       }
     });
-
-    const dbResponseNicknameById = await dbConnection.query(
-      'SELECT nickname FROM users WHERE user_id = ?;',
-      [userId],
-    );
-
-    const { nickname } = dbResponseNicknameById[0];
-
-    const token = getJwtToken({ userId });
-
-    res.json({
-      token,
-      user: { nickname },
-    });
   },
 );
 
