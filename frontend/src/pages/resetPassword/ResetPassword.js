@@ -13,13 +13,6 @@ export const ResetPassword = () => {
   const resetPasswordState = useRequest();
   const [emailSentState, setEmailSentState] = useState('');
 
-  const onSuccess = useCallback(
-    ({ data: { email } }) => {
-      setEmailSentState(t('Page.ResetPassword.EmailSent', { email }));
-    },
-    [setEmailSentState, t],
-  );
-
   useEffect(() => {
     if (resetPasswordState.isLoading) {
       setEmailSentState('');
@@ -27,14 +20,17 @@ export const ResetPassword = () => {
   }, [resetPasswordState.isLoading]);
 
   const onSubmitMemoized = useCallback(
-    ({ email }) => {
+    ({ email }, { resetForm }) => {
       resetPasswordState.request(ENDPOINTS.resetPassword(), {
         method: 'POST',
-        onSuccess,
+        onSuccess: ({ data: { email } }) => {
+          resetForm();
+          setEmailSentState(t('Page.ResetPassword.EmailSent', { email }));
+        },
         data: { email },
       });
     },
-    [resetPasswordState, onSuccess],
+    [resetPasswordState, t],
   );
 
   const { object, requiredEmail } = translatedValidations(t);

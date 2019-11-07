@@ -125,6 +125,14 @@
     },
     "NotFound": {
       "Heading": "Page not found"
+    },
+    "ResetPasswordConfirmation": {
+      "FormHeading": "Změna hesla",
+      "PasswordLabel": "Heslo",
+      "PasswordPlaceholder": "Vyplňte heslo",
+      "PasswordConfirmationLabel": "Heslo znovu",
+      "PasswordConfirmationPlaceholder": "Zopakujte heslo",
+      "SubmitResetPasswordConfirmationButton": "Odeslat"
     }
   },
   "Validations": {

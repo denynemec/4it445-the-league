@@ -9,3 +9,4 @@ export { RegistrationPage } from './registration';
 export { ResetPassword } from './resetPassword';
 export { SettingsPage } from './settings';
 export { DraftDetail } from './draftDetail';
+export { ResetPasswordConfirmationPage } from './resetPasswordConfirmation';

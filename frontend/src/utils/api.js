@@ -12,6 +12,9 @@ import { config } from '../config';
 import PATHNAMES from '../pathnames';
 
 const activateUserUrl = `${config.PUBLIC_URL}${PATHNAMES.getActivateUser()}`;
+const resetPasswordUrl = `${
+  config.PUBLIC_URL
+}${PATHNAMES.getResetPasswordConfirmation()}`;
 
 const joinToLobbyUrl = `${config.PUBLIC_URL}${PATHNAMES.getJoinToLobby()}`;
 
@@ -22,6 +25,7 @@ const globalApiInstance = axios.create({
     'Access-Control-Allow-Origin': '*',
     'x-the-league-app-activate-user-url': activateUserUrl,
     'x-the-league-app-join-to-the-lobby-url': joinToLobbyUrl,
+    'x-the-league-app-reset-password-url': resetPasswordUrl,
   },
 });
 
