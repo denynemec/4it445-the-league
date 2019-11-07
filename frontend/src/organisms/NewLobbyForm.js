@@ -20,6 +20,7 @@ export const NewLobbyForm = ({
   eventName,
   minUsers,
   maxUsers,
+  eventId,
 }) => {
   const { t } = useTranslation();
   const history = useHistory();
@@ -38,10 +39,11 @@ export const NewLobbyForm = ({
         data: {
           lobbyName,
           emails: Object.values(emailsStringToEmailArray(emails)),
+          eventId,
         },
       });
     },
-    [newLobbyState, history],
+    [newLobbyState, history, eventId],
   );
 
   const { object, uniqueMinMaxEmails, requiredString } = translatedValidations(

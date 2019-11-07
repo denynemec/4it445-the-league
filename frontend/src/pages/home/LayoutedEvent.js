@@ -68,6 +68,7 @@ export const LayoutedEvent = ({
           minUsers={minUsers}
           maxUsers={maxUsers}
           eventName={name}
+          eventId={id}
         />
       </Layout>
 
