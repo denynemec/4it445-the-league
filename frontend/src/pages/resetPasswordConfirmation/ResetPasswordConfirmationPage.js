@@ -9,23 +9,14 @@ import PATHNAMES from '../../pathnames';
 import { Heading, Button, Layout } from '../../atoms';
 import { Field } from '../../organisms';
 import { NotLoggedInPageLayout } from '../../templates';
-import { useRequest, useAuth } from '../../utils';
+import { useRequest } from '../../utils';
 
 export const ResetPasswordConfirmationPage = () => {
   const { t } = useTranslation();
   const { userHash } = useParams();
-  const { signin } = useAuth();
   const history = useHistory();
 
   const resetPasswordConfirmationState = useRequest();
-
-  const resetPasswordOnSuccess = useCallback(
-    ({ data: { user, token } }) => {
-      signin({ user, token });
-      history.push(PATHNAMES.home());
-    },
-    [signin, history],
-  );
 
   const onSubmitMemoized = useCallback(
     ({ password, passwordConfirmation }) => {
@@ -33,12 +24,12 @@ export const ResetPasswordConfirmationPage = () => {
         ENDPOINTS.resetPasswordConfirmation(),
         {
           method: 'PUT',
-          onSuccess: resetPasswordOnSuccess,
+          onSuccess: history.push(PATHNAMES.login()),
           data: { password, passwordConfirmation, userHash },
         },
       );
     },
-    [resetPasswordConfirmationState, resetPasswordOnSuccess, userHash],
+    [resetPasswordConfirmationState, history, userHash],
   );
 
   const schema = yup.object().shape({
