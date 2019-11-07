@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import * as yup from 'yup';
 import { useHistory, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
@@ -9,7 +8,7 @@ import PATHNAMES from '../../pathnames';
 import { Heading, Button, Layout } from '../../atoms';
 import { Field } from '../../organisms';
 import { NotLoggedInPageLayout } from '../../templates';
-import { useRequest } from '../../utils';
+import { useRequest, translatedValidations } from '../../utils';
 
 export const ResetPasswordConfirmationPage = () => {
   const { t } = useTranslation();
@@ -32,16 +31,13 @@ export const ResetPasswordConfirmationPage = () => {
     [resetPasswordConfirmationState, history, userHash],
   );
 
-  const schema = yup.object().shape({
-    password: yup
-      .string()
-      .required()
-      .label('Password'),
-    passwordConfirmation: yup
-      .string()
-      .required()
-      .oneOf([yup.ref('password')], 'Both passwords must match')
-      .label('Password Confirmation'),
+  const { object, passwordsDontMatch, requiredString } = translatedValidations(
+    t,
+  );
+
+  const schema = object({
+    password: requiredString,
+    passwordConfirmation: passwordsDontMatch('password'),
   });
 
   return (
