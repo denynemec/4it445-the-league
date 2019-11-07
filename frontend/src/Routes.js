@@ -13,6 +13,7 @@ import {
   ActivateUserPage,
   SettingsPage,
   JoinToLobbyPage,
+  DraftDetail,
 } from './pages';
 import { useAuth } from './utils';
 
@@ -50,6 +51,11 @@ export function Routes() {
         path={PATHNAMES.lobbyDetail()}
         exact
         component={LobbyDetail}
+      />
+      <PrivateRoute
+        path={PATHNAMES.draftDetail()}
+        exact
+        component={DraftDetail}
       />
 
       {/* Not found route */}

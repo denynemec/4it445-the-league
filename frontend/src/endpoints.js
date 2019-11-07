@@ -12,6 +12,7 @@ export default {
   updatePassword: () => `${apiPrefix}/settings/update-password`,
   getEventDetail: id => `${apiPrefix}/event/${id}`,
   getLobbyDetail: id => `${apiPrefix}/lobby/${id}`,
+  fetchDraft: id => `${apiPrefix}/lobby/${id}/fetchDraft`,
   resetPassword: () => `${apiPrefix}/auth/reset-password`,
   getJoinToLobbyDetail: lobbyHash =>
     `${apiPrefix}/lobby/join-to-lobby-detail/${lobbyHash}`,

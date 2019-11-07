@@ -13,6 +13,7 @@ export default {
   getLobbyDetail: id => `/lobby/${id}`,
   joinToLobby: () => `${joinToLobbyBase}/:lobbyHash`,
   getJoinToLobby: () => joinToLobbyBase,
+  draftDetail: () => '/lobby/:lobbyId/draft',
 };
 
 const activateUserBase = '/activate-user';

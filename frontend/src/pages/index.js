@@ -8,3 +8,4 @@ export { NotFoundPage } from './notFound';
 export { RegistrationPage } from './registration';
 export { ResetPassword } from './resetPassword';
 export { SettingsPage } from './settings';
+export { DraftDetail } from './draftDetail';
