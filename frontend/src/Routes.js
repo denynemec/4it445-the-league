@@ -14,6 +14,7 @@ import {
   SettingsPage,
   JoinToLobbyPage,
   DraftDetail,
+  ResetPasswordConfirmationPage,
 } from './pages';
 import { useAuth } from './utils';
 
@@ -34,6 +35,11 @@ export function Routes() {
         component={ActivateUserPage}
       />
       <Route path={PATHNAMES.joinToLobby()} exact component={JoinToLobbyPage} />
+      <Route
+        path={PATHNAMES.resetPasswordConfirmation()}
+        exact
+        component={ResetPasswordConfirmationPage}
+      />
 
       {/* Login required routes */}
       <PrivateRoute path={PATHNAMES.home()} exact component={HomePage} />

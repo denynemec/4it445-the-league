@@ -17,4 +17,6 @@ export default {
   getJoinToLobbyDetail: lobbyHash =>
     `${apiPrefix}/lobby/join-to-lobby-detail/${lobbyHash}`,
   joinToLobby: () => `${apiPrefix}/lobby/join-to-lobby`,
+  resetPasswordConfirmation: () =>
+    `${apiPrefix}/auth/reset-password-confirmation`,
 };
