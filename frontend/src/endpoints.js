@@ -14,4 +14,7 @@ export default {
   getLobbyDetail: id => `${apiPrefix}/lobby/${id}`,
   fetchDraft: id => `${apiPrefix}/lobby/${id}/fetchDraft`,
   resetPassword: () => `${apiPrefix}/auth/reset-password`,
+  getJoinToLobbyDetail: lobbyHash =>
+    `${apiPrefix}/lobby/join-to-lobby-detail/${lobbyHash}`,
+  joinToLobby: () => `${apiPrefix}/lobby/join-to-lobby`,
 };

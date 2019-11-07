@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import * as yup from 'yup';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
@@ -9,7 +8,7 @@ import PATHNAMES from '../../pathnames';
 import { Heading, Button, Layout, Link } from '../../atoms';
 import { NotLoggedInPageLayout } from '../../templates';
 import { Field } from '../../organisms';
-import { useAuth, useRequest } from '../../utils';
+import { useAuth, useRequest, translatedValidations } from '../../utils';
 
 export const LoginPage = () => {
   const { t } = useTranslation();
@@ -36,16 +35,11 @@ export const LoginPage = () => {
     [loginState, onSuccess],
   );
 
-  const schema = yup.object().shape({
-    email: yup
-      .string()
-      .email()
-      .required()
-      .label('Email'),
-    password: yup
-      .string()
-      .required()
-      .label('Password'),
+  const { object, requiredString, requiredEmail } = translatedValidations(t);
+
+  const schema = object({
+    email: requiredEmail,
+    password: requiredString,
   });
 
   return (

@@ -68,6 +68,9 @@ export const EventDetail = () => {
             isOpen={addNewLobbyModalIsOpen}
             onCloseClick={onCloseModalClick}
             eventName={eventState.data.name}
+            minUsers={eventState.data.minUsers}
+            maxUsers={eventState.data.maxUsers}
+            eventId={eventId}
           />
 
           <Layout bb mv2 />

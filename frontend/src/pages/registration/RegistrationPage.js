@@ -1,31 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Form, Formik } from 'formik';
-import * as yup from 'yup';
 
 import PATHNAMES from '../../pathnames';
 import ENDPOINTS from '../../endpoints';
 import { Heading, Button, Layout, Link, InfoBox } from '../../atoms';
 import { NotLoggedInPageLayout } from '../../templates';
-import { useRequest } from '../../utils';
+import { useRequest, translatedValidations } from '../../utils';
 import { Field } from '../../organisms';
-
-const schema = yup.object().shape({
-  email: yup
-    .string()
-    .email()
-    .required()
-    .label('Email'),
-  password: yup
-    .string()
-    .required()
-    .label('Password'),
-  passwordConfirmation: yup
-    .string()
-    .required()
-    .oneOf([yup.ref('password')], 'Both passwords must match')
-    .label('Password Confirmation'),
-});
 
 export const RegistrationPage = () => {
   const { t } = useTranslation();
@@ -53,6 +35,19 @@ export const RegistrationPage = () => {
     },
     [registrationState, t],
   );
+
+  const {
+    object,
+    requiredString,
+    requiredEmail,
+    passwordsDontMatch,
+  } = translatedValidations(t);
+
+  const schema = object({
+    email: requiredEmail,
+    password: requiredString,
+    passwordConfirmation: passwordsDontMatch('password'),
+  });
 
   return (
     <NotLoggedInPageLayout

@@ -2,8 +2,8 @@ export default {
   empty: () => '/',
   login: () => '/login',
   registration: () => '/registration',
-  activateUser: () => '/activate-user/:userHash',
-  getActivateUser: () => '/activate-user',
+  activateUser: () => `${activateUserBase}/:userHash`,
+  getActivateUser: () => activateUserBase,
   resetPassword: () => '/reset-password',
   home: () => '/home',
   settings: () => '/settings',
@@ -11,5 +11,11 @@ export default {
   lobbyDetail: () => '/lobby/:lobbyId',
   getEventDetail: id => `/event/${id}`,
   getLobbyDetail: id => `/lobby/${id}`,
+  joinToLobby: () => `${joinToLobbyBase}/:lobbyHash`,
+  getJoinToLobby: () => joinToLobbyBase,
   draftDetail: () => '/lobby/:lobbyId/draft',
 };
+
+const activateUserBase = '/activate-user';
+
+const joinToLobbyBase = '/join-to-lobby';

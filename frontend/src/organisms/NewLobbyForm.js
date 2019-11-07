@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import * as yup from 'yup';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
@@ -9,32 +8,52 @@ import PATHNAMES from '../pathnames';
 import { Button, Layout, ErrorBox } from '../atoms';
 import { Field } from '../organisms';
 import { Modal } from '../molecules';
-import { useRequest } from '../utils';
+import {
+  useRequest,
+  translatedValidations,
+  emailsStringToEmailArray,
+} from '../utils';
 
-const schema = yup.object().shape({
-  lobbyName: yup
-    .string()
-    .required()
-    .label('LobbyName'),
-});
-
-export const NewLobbyForm = ({ isOpen, onCloseClick, eventName }) => {
+export const NewLobbyForm = ({
+  isOpen,
+  onCloseClick,
+  eventName,
+  minUsers,
+  maxUsers,
+  eventId,
+}) => {
   const { t } = useTranslation();
   const history = useHistory();
   const newLobbyState = useRequest();
 
+  const minEmails = minUsers - 1;
+  const maxEmails = maxUsers - 1;
+
   const onSubmitMemoized = useCallback(
-    ({ lobbyName }) => {
+    ({ lobbyName, emails }) => {
       newLobbyState.request(ENDPOINTS.newLobby(), {
         method: 'POST',
         onSuccess: ({ data: { lobbyId } }) => {
           history.push(PATHNAMES.getLobbyDetail(lobbyId));
         },
-        data: { lobbyName },
+        data: {
+          lobbyName,
+          emails: Object.values(emailsStringToEmailArray(emails)),
+          eventId,
+        },
       });
     },
-    [newLobbyState, history],
+    [newLobbyState, history, eventId],
   );
+
+  const { object, uniqueMinMaxEmails, requiredString } = translatedValidations(
+    t,
+  );
+
+  const schema = object({
+    lobbyName: requiredString,
+    emails: uniqueMinMaxEmails({ min: minEmails, max: maxEmails }),
+  });
 
   return (
     <Modal
@@ -47,7 +66,7 @@ export const NewLobbyForm = ({ isOpen, onCloseClick, eventName }) => {
       <ErrorBox errorList={[{ id: 1, error: newLobbyState.error }]} />
 
       <Formik
-        initialValues={{ lobbyName: '' }}
+        initialValues={{ lobbyName: '', emails: '' }}
         validationSchema={schema}
         onSubmit={onSubmitMemoized}
       >
@@ -57,6 +76,16 @@ export const NewLobbyForm = ({ isOpen, onCloseClick, eventName }) => {
             name="lobbyName"
             label={t('Organisms.NewLobbyForm.LobbyName')}
             placeholder={t('Organisms.NewLobbyForm.LobbyNamePlaceholder')}
+          />
+
+          <Field
+            type="textarea"
+            name="emails"
+            label={t('Organisms.NewLobbyForm.Emails')}
+            placeholder={t('Organisms.NewLobbyForm.EmailsPlaceholder', {
+              min: minEmails,
+              max: maxEmails,
+            })}
           />
 
           <Layout flex justify-center>

@@ -34,11 +34,11 @@ router.post(
     );
 
     if (!dbResponse[0]) {
-      // For not found user, we should return same error as for bad password to not allowed guesing emails/emails
+      // For not found user, we should return same error as for bad password to not allowed guesing emails
       return res.status(401).json({ error: '401: Not authenticated.' });
     }
 
-    const { password: passwordHash, user_id, ...userData } = dbResponse[0];
+    const { password: passwordHash, user_id, nickname } = dbResponse[0];
 
     bcrypt.compare(password, passwordHash, function(err, result) {
       if (result) {
@@ -46,7 +46,7 @@ router.post(
 
         res.json({
           token,
-          user: userData,
+          user: { nickname },
         });
       } else {
         res.status(401).json({ error: '401: Not authenticated.' });

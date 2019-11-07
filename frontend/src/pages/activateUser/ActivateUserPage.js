@@ -2,14 +2,13 @@ import React, { useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
-import * as yup from 'yup';
 
 import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
 import { Heading, Button, Layout } from '../../atoms';
 import { NotLoggedInPageLayout } from '../../templates';
 import { Field } from '../../organisms';
-import { useAuth, useRequest } from '../../utils';
+import { useAuth, useRequest, translatedValidations } from '../../utils';
 
 export const ActivateUserPage = () => {
   const { t } = useTranslation();
@@ -38,11 +37,12 @@ export const ActivateUserPage = () => {
     [activateUserState, activateUserOnSuccess, userHash],
   );
 
-  const schema = yup.object().shape({
-    nickname: yup
-      .string()
-      .required()
-      .label('Nickname'),
+  const { object, requiredString } = translatedValidations(t);
+
+  const schema = object({
+    nickname: requiredString,
+    firstName: requiredString,
+    lastName: requiredString,
   });
 
   return (

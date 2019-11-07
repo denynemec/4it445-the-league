@@ -1,13 +1,19 @@
 import React from 'react';
 import classNames from 'classnames';
 
-export const TextInput = ({ className, ...inputProps }) => (
-  <input
-    type="text"
-    className={classNames(
-      'input-reset ba b--black-20 pa2 mv2 db w-100',
-      className,
-    )}
-    {...inputProps}
-  />
-);
+export const TextInput = ({ type, className, ...inputProps }) => {
+  const isTextarea = type === 'textarea';
+  const Component = isTextarea ? 'textarea' : 'input';
+
+  return (
+    <Component
+      type={type}
+      className={classNames(
+        'input-reset ba b--black-20 pa2 mv2 db w-100',
+        className,
+      )}
+      style={isTextarea ? { resize: 'vertical' } : {}}
+      {...inputProps}
+    />
+  );
+};

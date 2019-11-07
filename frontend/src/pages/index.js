@@ -1,6 +1,7 @@
 export { ActivateUserPage } from './activateUser';
 export { EventDetail } from './eventDetail';
 export { HomePage } from './home';
+export { JoinToLobbyPage } from './joinToLobby';
 export { LobbyDetail } from './lobbyDetail';
 export { LoginPage } from './login';
 export { NotFoundPage } from './notFound';

@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 
-import { Heading, Layout } from '../atoms';
+import PATHNAMES from '../pathnames';
+import { Button, Heading, Layout } from '../atoms';
 import { LayoutedLobby, TextInputWithLabel } from '../molecules';
+import { valueContains } from '../utils';
 
 export const LobbyList = ({ lobbyList, header }) => {
   const { t } = useTranslation();
+  const history = useHistory();
 
   const [filterLobby, setFilterLobby] = useState('');
 
@@ -30,11 +34,23 @@ export const LobbyList = ({ lobbyList, header }) => {
 
         <Layout flex flex-wrap pt3>
           {lobbyList
-            .filter(({ name }) =>
-              name.toLowerCase().includes(filterLobby.toLowerCase()),
-            )
+            .filter(({ name }) => valueContains(name, filterLobby))
             .map(lobby => (
-              <LayoutedLobby key={lobby.id} {...lobby} />
+              <Layout w-30 ma2 key={lobby.id}>
+                <LayoutedLobby {...lobby} />
+
+                <Layout pt3>
+                  <Button
+                    className="w-100 pt3"
+                    primary
+                    onClick={() =>
+                      history.push(PATHNAMES.getLobbyDetail(lobby.id))
+                    }
+                  >
+                    {t('Organisms.LobbyList.GoToGroupDetailButton')}
+                  </Button>
+                </Layout>
+              </Layout>
             ))}
         </Layout>
       </>

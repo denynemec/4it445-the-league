@@ -13,12 +13,15 @@ import PATHNAMES from '../pathnames';
 
 const activateUserUrl = `${config.PUBLIC_URL}${PATHNAMES.getActivateUser()}`;
 
+const joinToLobbyUrl = `${config.PUBLIC_URL}${PATHNAMES.getJoinToLobby()}`;
+
 const globalApiInstance = axios.create({
   baseURL: config.BASE_API_URL,
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'x-the-league-app-activate-user-url': activateUserUrl,
+    'x-the-league-app-join-to-the-lobby-url': joinToLobbyUrl,
   },
 });
 

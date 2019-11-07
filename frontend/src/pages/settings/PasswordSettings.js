@@ -1,28 +1,11 @@
 import React, { useCallback } from 'react';
-import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../../endpoints';
 import { ErrorBox, Heading, Button, Layout } from '../../atoms';
 import { Field } from '../../organisms';
-import { useRequest } from '../../utils';
-
-const schema = yup.object().shape({
-  oldPassword: yup
-    .string()
-    .required()
-    .label('Old password'),
-  newPassword: yup
-    .string()
-    .required()
-    .label('New password'),
-  newPasswordConfirmation: yup
-    .string()
-    .required()
-    .oneOf([yup.ref('newPassword')], 'Both passwords must match')
-    .label('New password confirmation'),
-});
+import { useRequest, translatedValidations } from '../../utils';
 
 export const PasswordSettings = () => {
   const { t } = useTranslation();
@@ -38,6 +21,16 @@ export const PasswordSettings = () => {
     },
     [updatePasswordSettingsState],
   );
+
+  const { object, requiredString, passwordsDontMatch } = translatedValidations(
+    t,
+  );
+
+  const schema = object({
+    oldPassword: requiredString,
+    newPassword: requiredString,
+    newPasswordConfirmation: passwordsDontMatch('newPassword'),
+  });
 
   return (
     <>

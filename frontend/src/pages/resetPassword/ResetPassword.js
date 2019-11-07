@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 
@@ -7,15 +6,7 @@ import ENDPOINTS from '../../endpoints';
 import { Heading, Button, Layout, InfoBox } from '../../atoms';
 import { Field } from '../../organisms';
 import { NotLoggedInPageLayout } from '../../templates';
-import { useRequest } from '../../utils';
-
-const schema = yup.object().shape({
-  email: yup
-    .string()
-    .email()
-    .required()
-    .label('Email'),
-});
+import { useRequest, translatedValidations } from '../../utils';
 
 export const ResetPassword = () => {
   const { t } = useTranslation();
@@ -45,6 +36,12 @@ export const ResetPassword = () => {
     },
     [resetPasswordState, onSuccess],
   );
+
+  const { object, requiredEmail } = translatedValidations(t);
+
+  const schema = object({
+    email: requiredEmail,
+  });
 
   return (
     <NotLoggedInPageLayout

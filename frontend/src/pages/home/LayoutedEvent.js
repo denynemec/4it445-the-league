@@ -14,6 +14,8 @@ export const LayoutedEvent = ({
   endDate,
   name,
   id,
+  minUsers,
+  maxUsers,
 }) => {
   const { t } = useTranslation();
   const history = useHistory();
@@ -63,7 +65,10 @@ export const LayoutedEvent = ({
         <NewLobbyForm
           isOpen={addNewLobbyModalIsOpen}
           onCloseClick={onCloseModalClick}
+          minUsers={minUsers}
+          maxUsers={maxUsers}
           eventName={name}
+          eventId={id}
         />
       </Layout>
 
