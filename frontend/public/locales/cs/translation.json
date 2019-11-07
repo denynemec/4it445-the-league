@@ -112,6 +112,14 @@
       "EmailPlaceholder": "Vyplňte email",
       "SubmitResetPasswordButton": "Odeslat",
       "EmailSent": "Link pro změnu hesla byl odeslán na email {{email}}"
+    },
+    "ResetPasswordConfirmation": {
+      "FormHeading": "Změna hesla",
+      "PasswordLabel": "Heslo",
+      "PasswordPlaceholder": "Vyplňte heslo",
+      "PasswordConfirmationLabel": "Heslo znovu",
+      "PasswordConfirmationPlaceholder": "Zopakujte heslo",
+      "SubmitResetPasswordConfirmationButton": "Odeslat"
     }
   }
 }

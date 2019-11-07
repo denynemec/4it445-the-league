@@ -12,6 +12,7 @@ import {
   LobbyDetail,
   ActivateUserPage,
   SettingsPage,
+  ResetPasswordConfirmationPage,
 } from './pages';
 import { useAuth } from './utils';
 
@@ -30,6 +31,11 @@ export function Routes() {
         path={PATHNAMES.activateUser()}
         exact
         component={ActivateUserPage}
+      />
+      <Route
+        path={PATHNAMES.resetPasswordConfirmation()}
+        exact
+        component={ResetPasswordConfirmationPage}
       />
 
       {/* Login required routes */}

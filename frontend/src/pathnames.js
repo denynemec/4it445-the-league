@@ -5,6 +5,8 @@ export default {
   activateUser: () => '/activate-user/:userHash',
   getActivateUser: () => '/activate-user',
   resetPassword: () => '/reset-password',
+  resetPasswordConfirmation: () => '/reset-password-confirmation/:userHash',
+  getResetPasswordConfirmation: () => '/reset-password-confirmation',
   home: () => '/home',
   settings: () => '/settings',
   eventDetail: () => '/event/:eventId',

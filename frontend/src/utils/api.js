@@ -12,6 +12,9 @@ import { config } from '../config';
 import PATHNAMES from '../pathnames';
 
 const activateUserUrl = `${config.PUBLIC_URL}${PATHNAMES.getActivateUser()}`;
+const resetPasswordUrl = `${
+  config.PUBLIC_URL
+}${PATHNAMES.getResetPasswordConfirmation()}`;
 
 const globalApiInstance = axios.create({
   baseURL: config.BASE_API_URL,
@@ -19,6 +22,7 @@ const globalApiInstance = axios.create({
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'x-the-league-app-activate-user-url': activateUserUrl,
+    'x-the-league-app-reset-password-url': resetPasswordUrl,
   },
 });
 

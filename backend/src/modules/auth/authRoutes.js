@@ -93,7 +93,7 @@ router.post(
     bcrypt.hash(password, 10, async (error, hash) => {
       if (!error) {
         const dbResponse = await dbConnection.query(
-          `INSERT INTO users (user_id, email, password, active) 
+          `INSERT INTO users (user_id, email, password, active)
       VALUES (NULL, ?, ?, ?);`,
           [email, hash, false],
         );
@@ -181,12 +181,98 @@ router.post(
       .not()
       .isEmpty(),
   ],
-  (req, res, next) => {
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: formatErrors(errors),
+      });
+    }
+    const dbConnection = req[DB_CONNECTION_KEY];
     const {
-      body: { email, password },
+      body: { email },
     } = req;
 
-    res.json({ email });
+    // validate if email is already registered
+    const dbResponseUserWithEmail = await dbConnection.query(
+      'SELECT user_id FROM users WHERE email = ?;',
+      [email],
+    );
+
+    if (!dbResponseUserWithEmail[0]) {
+      return res.status(422).json({ error: '422: This email not registered' });
+    }
+
+    const userHashId = Hashids.encode(dbResponseUserWithEmail[0].user_id);
+
+    const resetPasswordFeAppLink = `${
+      req.headers['x-the-league-app-reset-password-url']
+    }/${userHashId}`;
+
+    sendEmail({
+      emailTo: email,
+      subject: 'The League Reset Password Confirmation',
+      text: 'The League 4',
+      html: `<strong>The League 4</strong> <br /> <a href='${resetPasswordFeAppLink}' target="_blank">Pro změnu hesla klikněte na tento link... </a>`,
+      onSuccess: () => res.json({ email }),
+      onError: () => {
+        console.error(error);
+
+        return res.status(500).json({ error: '500: Internal Server Error' });
+      },
+    });
+  },
+);
+
+router.put(
+  '/reset-password-confirmation',
+  [
+    check('userHash')
+      .not()
+      .isEmpty(),
+    check('password')
+      .not()
+      .isEmpty(),
+  ],
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: formatErrors(errors),
+      });
+    }
+
+    const dbConnection = req[DB_CONNECTION_KEY];
+    const {
+      body: { userHash, password },
+    } = req;
+
+    const userId = Hashids.decode(userHash);
+
+    bcrypt.hash(password, 10, async (error, hash) => {
+      if (!error) {
+        const dbResponse = await dbConnection.query(
+          'UPDATE users SET password = ? where user_id = ?;',
+          [hash, userId],
+        );
+      } else {
+        return res.status(500).json({ error: '500: Internal Server Error' });
+      }
+    });
+
+    const dbResponseNicknameById = await dbConnection.query(
+      'SELECT nickname FROM users WHERE user_id = ?;',
+      [userId],
+    );
+
+    const { nickname } = dbResponseNicknameById[0];
+
+    const token = getJwtToken({ userId });
+
+    res.json({
+      token,
+      user: { nickname },
+    });
   },
 );
 
