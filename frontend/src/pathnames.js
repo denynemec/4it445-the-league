@@ -11,4 +11,5 @@ export default {
   lobbyDetail: () => '/lobby/:lobbyId',
   getEventDetail: id => `/event/${id}`,
   getLobbyDetail: id => `/lobby/${id}`,
+  draftDetail: () => '/lobby/:lobbyId/draft',
 };

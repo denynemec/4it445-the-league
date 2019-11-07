@@ -11,7 +11,7 @@ export const LobbyDetail = () => {
   // const { t } = useTranslation();
   const { lobbyId } = useParams();
 
-  const lobbyState = useFetchRequest(ENDPOINTS.getLobbyDetail(lobbyId));
+  const lobbyState = useFetchRequest(ENDPOINTS.fetchDraft(lobbyId));
 
   return (
     <LoggedInPageLayout errorList={[{ id: 1, error: lobbyState.error }]}>
