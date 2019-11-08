@@ -27,18 +27,25 @@ router.get('/list', async (req, res, next) => {
 router.get('/join-to-lobby-detail/:lobbyHash', async (req, res, next) => {
   const dbConnection = req[DB_CONNECTION_KEY];
   const { lobbyHash } = req.params;
-
   // TODO select lobby detail by lobbyHash and return to FE
-
+  const [lobbyId, email]  = Hashids.decode(lobbyHash);
+  console.log(email);
+  const lobbyDetail = await dbConnection.query(
+    'SELECT lobby.lobby_id, lobby.name, game.name as eventName, count(lobby_user.user_id) as joinedUsers, max_users FROM lobby LEFT JOIN game ON game.game_id = lobby.game_id LEFT JOIN lobby_user ON lobby.lobby_id = lobby_user.lobby_id WHERE lobby.lobby_id = ? AND lobby.active = true;',
+    [lobbyId]
+  );
+  const userDetail = await dbConnection.query(
+    'SELECT user_id, email FROM users WHERE email = ? LIMIT 1;',
+    [email]
+  );
+  const userIsRegistered = (userDetail) ? true : false;
+  
   res.json({
-    name: 'Lobby name mocked',
-    joinedUsers: 4,
-    maxUsers: 8,
-    eventName: 'Euro 2020',
-    // false - user will be redirected to register form after click to "Join button"
-    // true - user will be logged into app and redirected to home page
-    // different response.body will be then in UPDATE joinToLobby endpoint - different route in this module..
-    userIsRegistered: false,
+    name: lobbyDetail[0].name,
+    joinedUsers: lobbyDetail[0].joinedUsers,
+    maxUsers: lobbyDetail[0].max_users,
+    eventName: lobbyDetail[0].eventName,
+    userIsRegistered: userIsRegistered,
   });
 });
 
@@ -117,7 +124,8 @@ router.post(
   },
 );
 
-router.get('/:lobbyId', (req, res, next) => {
+router.get('/:lobbyId', async (req, res, next) => {
+  const { lobbyId } = req.params;
   res.json({});
 });
 
@@ -144,6 +152,9 @@ router.get('/:lobbyId/fetchDraft', async (req, res, next) => {
       `UPDATE lobby_user SET draft_order= ? WHERE draft_order IS NULL and lobby_id = ? AND user_id = ? LIMIT 1;`,
       [i + 1, lobbyId, user_id],
     );
+    console.log(Hashids.encode([lobbyId]));
+    console.log(Hashids.decode(Hashids.encode(lobbyId, 'admin@fdfd.cz')));
+
     if (dbResponse.affectedRows === 0) {
       return res
         .status(409)
