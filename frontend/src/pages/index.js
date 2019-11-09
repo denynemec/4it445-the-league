@@ -1,4 +1,5 @@
 export { ActivateUserPage } from './activateUser';
+export { AdministrationPage } from './administration';
 export { EventDetail } from './eventDetail';
 export { HomePage } from './home';
 export { JoinToLobbyPage } from './joinToLobby';

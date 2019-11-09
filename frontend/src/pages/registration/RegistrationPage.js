@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Form, Formik } from 'formik';
+import { useParams } from 'react-router-dom';
 
 import PATHNAMES from '../../pathnames';
 import ENDPOINTS from '../../endpoints';
@@ -11,7 +12,7 @@ import { Field } from '../../organisms';
 
 export const RegistrationPage = () => {
   const { t } = useTranslation();
-
+  const { email } = useParams();
   const registrationState = useRequest();
 
   const [emailSentState, setEmailSentState] = useState('');
@@ -49,6 +50,8 @@ export const RegistrationPage = () => {
     passwordConfirmation: passwordsDontMatch('password'),
   });
 
+  const prefilledEmail = typeof email === 'undefined' ? '' : email;
+
   return (
     <NotLoggedInPageLayout
       errorList={[{ id: 1, error: registrationState.error }]}
@@ -58,7 +61,11 @@ export const RegistrationPage = () => {
       </Heading>
 
       <Formik
-        initialValues={{ email: '', password: '', passwordConfirmation: '' }}
+        initialValues={{
+          email: prefilledEmail,
+          password: '',
+          passwordConfirmation: '',
+        }}
         validationSchema={schema}
         onSubmit={onSubmitMemoized}
       >

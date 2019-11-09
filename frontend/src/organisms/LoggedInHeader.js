@@ -11,11 +11,11 @@ import {
   navLinkStyle,
   navButtonStyle,
 } from '../molecules/HeaderBase';
-import { useAuth } from '../utils';
+import { useAuth, hasPrivilege } from '../utils';
 import PATHNAMES from '../pathnames';
 
 const LoggedInHeaderBase = ({ history }) => {
-  const { user, signout } = useAuth();
+  const { user, signout, privileges } = useAuth();
   const { t } = useTranslation();
 
   const logoutCallback = useCallback(() => {
@@ -23,10 +23,24 @@ const LoggedInHeaderBase = ({ history }) => {
     history.push(PATHNAMES.login());
   }, [history, signout]);
 
+  const hasAdministrationPagePrivilege = hasPrivilege(
+    privileges,
+    'AdministrationPage',
+  );
+
   return (
     <HeaderBase homeLinkTo={PATHNAMES.home()}>
       <Layout flex-grow flex items-center>
         <span className="b pa3">{user && user.nickname}</span>
+
+        {hasAdministrationPagePrivilege && (
+          <Link
+            to={PATHNAMES.administration()}
+            className={classNames(navLinkStyle, 'pa3')}
+          >
+            {t('Organisms.LoggedInHeader.AdministrationLink')}
+          </Link>
+        )}
 
         <Link to={PATHNAMES.home()} className={classNames(navLinkStyle, 'pa3')}>
           {t('Organisms.LoggedInHeader.HomeLink')}

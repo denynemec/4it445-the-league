@@ -3,7 +3,12 @@ import bcrypt from 'bcrypt';
 import { check, validationResult } from 'express-validator';
 
 import { DB_CONNECTION_KEY } from '../../libs/connection';
-import { getJwtToken, formatErrors, Hashids, sendEmail } from '../../utils';
+import {
+  getLoginSuccessPayload,
+  formatErrors,
+  Hashids,
+  sendEmail,
+} from '../../utils';
 
 const router = Router();
 
@@ -29,7 +34,7 @@ router.post(
     } = req;
 
     const dbResponse = await dbConnection.query(
-      'SELECT user_id, nickname, password FROM users WHERE email = ? AND active = true LIMIT 1;',
+      'SELECT user_id, password FROM users WHERE email = ? AND active = true LIMIT 1;',
       [email],
     );
 
@@ -38,16 +43,16 @@ router.post(
       return res.status(401).json({ error: '401: Not authenticated.' });
     }
 
-    const { password: passwordHash, user_id, nickname } = dbResponse[0];
+    const { password: passwordHash, user_id: userId } = dbResponse[0];
 
-    bcrypt.compare(password, passwordHash, function(err, result) {
+    bcrypt.compare(password, passwordHash, async function(err, result) {
       if (result) {
-        const token = getJwtToken({ userId: user_id });
-
-        res.json({
-          token,
-          user: { nickname },
+        const loginSuccessPayload = await getLoginSuccessPayload({
+          userId,
+          dbConnection,
         });
+
+        res.json(loginSuccessPayload);
       } else {
         res.status(401).json({ error: '401: Not authenticated.' });
       }
@@ -165,12 +170,12 @@ router.put(
       return res.status(422).json({ error: '422: Not existing user' });
     }
 
-    const token = getJwtToken({ userId });
-
-    res.json({
-      token,
-      user: { nickname },
+    const loginSuccessPayload = getLoginSuccessPayload({
+      userId,
+      dbConnection,
     });
+
+    res.json(loginSuccessPayload);
   },
 );
 
