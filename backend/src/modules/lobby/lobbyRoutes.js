@@ -101,18 +101,19 @@ router.put(
         'DELETE FROM invitation WHERE invitation_id = ?;',
         [invitationId]
       );
-      const token = getJwtToken({ userId });
       res.json({ 
         userIsRegistered: true,
-        token: token,
-        nickname: nickName,
+        ...loginSuccessPayload(userId)
       });
     } else {
       await dbConnection.query(
         'UPDATE invitation SET approved = true WHERE invitation_id = ?;',
         [invitationId]
       );
-      res.json({ userIsRegistered: false });
+      res.json({ 
+        userIsRegistered: false,
+        email: invitation[0].email,
+      });
     }
   },
 );
