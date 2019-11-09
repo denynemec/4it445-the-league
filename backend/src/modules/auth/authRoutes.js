@@ -43,6 +43,10 @@ router.post(
     bcrypt.compare(password, passwordHash, function(err, result) {
       if (result) {
         const token = getJwtToken({ userId: user_id });
+        dbConnection.query(
+          'UPDATE users SET lastlogin = NOW() WHERE user_id = ?;',
+          [user_id],
+        );
 
         res.json({
           token,
