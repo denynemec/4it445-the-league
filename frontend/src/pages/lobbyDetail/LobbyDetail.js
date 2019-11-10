@@ -30,12 +30,15 @@ export const LobbyDetail = () => {
   return (
     <LoggedInPageLayout errorList={[{ id: 1, error: lobbyState.error }]}>
       <Layout>
-        <Heading className="flex justify-center pb2">
+        <Heading className="flex justify-center pb2 ">
           {t('Page.PlayersResults.ResultHeading')}
         </Heading>
       </Layout>
       <Layout>
         {lobbyState.isLoading && <LoadingSpinner />}
+        {lobbyState.data && (
+          <Table legendData={tableHeader} data={lobbyState.data.playerList} />
+        )}
         {lobbyState.data && (
           <CountEarnings playersData={lobbyState.data.playerList} />
         )}
@@ -44,9 +47,6 @@ export const LobbyDetail = () => {
         )}
         {lobbyState.data && (
           <TotalPercentageForSeason playersData={lobbyState.data.playerList} />
-        )}
-        {lobbyState.data && (
-          <Table legendData={tableHeader} data={lobbyState.data.playerList} />
         )}
       </Layout>
     </LoggedInPageLayout>

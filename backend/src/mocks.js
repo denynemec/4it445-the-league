@@ -77,6 +77,24 @@ export const lobbyList = [
   },
 ];
 
+export const gamerList = [
+  {
+    lobbyId: 1,
+    name: 'Adam',
+    playerListId: 1,
+  },
+  {
+    lobbyId: 1,
+    name: 'Kotlik',
+    playerListId: 2,
+  },
+  {
+    lobbyId: 1,
+    name: 'Morava',
+    playerListId: 3,
+  },
+];
+
 export const playerList = [
   {
     id: 43,
@@ -86,6 +104,7 @@ export const playerList = [
     earnings: 120,
     earningsPercentage: '3%',
     profitLoss: 120,
+    playerListId: 1,
   },
   {
     id: 6,
@@ -95,6 +114,7 @@ export const playerList = [
     earnings: 240,
     earningsPercentage: '7%',
     profitLoss: 0,
+    playerListId: 1,
   },
   {
     id: 53,
@@ -104,6 +124,7 @@ export const playerList = [
     earnings: 0,
     earningsPercentage: '0%',
     profitLoss: 0,
+    playerListId: 1,
   },
   {
     id: 128,
@@ -113,6 +134,7 @@ export const playerList = [
     earnings: 150,
     earningsPercentage: '4%',
     profitLoss: 0,
+    playerListId: 1,
   },
   {
     id: 25,
@@ -122,6 +144,7 @@ export const playerList = [
     earnings: 450,
     earningsPercentage: '13%',
     profitLoss: 0,
+    playerListId: 1,
   },
   {
     id: 144,
@@ -131,6 +154,7 @@ export const playerList = [
     earnings: 720,
     earningsPercentage: '21%',
     profitLoss: 0,
+    playerListId: 1,
   },
   {
     id: 219,
@@ -140,6 +164,7 @@ export const playerList = [
     earnings: 60,
     earningsPercentage: '2%',
     profitLoss: 30,
+    playerListId: 1,
   },
   {
     id: 466,
@@ -149,6 +174,7 @@ export const playerList = [
     earnings: 270,
     earningsPercentage: '8%',
     profitLoss: 120,
+    playerListId: 1,
   },
   {
     id: 75,
@@ -158,6 +184,7 @@ export const playerList = [
     earnings: 360,
     earningsPercentage: '10%',
     profitLoss: 0,
+    playerListId: 1,
   },
   {
     id: 112,
@@ -167,6 +194,7 @@ export const playerList = [
     earnings: 630,
     earningsPercentage: '18%',
     profitLoss: 0,
+    playerListId: 1,
   },
   {
     id: 309,
@@ -176,6 +204,7 @@ export const playerList = [
     earnings: 0,
     earningsPercentage: '0%',
     profitLoss: 0,
+    playerListId: 1,
   },
   {
     id: 44,
@@ -185,6 +214,7 @@ export const playerList = [
     earnings: 0,
     earningsPercentage: '0%',
     profitLoss: 0,
+    playerListId: 1,
   },
   {
     id: 212,
@@ -194,6 +224,7 @@ export const playerList = [
     earnings: 60,
     earningsPercentage: '2%',
     profitLoss: 30,
+    playerListId: 1,
   },
   {
     id: 409,
@@ -203,6 +234,7 @@ export const playerList = [
     earnings: 240,
     earningsPercentage: '7%',
     profitLoss: 30,
+    playerListId: 1,
   },
   {
     id: 264,
@@ -212,6 +244,7 @@ export const playerList = [
     earnings: 90,
     earningsPercentage: '3%',
     profitLoss: 0,
+    playerListId: 1,
   },
   {
     id: 188,
@@ -221,6 +254,7 @@ export const playerList = [
     earnings: 0,
     earningsPercentage: '0%',
     profitLoss: 120,
+    playerListId: 1,
   },
   {
     id: 348,
@@ -230,6 +264,7 @@ export const playerList = [
     earnings: 0,
     earningsPercentage: '0%',
     profitLoss: 0,
+    playerListId: 1,
   },
   {
     id: 350,
@@ -239,6 +274,7 @@ export const playerList = [
     earnings: 90,
     earningsPercentage: '3%',
     profitLoss: 0,
+    playerListId: 1,
   },
 ];
 
@@ -246,4 +282,5 @@ export const mocks = {
   eventList,
   lobbyList,
   playerList,
+  gamerList,
 };
