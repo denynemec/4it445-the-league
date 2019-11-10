@@ -5,7 +5,7 @@ const HASHIDS_PADDING = 15;
 
 const hashids = new Hashids(HASHIDS_SECRET_KEY, HASHIDS_PADDING);
 
-const encode = data => hashids.encode(data);
+const encode = (...data) => hashids.encode(...data);
 
 const decode = hash => hashids.decode(hash);
 

@@ -51,6 +51,11 @@ router.post(
           userId,
           dbConnection,
         });
+        
+        dbConnection.query(
+          'UPDATE users SET lastlogin = NOW() WHERE user_id = ?;',
+          [user_id],
+        );
 
         res.json(loginSuccessPayload);
       } else {
@@ -169,7 +174,32 @@ router.put(
     if (dbResponse.affectedRows === 0) {
       return res.status(422).json({ error: '422: Not existing user' });
     }
+    
+    const userDetail = await dbConnection.query(
+      'SELECT email FROM users WHERE user_id = ? AND active = true;',
+      [userId],
+    );
 
+    if (userDetail.length > 0) {
+      const { email } = userDetail[0];
+      const lobbyInvitation = await dbConnection.query(
+        'SELECT invitation_id, lobby_id FROM invitation WHERE email = ? AND approved = true;',
+        [email],
+      );
+      if (lobbyInvitation && lobbyInvitation.length > 0) {
+        lobbyInvitation.map(async invitation => {
+          const { invitation_id: invitationId, lobby_id: lobbyId } = invitation;
+          await dbConnection.query(
+            'INSERT INTO lobby_user (user_id, lobby_id) VALUES (?, ?);',
+            [userId, lobbyId],
+          );
+          await dbConnection.query(
+            'DELETE FROM invitation WHERE invitation_id = ?;',
+            [invitationId],
+          );
+        });
+      }
+    }
     const loginSuccessPayload = getLoginSuccessPayload({
       userId,
       dbConnection,
