@@ -19,6 +19,7 @@ export default {
   joinToLobby: () => `${joinToLobbyBase}/:lobbyHash`,
   getJoinToLobby: () => joinToLobbyBase,
   draftDetail: () => '/lobby/:lobbyId/draft',
+  getDraftDetail: id => `/lobby/${id}/draft`,
   administration: () => '/administration',
 };
 

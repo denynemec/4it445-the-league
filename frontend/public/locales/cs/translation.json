@@ -135,7 +135,13 @@
       "PasswordConfirmationLabel": "Heslo znovu",
       "PasswordConfirmationPlaceholder": "Zopakujte heslo",
       "SubmitResetPasswordConfirmationButton": "Odeslat"
-    }
+    },
+    "LobbyDetail": {
+      "StartDraft": "Začit draft",
+      "ToDraft": "Do draftu",
+      "DraftNotStarted": "Draft ještě nezačal, kontaktuje zakladete skupiny"
+    },
+    "Draft": { "Heading": "Draft " }
   },
   "Validations": {
     "Required": "Povinný údaj",

@@ -8,14 +8,23 @@ import PATHNAMES from '../../pathnames';
 import { Heading, Button, Layout } from '../../atoms';
 import { Field } from '../../organisms';
 import { NotLoggedInPageLayout } from '../../templates';
-import { useRequest, translatedValidations } from '../../utils';
+import { useAuth, useRequest, translatedValidations } from '../../utils';
 
 export const ResetPasswordConfirmationPage = () => {
   const { t } = useTranslation();
   const { userHash } = useParams();
   const history = useHistory();
+  const { signin } = useAuth();
 
   const resetPasswordConfirmationState = useRequest();
+
+  const onSuccess = useCallback(
+    ({ data: { user, token, privileges } }) => {
+      signin({ user, token, privileges });
+      history.push(PATHNAMES.home());
+    },
+    [signin, history],
+  );
 
   const onSubmitMemoized = useCallback(
     ({ password, passwordConfirmation }) => {
@@ -23,12 +32,12 @@ export const ResetPasswordConfirmationPage = () => {
         ENDPOINTS.resetPasswordConfirmation(),
         {
           method: 'PUT',
-          onSuccess: history.push(PATHNAMES.login()),
+          onSuccess,
           data: { password, passwordConfirmation, userHash },
         },
       );
     },
-    [resetPasswordConfirmationState, history, userHash],
+    [resetPasswordConfirmationState, userHash, onSuccess],
   );
 
   const { object, passwordsDontMatch, requiredString } = translatedValidations(

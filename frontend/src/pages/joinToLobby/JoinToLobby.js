@@ -24,9 +24,11 @@ export const JoinToLobbyPage = () => {
   const onJoinToLobbyMemoized = useCallback(() => {
     joinToLobbyState.request(ENDPOINTS.joinToLobby(), {
       method: 'PUT',
-      onSuccess: ({ data: { userIsRegistered, token, user, email } }) => {
+      onSuccess: ({
+        data: { userIsRegistered, token, user, privileges, email },
+      }) => {
         if (userIsRegistered) {
-          signin({ token, user });
+          signin({ token, user, privileges });
           history.push(PATHNAMES.home());
         }
 

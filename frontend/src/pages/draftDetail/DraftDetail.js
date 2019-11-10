@@ -13,12 +13,15 @@ export const DraftDetail = () => {
 
   const fetchDraftState = useFetchRequest(ENDPOINTS.fetchDraft(lobbyId));
 
+  // tmp
+  fetchDraftState.data && console.log(fetchDraftState.data);
+
   return (
     <LoggedInPageLayout errorList={[{ id: 1, error: fetchDraftState.error }]}>
       {fetchDraftState.isLoading && <LoadingSpinner />}
 
       <Heading className="flex justify-center pb2">
-        {t('Page.Draft.DraftOrderHeading')}
+        {t('Page.Draft.Heading')}
       </Heading>
     </LoggedInPageLayout>
   );

@@ -19,8 +19,8 @@ export const ActivateUserPage = () => {
   const activateUserState = useRequest();
 
   const activateUserOnSuccess = useCallback(
-    ({ data: { user, token } }) => {
-      signin({ user, token });
+    ({ data: { user, token, privileges } }) => {
+      signin({ user, token, privileges });
       history.push(PATHNAMES.home());
     },
     [signin, history],
