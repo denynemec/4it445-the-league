@@ -27,15 +27,14 @@ router.get('/list', async (req, res, next) => {
 router.get('/join-to-lobby-detail/:lobbyHash', async (req, res, next) => {
   const dbConnection = req[DB_CONNECTION_KEY];
   const { lobbyHash } = req.params;
-  // TODO select lobby detail by lobbyHash and return to FE
-  const [lobbyId, invitationId]  = Hashids.decode(lobbyHash);
+  const [lobbyId, invitationId] = Hashids.decode(lobbyHash);
   const lobbyDetail = await dbConnection.query(
     'SELECT lobby.lobby_id, lobby.name, game.name as eventName, count(lobby_user.user_id) as joinedUsers, max_users FROM lobby LEFT JOIN game ON game.game_id = lobby.game_id LEFT JOIN lobby_user ON lobby.lobby_id = lobby_user.lobby_id WHERE lobby.lobby_id = ? AND lobby.active = true;',
-    [lobbyId]
+    [lobbyId],
   );
   const invitation = await dbConnection.query(
     'SELECT invitation_id, email FROM invitation WHERE invitation_id = ? AND lobby_id = ?;',
-    [invitationId, lobbyId]
+    [invitationId, lobbyId],
   );
   if (!invitation || invitation.length < 1) {
     return res.status(422).json({
@@ -43,11 +42,11 @@ router.get('/join-to-lobby-detail/:lobbyHash', async (req, res, next) => {
     });
   }
   const userDetail = await dbConnection.query(
-    'SELECT user_id, email FROM users WHERE email = ? LIMIT 1;',
-    [invitation[0].email]
+    'SELECT user_id, email FROM users WHERE email = ? AND active = true LIMIT 1;',
+    [invitation[0].email],
   );
-  const userIsRegistered = (userDetail.length > 0) ? true : false;
-  
+  const userIsRegistered = userDetail.length > 0 ? true : false;
+
   res.json({
     name: lobbyDetail[0].name,
     joinedUsers: lobbyDetail[0].joinedUsers,
@@ -77,7 +76,7 @@ router.put(
     const [lobbyId, invitationId] = Hashids.decode(lobbyHash);
     const invitation = await dbConnection.query(
       'SELECT invitation_id, email FROM invitation WHERE invitation_id = ? AND lobby_id = ?;',
-      [invitationId, lobbyId]
+      [invitationId, lobbyId],
     );
     if (!invitation || invitation.length < 1) {
       return res.status(422).json({
@@ -86,31 +85,33 @@ router.put(
     }
     const userDetail = await dbConnection.query(
       'SELECT user_id, email, nickname FROM users WHERE email = ? AND active = true LIMIT 1;',
-      [invitation[0].email]
+      [invitation[0].email],
     );
 
-    const userIsRegistered = (userDetail.length > 0) ? true : false;
+    const userIsRegistered = userDetail.length > 0 ? true : false;
 
     if (userIsRegistered === true) {
       const { user_id: userId, nickname: nickName } = userDetail[0];
       await dbConnection.query(
         'INSERT INTO lobby_user (user_id, lobby_id) VALUES (?, ?);',
-        [userId, lobbyId]
+        [userId, lobbyId],
       );
       await dbConnection.query(
         'DELETE FROM invitation WHERE invitation_id = ?;',
-        [invitationId]
+        [invitationId],
       );
-      res.json({ 
+      const token = getJwtToken({ userId });
+      res.json({
         userIsRegistered: true,
-        ...loginSuccessPayload(userId)
+        token: token,
+        nickname: nickName,
       });
     } else {
       await dbConnection.query(
         'UPDATE invitation SET approved = true WHERE invitation_id = ?;',
-        [invitationId]
+        [invitationId],
       );
-      res.json({ 
+      res.json({
         userIsRegistered: false,
         email: invitation[0].email,
       });
@@ -153,25 +154,25 @@ router.post(
         });
       }
     } else {
-        return res.status(422).json({
-          error: '422: The game was cancelled.',
-        });
+      return res.status(422).json({
+        error: '422: The game was cancelled.',
+      });
     }
 
     // add lobby to DB
     const lobbyResponse = await dbConnection.query(
       'INSERT INTO lobby (game_id, leader_id, name, max_players, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW());',
-      [eventId, userId, lobbyName, eventDetail[0].max_users]
+      [eventId, userId, lobbyName, eventDetail[0].max_users],
     );
     const lobbyId = lobbyResponse.insertId;
     await dbConnection.query(
       'INSERT INTO lobby_user (user_id, lobby_id) VALUES (?, ?);',
-      [userId, lobbyId]
+      [userId, lobbyId],
     );
-    emails.forEach(async email => {
+    emails.map(async email => {
       const dbResponse = await dbConnection.query(
         'INSERT INTO invitation (lobby_id, email) VALUES (?, ?);',
-        [lobbyId, email]
+        [lobbyId, email],
       );
       const newLobbyHashId = Hashids.encode(lobbyId, dbResponse.insertId);
 
@@ -187,14 +188,11 @@ router.post(
         onError: () => {
           console.error(error);
 
-          return res
-            .status(500)
-            .json({ error: '500: Internal Server Error' });
+          return res.status(500).json({ error: '500: Internal Server Error' });
         },
       });
-      
     });
-    
+
     res.json({ lobbyId: lobbyResponse.insertId });
   },
 );
