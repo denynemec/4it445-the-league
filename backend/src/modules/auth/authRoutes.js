@@ -54,7 +54,7 @@ router.post(
         
         dbConnection.query(
           'UPDATE users SET lastlogin = NOW() WHERE user_id = ?;',
-          [user_id],
+          [userId],
         );
 
         res.json(loginSuccessPayload);
