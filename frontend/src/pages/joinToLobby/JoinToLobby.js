@@ -24,13 +24,13 @@ export const JoinToLobbyPage = () => {
   const onJoinToLobbyMemoized = useCallback(() => {
     joinToLobbyState.request(ENDPOINTS.joinToLobby(), {
       method: 'PUT',
-      onSuccess: ({ data: { userIsRegistered, token, user } }) => {
+      onSuccess: ({ data: { userIsRegistered, token, user, email } }) => {
         if (userIsRegistered) {
           signin({ token, user });
           history.push(PATHNAMES.home());
         }
 
-        history.push(PATHNAMES.registration());
+        history.push(PATHNAMES.getRegistrationWithPrefilledEmail(email));
       },
       data: { lobbyHash },
     });

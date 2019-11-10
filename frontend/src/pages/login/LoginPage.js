@@ -17,8 +17,8 @@ export const LoginPage = () => {
   const loginState = useRequest();
 
   const onSuccess = useCallback(
-    ({ data: { user, token } }) => {
-      signin({ user, token });
+    ({ data: { user, token, privileges } }) => {
+      signin({ user, token, privileges });
       history.push(PATHNAMES.home());
     },
     [signin, history],

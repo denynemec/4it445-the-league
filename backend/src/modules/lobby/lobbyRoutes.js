@@ -135,6 +135,7 @@ router.post(
         error: formatErrors(errors),
       });
     }
+
     const dbConnection = req[DB_CONNECTION_KEY];
     const { eventId, lobbyName, emails } = req.body;
     const { userId } = req.jwtDecoded;

@@ -14,8 +14,10 @@ import {
   SettingsPage,
   JoinToLobbyPage,
   DraftDetail,
+  ResetPasswordConfirmationPage,
+  AdministrationPage,
 } from './pages';
-import { useAuth } from './utils';
+import { useAuth, hasPrivilege } from './utils';
 
 export function Routes() {
   return (
@@ -23,6 +25,12 @@ export function Routes() {
       <Route path={PATHNAMES.empty()} exact component={LoginPage} />
       <Route path={PATHNAMES.login()} exact component={LoginPage} />
       <Route path={PATHNAMES.resetPassword()} exact component={ResetPassword} />
+      {/* new email route for prefill email, when go from joinToLobby page and not already registered */}
+      <Route
+        path={PATHNAMES.registrationWithPrefilledEmail()}
+        exact
+        component={RegistrationPage}
+      />
       <Route
         path={PATHNAMES.registration()}
         exact
@@ -34,6 +42,11 @@ export function Routes() {
         component={ActivateUserPage}
       />
       <Route path={PATHNAMES.joinToLobby()} exact component={JoinToLobbyPage} />
+      <Route
+        path={PATHNAMES.resetPasswordConfirmation()}
+        exact
+        component={ResetPasswordConfirmationPage}
+      />
 
       {/* Login required routes */}
       <PrivateRoute path={PATHNAMES.home()} exact component={HomePage} />
@@ -58,6 +71,15 @@ export function Routes() {
         component={DraftDetail}
       />
 
+      {/* Login and privilege required routes */}
+
+      <PrivilegePrivateRoute
+        path={PATHNAMES.administration()}
+        exact
+        component={AdministrationPage}
+        privilege="AdministrationPage"
+      />
+
       {/* Not found route */}
       <Route path="*" component={NotFoundPage} />
     </Switch>
@@ -72,6 +94,29 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       {...rest}
       render={props =>
         token ? <Component {...props} /> : <Redirect to={PATHNAMES.login()} />
+      }
+    />
+  );
+};
+
+const PrivilegePrivateRoute = ({
+  component: Component,
+  privilege,
+  ...rest
+}) => {
+  const { token, privileges } = useAuth();
+
+  const routeHasPrivilege = hasPrivilege(privileges, privilege);
+
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        token && routeHasPrivilege ? (
+          <Component privilege={privilege} {...props} />
+        ) : (
+          <Redirect to={PATHNAMES.login()} />
+        )
       }
     />
   );

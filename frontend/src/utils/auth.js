@@ -11,12 +11,14 @@ const LOCAL_STORAGE_AUTH_KEY = 'the-league-auth';
 const initialState = {
   token: null,
   user: null,
+  privileges: [],
 };
 
 const AuthContext = createContext(
   createContextValue({
     token: initialState.token,
     user: initialState.user,
+    privileges: initialState.privileges,
     setState: () =>
       console.error('You are using AuthContext without AuthProvider!'),
   }),
@@ -30,8 +32,8 @@ export function AuthProvider({ children }) {
   const [state, setState] = usePersistedAuth(initialState);
 
   const contextValue = useMemo(() => {
-    const { token, user } = state;
-    return createContextValue({ token, user, setState });
+    const { token, user, privileges } = state;
+    return createContextValue({ token, user, privileges, setState });
   }, [state, setState]);
 
   return (
@@ -39,12 +41,14 @@ export function AuthProvider({ children }) {
   );
 }
 
-function createContextValue({ token, user, setState }) {
+function createContextValue({ token, user, privileges, setState }) {
   return {
     token,
     user,
-    signin: ({ token, user }) => setState({ token, user }),
-    signout: () => setState({ token: null, user: null }),
+    privileges,
+    signin: ({ token, user, privileges }) =>
+      setState({ token, user, privileges }),
+    signout: () => setState({ token: null, user: null, privileges: [] }),
   };
 }
 
@@ -70,10 +74,10 @@ function getStorageState(defaultState) {
   }
 
   try {
-    const { user, token } = JSON.parse(rawData);
+    const { user, token, privileges } = JSON.parse(rawData);
 
-    if (token && user) {
-      return { token, user };
+    if (token && user && privileges) {
+      return { token, user, privileges };
     }
   } catch {}
 

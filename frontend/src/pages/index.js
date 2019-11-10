@@ -1,4 +1,5 @@
 export { ActivateUserPage } from './activateUser';
+export { AdministrationPage } from './administration';
 export { EventDetail } from './eventDetail';
 export { HomePage } from './home';
 export { JoinToLobbyPage } from './joinToLobby';
@@ -9,3 +10,4 @@ export { RegistrationPage } from './registration';
 export { ResetPassword } from './resetPassword';
 export { SettingsPage } from './settings';
 export { DraftDetail } from './draftDetail';
+export { ResetPasswordConfirmationPage } from './resetPasswordConfirmation';
