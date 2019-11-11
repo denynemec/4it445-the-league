@@ -18,26 +18,21 @@ export const ResetPasswordConfirmationPage = () => {
 
   const resetPasswordConfirmationState = useRequest();
 
-  const onSuccess = useCallback(
-    ({ data: { user, token, privileges } }) => {
-      signin({ user, token, privileges });
-      history.push(PATHNAMES.home());
-    },
-    [signin, history],
-  );
-
   const onSubmitMemoized = useCallback(
     ({ password, passwordConfirmation }) => {
       resetPasswordConfirmationState.request(
         ENDPOINTS.resetPasswordConfirmation(),
         {
           method: 'PUT',
-          onSuccess,
+          onSuccess: ({ data: { user, token, privileges } }) => {
+            signin({ user, token, privileges });
+            history.push(PATHNAMES.home());
+          },
           data: { password, passwordConfirmation, userHash },
         },
       );
     },
-    [resetPasswordConfirmationState, userHash, onSuccess],
+    [resetPasswordConfirmationState, userHash, history, signin],
   );
 
   const { object, passwordsDontMatch, requiredString } = translatedValidations(
