@@ -239,6 +239,17 @@ router.post(
     }
 
     const userHashId = Hashids.encode(dbResponseUserWithEmail[0].user_id);
+    dbConnection.query(
+      'INSERT INTO password_resets (email, token, created_at) VALUES (?, ?, NOW());',
+      [email, userHashId],
+      function(err) {
+        if (err) {
+          if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
+            console.log('Duplication');
+          }
+        }
+      },
+    );
 
     const resetPasswordFeAppLink = `${
       req.headers['x-the-league-app-reset-password-url']
@@ -282,6 +293,16 @@ router.put(
       body: { userHash, password },
     } = req;
 
+    const passwordRequest = await dbConnection.query(
+      'SELECT email, token FROM password_resets WHERE token = ? LIMIT 1;',
+      [userHash],
+    );
+    if (passwordRequest.length < 1) {
+      return res
+        .status(422)
+        .json({ error: '422: Password reset token expired.' });
+    }
+
     const [userId] = Hashids.decode(userHash);
 
     bcrypt.hash(password, 10, async (error, hash) => {
@@ -295,6 +316,10 @@ router.put(
           userId,
           dbConnection,
         });
+        
+        dbConnection.query('DELETE FROM password_resets WHERE token = ?', [
+          userHash,
+        ]);
 
         res.json(loginSuccessPayload);
       } else {
