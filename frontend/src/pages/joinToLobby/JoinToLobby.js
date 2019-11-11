@@ -30,6 +30,7 @@ export const JoinToLobbyPage = () => {
         if (userIsRegistered) {
           signin({ token, user, privileges });
           history.push(PATHNAMES.home());
+          return;
         }
 
         history.push(PATHNAMES.getRegistrationWithPrefilledEmail(email));
