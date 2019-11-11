@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Formik, Form } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -9,20 +9,34 @@ import {
   useRequest,
   translatedValidations,
   useFetchRequest,
+  useApi,
 } from '../../utils';
 import ENDPOINTS from '../../endpoints';
 
 export const AdministrationPage = () => {
   const { t } = useTranslation();
 
-  const eventsState = useFetchRequest(ENDPOINTS.enumEvents());
+  const eventState = useFetchRequest(ENDPOINTS.enumEvents());
 
   const administrationState = useRequest();
+  const api = useApi();
+  const eventPlayersInputRef = useRef(null);
 
   const onSubmitMemoized = useCallback((data, { resetForm }) => {
-    console.log(data);
+    const formData = new FormData();
+
+    Object.entries(data).forEach(([key, value]) => formData.append(key, value));
+
+    api.post('/abc', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
     resetForm();
+    if (eventPlayersInputRef.current) {
+      eventPlayersInputRef.current.value = '';
+    }
   }, []);
 
   const { object, selectRequired, fileRequired } = translatedValidations(t);
@@ -32,29 +46,32 @@ export const AdministrationPage = () => {
   return (
     <LoggedInPageLayout
       errorList={[
-        { id: 1, error: eventsState.error },
+        { id: 1, error: eventState.error },
         { id: 2, error: administrationState.error },
       ]}
     >
-      {eventsState.isLoading && <LoadingSpinner />}
+      {eventState.isLoading && <LoadingSpinner />}
 
-      {eventsState.data && (
+      {eventState.data && (
         <>
           <Heading className="flex justify-center pb2">
             {t('Page.Administration.Heading')}
           </Heading>
 
           <Formik
-            initialValues={{ events: -1, eventPlayers: '' }}
+            initialValues={{
+              event: -1,
+              eventPlayers: '',
+            }}
             validationSchema={schema}
             onSubmit={onSubmitMemoized}
           >
             {({ setFieldValue }) => (
               <Form>
                 <SelectField
-                  name="events"
-                  data={eventsState.data}
-                  label={t('Page.Administration.EventsLabel')}
+                  name="event"
+                  data={eventState.data}
+                  label={t('Page.Administration.EventLabel')}
                 />
 
                 <Field
@@ -64,9 +81,11 @@ export const AdministrationPage = () => {
                   label={t('Page.Administration.EventPlayersLabel')}
                   accept=".csv"
                   onChange={event => {
-                    console.log(event.currentTarget);
-                    setFieldValue('eventPlayers', event.currentTarget.files[0]);
+                    const [file] = event.currentTarget.files;
+                    setFieldValue('eventPlayers', file);
                   }}
+                  inputRef={eventPlayersInputRef}
+                  value={undefined}
                 />
 
                 <Layout flex justify-center>

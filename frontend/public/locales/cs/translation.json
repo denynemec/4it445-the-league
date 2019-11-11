@@ -37,7 +37,7 @@
   "Page": {
     "Administration": {
       "Heading": "Admin rozhraní",
-      "EventsLabel": "Vyberte event",
+      "EventLabel": "Vyberte event",
       "EventPlayersLabel": "Nahrajte .csv soubor s hráči",
       "UploadEventPlayers": "Nahrát hráče"
     },
