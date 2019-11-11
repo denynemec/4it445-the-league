@@ -164,7 +164,7 @@ router.put(
       body: { userHash, nickname, firstName, lastName },
     } = req;
 
-    const userId = Hashids.decode(userHash);
+    const [userId] = Hashids.decode(userHash);
 
     const dbResponse = await dbConnection.query(
       'UPDATE users SET nickname = ?, firstname = ?, lastname = ?, active = true, updated_at = NOW() WHERE user_id = ? AND active = false;',
@@ -200,7 +200,7 @@ router.put(
         });
       }
     }
-    const loginSuccessPayload = getLoginSuccessPayload({
+    const loginSuccessPayload = await getLoginSuccessPayload({
       userId,
       dbConnection,
     });
@@ -303,7 +303,7 @@ router.put(
         .json({ error: '422: Password reset token expired.' });
     }
 
-    const userId = Hashids.decode(userHash);
+    const [userId] = Hashids.decode(userHash);
 
     bcrypt.hash(password, 10, async (error, hash) => {
       if (!error) {
@@ -311,9 +311,17 @@ router.put(
           'UPDATE users SET password = ? where user_id = ?;',
           [hash, userId],
         );
+
+        const loginSuccessPayload = await getLoginSuccessPayload({
+          userId,
+          dbConnection,
+        });
+        
         dbConnection.query('DELETE FROM password_resets WHERE token = ?', [
           userHash,
         ]);
+
+        res.json(loginSuccessPayload);
       } else {
         return res.status(500).json({ error: '500: Internal Server Error' });
       }

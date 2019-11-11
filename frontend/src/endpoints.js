@@ -13,10 +13,11 @@ export default {
   getEventDetail: id => `${apiPrefix}/event/${id}`,
   getLobbyDetail: id => `${apiPrefix}/lobby/${id}`,
   fetchDraft: id => `${apiPrefix}/lobby/${id}/fetchDraft`,
+  startDraft: id => `${apiPrefix}/lobby/${id}/startDraft`,
   resetPassword: () => `${apiPrefix}/auth/reset-password`,
   getJoinToLobbyDetail: lobbyHash =>
-    `${apiPrefix}/lobby/join-to-lobby-detail/${lobbyHash}`,
-  joinToLobby: () => `${apiPrefix}/lobby/join-to-lobby`,
+    `${apiPrefix}/joinToLobby/join-to-lobby-detail/${lobbyHash}`,
+  joinToLobby: () => `${apiPrefix}/joinToLobby/join-to-lobby`,
   resetPasswordConfirmation: () =>
     `${apiPrefix}/auth/reset-password-confirmation`,
 };
