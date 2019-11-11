@@ -22,22 +22,27 @@ export const AdministrationPage = () => {
   const api = useApi();
   const eventPlayersInputRef = useRef(null);
 
-  const onSubmitMemoized = useCallback((data, { resetForm }) => {
-    const formData = new FormData();
+  const onSubmitMemoized = useCallback(
+    (data, { resetForm }) => {
+      const formData = new FormData();
 
-    Object.entries(data).forEach(([key, value]) => formData.append(key, value));
+      Object.entries(data).forEach(([key, value]) =>
+        formData.append(key, value),
+      );
 
-    api.post('/abc', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+      api.post('/abc', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
-    resetForm();
-    if (eventPlayersInputRef.current) {
-      eventPlayersInputRef.current.value = '';
-    }
-  }, []);
+      resetForm();
+      if (eventPlayersInputRef.current) {
+        eventPlayersInputRef.current.value = '';
+      }
+    },
+    [eventPlayersInputRef, api],
+  );
 
   const { object, selectRequired, fileRequired } = translatedValidations(t);
 
