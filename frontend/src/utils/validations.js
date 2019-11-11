@@ -9,9 +9,13 @@ export const translatedValidations = t => ({
   passwordsDontMatch: passwordsDontMatch(t),
   object: obj => yup.object().shape(obj),
   uniqueMinMaxEmails: uniqueMinMaxEmails(t),
+  selectRequired: selectRequired(t),
+  fileRequired: fileRequired(t),
 });
 
 const string = () => yup.string();
+
+const number = () => yup.number();
 
 const requiredString = t => string(t).required(t('Validations.Required'));
 
@@ -60,3 +64,9 @@ const uniqueMinMaxEmails = t => ({ min, max }) =>
 
     return true;
   });
+
+const selectRequired = t => number().min(0, t('Validations.SelectRequired'));
+
+const mixed = () => yup.mixed();
+
+const fileRequired = t => mixed().required(t('Validations.FileRequired'));

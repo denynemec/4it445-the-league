@@ -2,13 +2,20 @@ import React, { useCallback } from 'react';
 import { Formik, Form } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { Heading, Layout, Button } from '../../atoms';
-import { Field } from '../../organisms';
+import { Heading, Layout, Button, LoadingSpinner } from '../../atoms';
+import { Field, SelectField } from '../../organisms';
 import { LoggedInPageLayout } from '../../templates';
-import { useRequest, translatedValidations } from '../../utils';
+import {
+  useRequest,
+  translatedValidations,
+  useFetchRequest,
+} from '../../utils';
+import ENDPOINTS from '../../endpoints';
 
 export const AdministrationPage = () => {
   const { t } = useTranslation();
+
+  const eventsState = useFetchRequest(ENDPOINTS.enumEvents());
 
   const administrationState = useRequest();
 
@@ -18,41 +25,64 @@ export const AdministrationPage = () => {
     resetForm();
   }, []);
 
-  const { object } = translatedValidations(t);
+  const { object, selectRequired, fileRequired } = translatedValidations(t);
 
-  const schema = object({});
+  const schema = object({ events: selectRequired, eventPlayers: fileRequired });
 
   return (
     <LoggedInPageLayout
-      errorList={[{ id: 1, error: administrationState.error }]}
+      errorList={[
+        { id: 1, error: eventsState.error },
+        { id: 2, error: administrationState.error },
+      ]}
     >
-      <Heading className="flex justify-center pb2">
-        {t('Page.Administration.Heading')}
-      </Heading>
+      {eventsState.isLoading && <LoadingSpinner />}
 
-      <Formik
-        initialValues={{ eventPlayers: null }}
-        validationSchema={schema}
-        onSubmit={onSubmitMemoized}
-      >
-        <Form>
-          <Layout flex flex-row>
-            <Field
-              type="file"
-              name="eventPlayers"
-              label={t('Page.Administration.EventPlayersLabel')}
-              placeholder={t('Page.Administration.EventPlayersPlaceholder')}
-              accept=".csv"
-            />
-          </Layout>
+      {eventsState.data && (
+        <>
+          <Heading className="flex justify-center pb2">
+            {t('Page.Administration.Heading')}
+          </Heading>
 
-          <Layout flex justify-center>
-            <Button submit primary disabled={administrationState.isLoading}>
-              {t('Page.Administration.SubmitAdministration')}
-            </Button>
-          </Layout>
-        </Form>
-      </Formik>
+          <Formik
+            initialValues={{ events: -1, eventPlayers: '' }}
+            validationSchema={schema}
+            onSubmit={onSubmitMemoized}
+          >
+            {({ setFieldValue }) => (
+              <Form>
+                <SelectField
+                  name="events"
+                  data={eventsState.data}
+                  label={t('Page.Administration.EventsLabel')}
+                />
+
+                <Field
+                  id="eventPlayers"
+                  type="file"
+                  name="eventPlayers"
+                  label={t('Page.Administration.EventPlayersLabel')}
+                  accept=".csv"
+                  onChange={event => {
+                    console.log(event.currentTarget);
+                    setFieldValue('eventPlayers', event.currentTarget.files[0]);
+                  }}
+                />
+
+                <Layout flex justify-center>
+                  <Button
+                    submit
+                    primary
+                    disabled={administrationState.isLoading}
+                  >
+                    {t('Page.Administration.UploadEventPlayers')}
+                  </Button>
+                </Layout>
+              </Form>
+            )}
+          </Formik>
+        </>
+      )}
     </LoggedInPageLayout>
   );
 };

@@ -1,4 +1,5 @@
 {
+  "Atoms": { "Select": { "Placeholder": "Vyberte hodnotu..." } },
   "Molecules": {
     "HeaderBase": {
       "HomeLink": "Pasivní sport nikdy nebyl zábavnější"
@@ -34,7 +35,12 @@
     }
   },
   "Page": {
-    "Administration": { "Heading": "Admin rozhraní" },
+    "Administration": {
+      "Heading": "Admin rozhraní",
+      "EventsLabel": "Vyberte event",
+      "EventPlayersLabel": "Nahrajte .csv soubor s hráči",
+      "UploadEventPlayers": "Nahrát hráče"
+    },
     "Login": {
       "FormHeading": "Přihlášení do aplikace The League",
       "EmailLabel": "Email",
@@ -42,11 +48,7 @@
       "PasswordLabel": "Heslo",
       "PasswordPlaceholder": "Vyplňte heslo",
       "SubmitLoginButton": "Přihlásit se",
-      "DidYouForgetPasswordLink": "Zapomněli jste heslo?",
-      "Validations": {
-        "EmailRequired": "Email je povinný",
-        "PasswordRequired": "Heslo je povinné"
-      }
+      "DidYouForgetPasswordLink": "Zapomněli jste heslo?"
     },
     "Registration": {
       "FormHeading": "Registrace",
@@ -149,6 +151,8 @@
     "PasswordsDontMatch": "Hesla se neshodují",
     "EmailsContainNotEmail": "Některý ze zadaných emailů není validní",
     "EmailsUnique": "Emaily musí být unikátní",
-    "EmailsMinMax": "Počet emailů musí být minimálně {{min}} a maximálně {{max}}"
+    "EmailsMinMax": "Počet emailů musí být minimálně {{min}} a maximálně {{max}}",
+    "SelectRequired": "Musíte vybrat hodnotu",
+    "FileRequired": "Nahrajte soubor"
   }
 }
