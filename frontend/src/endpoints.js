@@ -1,5 +1,7 @@
 const apiPrefix = '/api';
 
+const enumPrefix = `${apiPrefix}/enum`;
+
 export default {
   login: () => `${apiPrefix}/auth/login`,
   registration: () => `${apiPrefix}/auth/register-user`,
@@ -20,4 +22,7 @@ export default {
   joinToLobby: () => `${apiPrefix}/joinToLobby/join-to-lobby`,
   resetPasswordConfirmation: () =>
     `${apiPrefix}/auth/reset-password-confirmation`,
+
+  // enums
+  enumEvents: () => `${enumPrefix}/events`,
 };

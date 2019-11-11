@@ -108,14 +108,14 @@ router.get('/:lobbyId', async (req, res, next) => {
 
   const dbConnection = req[DB_CONNECTION_KEY];
 
-  const dbResponsePlayers = await dbConnection.query(
+  const dbResponsePlayersWithoutDrafOrder = await dbConnection.query(
     `SELECT user_id FROM lobby_user WHERE draft_order IS NULL and lobby_id = ?;`,
     [lobbyId],
   );
 
-  const draftStarted = dbResponsePlayers.length === 0;
+  const draftStarted = dbResponsePlayersWithoutDrafOrder.length === 0;
 
-  res.json({ draftStarted: false });
+  res.json({ draftStarted });
 });
 
 router.post('/:lobbyId/startDraft', async (req, res, next) => {

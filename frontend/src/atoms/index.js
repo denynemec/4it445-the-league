@@ -10,4 +10,5 @@ export { Link } from './Link';
 export { LoadingSpinner } from './LoadingSpinner';
 export { MainSection } from './MainSection';
 export { ScrollToTop } from './ScrollToTop';
+export { Select } from './Select';
 export { TextInput } from './TextInput';

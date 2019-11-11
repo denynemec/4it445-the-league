@@ -1,12 +1,12 @@
 import React from 'react';
 import { useField } from 'formik';
 
-import { TextInputWithLabel } from '../molecules';
+import { SelectWithLabel } from '../molecules';
 
-export function Field(props) {
+export const SelectField = props => {
   const [field, meta] = useField(props);
 
   const error = meta.touched && meta.error ? meta.error : undefined;
 
-  return <TextInputWithLabel error={error} {...field} {...props} />;
-}
+  return <SelectWithLabel error={error} {...field} {...props} />;
+};
