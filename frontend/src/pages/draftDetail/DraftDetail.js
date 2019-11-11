@@ -20,9 +20,18 @@ export const DraftDetail = () => {
     <LoggedInPageLayout errorList={[{ id: 1, error: fetchDraftState.error }]}>
       {fetchDraftState.isLoading && <LoadingSpinner />}
 
-      <Heading className="flex justify-center pb2">
-        {t('Page.Draft.Heading')}
-      </Heading>
+      {fetchDraftState.data && (
+        <>
+          <Heading className="flex justify-center pb2">
+            {t('Page.Draft.Heading')}
+          </Heading>
+          {/* TMP - just for demo */}
+          Draft order: (nickname - draftOrder):
+          {fetchDraftState.data.map(({ nickname, draft_order: draftOrder }) => (
+            <span key={draftOrder}>{`${nickname} - ${draftOrder}`}</span>
+          ))}
+        </>
+      )}
     </LoggedInPageLayout>
   );
 };

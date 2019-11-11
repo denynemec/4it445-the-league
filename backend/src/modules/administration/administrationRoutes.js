@@ -1,9 +1,27 @@
 import { Router } from 'express';
+import { check, validationResult } from 'express-validator';
+
 import { DB_CONNECTION_KEY } from '../../libs/connection';
+import { formatErrors } from '../../utils/errors';
+
 const router = Router();
 
-router.get('/uploadplayer', async (req, res, next) => {
-  const csv = require('csv-parser');
+router.post(
+  '/upload-players-to-event',
+  [
+    check('eventId')
+      .not()
+      .isEmpty(),
+  ],
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: formatErrors(errors),
+      });
+    }
+    
+    const csv = require('csv-parser');
   const fs = require('fs');
   const dbConnection = req[DB_CONNECTION_KEY];
 
@@ -30,7 +48,8 @@ router.get('/uploadplayer', async (req, res, next) => {
     .on('end', () => {
       console.log('CSV file successfully processed');
     });
-  res.json({});
-});
-
+    
+    res.json({});
+  },
+);
 export default router;
