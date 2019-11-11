@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { check, validationResult } from 'express-validator';
 
 import { DB_CONNECTION_KEY } from '../../libs/connection';
-import { formatErrors, Hashids } from '../../utils';
+import { formatErrors, Hashids, getLoginSuccessPayload } from '../../utils';
 
 const router = Router();
 
