@@ -16,10 +16,10 @@ router.get('/list', async (req, res, next) => {
   const lobbyList = dbResponse.map(
     ({
       lobby_id: id,
-      min_users: minimumUsers,
+      min_users: minUsers,
       max_players: maxUsers,
       ...rest
-    }) => ({ id, minimumUsers, maxUsers, ...rest }),
+    }) => ({ id, minUsers, maxUsers, ...rest }),
   );
   res.json(lobbyList);
 });

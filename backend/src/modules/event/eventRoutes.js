@@ -34,12 +34,12 @@ router.get('/:eventId', async (req, res, next) => {
     [eventId, userId],
   );
   const lobbyList = dbResponse.map(
-    ({
-      lobby_id: id,
-      min_users: minUsers,
-      max_players: maxUsers,
-      ...rest
-    }) => ({ id, minUsers, maxUsers, ...rest }),
+    ({ lobby_id: id, min_users: minUsers, max_users: maxUsers, ...rest }) => ({
+      id,
+      minUsers,
+      maxUsers,
+      ...rest,
+    }),
   );
 
   res.json({
