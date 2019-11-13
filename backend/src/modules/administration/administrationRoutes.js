@@ -24,6 +24,12 @@ router.post(
     const csv = require('csv-parser');
     const fs = require('fs');
     const dbConnection = req[DB_CONNECTION_KEY];
+    const { eventId } = req.body;
+    const dbPlayer = await dbConnection.query(
+      'SELECT player_id, firstname, lastname FROM player;',
+    );
+
+    const dbTeam = await dbConnection.query('SELECT team_id, name FROM team;');
 
     fs.createReadStream('./src/modules/administration/player.csv')
       .pipe(
@@ -34,22 +40,42 @@ router.post(
       )
       .on('data', async player => {
         console.log(player);
-        const playerExist = await dbConnection.query(
-          'SELECT firstname, lastname FROM player WHERE firstname = ? AND lastname = ? LIMIT 1',
-          [player[0], player[1]],
-        );
+        let teamId;
+        let playerId;
+        const teamExist = dbTeam.filter(function(t) {
+          return t.name == player[4];
+        });
+        if (teamExist.length < 1) {
+          const dbTeamResponse = await dbConnection.query(
+            'INSERT INTO team (name, created_at, updated_at) VALUES (?, NOW(), NOW());',
+            [player[4]],
+          );
+          teamId = dbTeamResponse.insertId;
+        } else {
+          teamId = teamExist[0].team_id;
+        }
+        const playerExist = dbPlayer.filter(function(pl) {
+          return pl.firstname == player[0] && pl.lastname == player[1];
+        });
         if (playerExist.length < 1) {
           const dbPlayerResponse = await dbConnection.query(
             'INSERT INTO player (firstname, lastname, created_at, updated_at) VALUES (?, ?, NOW(), NOW());',
             [player[0], player[1]],
           );
+          playerId = dbPlayerResponse.insertId;
+        } else {
+          playerId = playerExist[0].player_id;
         }
+        await dbConnection.query(
+          'INSERT INTO player_game (game_id, player_id, post_abbr, team_id, number) VALUES (?, ?, ?, ?, ?);',
+          [eventId, playerId, player[3], teamId, player[2]],
+        );
       })
       .on('end', () => {
         console.log('CSV file successfully processed');
       });
 
-    res.json({});
+    res.json({ message: 'CSV file successfully processed' });
   },
 );
 export default router;
