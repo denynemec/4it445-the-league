@@ -31,6 +31,26 @@ router.post(
     const fs = require('fs');
     const dbConnection = req[DB_CONNECTION_KEY];
     const { eventId } = req.body;
+
+    const eventResponse = await dbConnection.query(
+      'SELECT game_id, date_from FROM game WHERE game_id = ? AND active = true;',
+      [eventId],
+    );
+
+    if (!eventResponse || eventResponse.length < 1) {
+      return res.status(422).json({ error: 'No event for you' });
+    }
+    const today = new Date();
+    const endUpload = eventResponse[0].date_from;
+    endUpload.setDate(endUpload.getDate() - 14);
+    if (today > endUpload) {
+      return res
+        .status(422)
+        .json({
+          error: 'It is too late. You can not upload players to this event',
+        });
+    }
+
     const dbPlayer = await dbConnection.query(
       'SELECT player_id, firstname, lastname FROM player;',
     );
