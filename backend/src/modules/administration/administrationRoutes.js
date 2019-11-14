@@ -44,16 +44,13 @@ router.post(
     const endUpload = eventResponse[0].date_from;
     endUpload.setDate(endUpload.getDate() - 14);
     if (today > endUpload) {
-      return res
-        .status(422)
-        .json({
-          error: 'It is too late. You can not upload players to this event',
-        });
+      return res.status(422).json({
+        error: 'It is too late. You can not upload players to this event',
+      });
     } else {
-      await dbConnection.query(
-        'DELETE FROM player_game WHERE game_id = ?',
-        [eventId]
-        );
+      await dbConnection.query('DELETE FROM player_game WHERE game_id = ?', [
+        eventId,
+      ]);
     }
 
     const dbPlayer = await dbConnection.query(
