@@ -21,9 +21,8 @@ router.post(
       });
     }
 
-    if(!req.files)
-    {
-      return res.send("CSV file was not found");
+    if (!req.files) {
+      return res.send('CSV file was not found');
     }
 
     const file = req.files.eventPlayers;
