@@ -49,6 +49,11 @@ router.post(
         .json({
           error: 'It is too late. You can not upload players to this event',
         });
+    } else {
+      await dbConnection.query(
+        'DELETE FROM player_game WHERE game_id = ?',
+        [eventId]
+        );
     }
 
     const dbPlayer = await dbConnection.query(
