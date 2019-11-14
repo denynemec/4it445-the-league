@@ -21,6 +21,13 @@ router.post(
       });
     }
 
+    if(!req.files)
+    {
+      return res.send("CSV file was not found");
+    }
+
+    const file = req.files.eventPlayers;
+
     const csv = require('csv-parser');
     const fs = require('fs');
     const dbConnection = req[DB_CONNECTION_KEY];
@@ -31,7 +38,7 @@ router.post(
 
     const dbTeam = await dbConnection.query('SELECT team_id, name FROM team;');
 
-    fs.createReadStream('./src/modules/administration/player.csv')
+    fs.createReadStream(file)
       .pipe(
         csv({
           headers: false,
