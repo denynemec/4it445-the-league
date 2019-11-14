@@ -12,12 +12,12 @@ export const LayoutedLobby = ({
 }) => {
   const { t } = useTranslation();
 
-  let groupUserIndicatorColorClass = 'bg-spring-green';
+  let groupUserIndicatorColorClass = 'bg-red';
 
-  if (joinedUsers < minUsers) {
+  if (joinedUsers >= minUsers) {
     groupUserIndicatorColorClass = 'bg-yellow';
   } else if (joinedUsers === maxUsers) {
-    groupUserIndicatorColorClass = 'bg-red';
+    groupUserIndicatorColorClass = 'bg-spring-green';
   }
 
   return (
