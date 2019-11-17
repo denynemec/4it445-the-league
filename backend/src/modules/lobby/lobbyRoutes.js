@@ -157,7 +157,15 @@ router.get('/:lobbyId/fetchDraft', async (req, res, next) => {
     [lobbyId],
   );
 
-  res.json(dbResponse);
+  const draftOrder = dbResponse.map(
+    ({ user_id: userId, draft_order: draftOrder, ...rest }) => ({
+      userId,
+      draftOrder,
+      ...rest,
+    }),
+  );
+
+  res.json({ draftOrder, activeDraftOrder: 1 });
 });
 
 export default router;
