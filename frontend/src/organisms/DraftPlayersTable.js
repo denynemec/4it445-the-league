@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { MultiSelect } from 'primereact/multiselect';
-import { Button, Layout } from '../atoms';
-import { TextInputWithLabel } from '../molecules';
+import { InputText } from 'primereact/inputtext';
+import { Button } from '../atoms';
 
 export const DraftPlayersTable = ({ draftPlayersList, selection }) => {
   const { t } = useTranslation();
@@ -220,60 +220,61 @@ export const DraftPlayersTable = ({ draftPlayersList, selection }) => {
     </Button>
   );
 
-  return (
-    <>
-      <Layout w-40>
-        <TextInputWithLabel
-          name="draftPlayersFilter"
-          label={t('Organisms.DraftPlayersTable.DraftPlayersFilter')}
-          placeholder={t(
-            'Organisms.DraftPlayersTable.DraftPlayersFilterPlaceholder',
-          )}
-          value={filterDraftPlayers}
-          onChange={event => setFilterDraftPlayers(event.target.value)}
-        />
-      </Layout>
+  const header = (
+    <div style={{ textAlign: 'left' }}>
+      <i className="pi pi-search" style={{ margin: '4px 4px 0 0' }}></i>
+      <InputText
+        type="search"
+        onInput={event => setFilterDraftPlayers(event.target.value)}
+        placeholder={t(
+          'Organisms.DraftPlayersTable.DraftPlayersFilterPlaceholder',
+        )}
+        size="50"
+      />
+    </div>
+  );
 
-      <DataTable
-        value={mockDraftPlayersList}
-        paginator={true}
-        rows={10}
-        rowsPerPageOptions={[10, 20, 50, 100]}
-        currentPageReportTemplate="({currentPage}/{totalPages})"
-        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-        selectionMode="single"
-        onSelectionChange={event => setSelectedRow(event.value)}
-        selection={selectedRow}
-        globalFilter={filterDraftPlayers}
-        footer={footer}
-        ref={dataTableRef}
-      >
-        <Column
-          field="firstName"
-          header={t('Organisms.DraftPlayersTable.FirstName')}
-          sortable={true}
-          filter={true}
-        />
-        <Column
-          field="lastName"
-          header={t('Organisms.DraftPlayersTable.LastName')}
-          sortable={true}
-          filter={true}
-        />
-        <Column
-          field="position"
-          header={t('Organisms.DraftPlayersTable.Position')}
-          sortable={true}
-          filter={true}
-          filterElement={positionFilter}
-        />
-        <Column
-          field="team"
-          header={t('Organisms.DraftPlayersTable.Team')}
-          sortable={true}
-          filter={true}
-        />
-      </DataTable>
-    </>
+  return (
+    <DataTable
+      value={mockDraftPlayersList}
+      header={header}
+      footer={footer}
+      paginator={true}
+      rows={10}
+      rowsPerPageOptions={[10, 20, 50, 100]}
+      currentPageReportTemplate="({currentPage}/{totalPages})"
+      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+      selectionMode="single"
+      onSelectionChange={event => setSelectedRow(event.value)}
+      selection={selectedRow}
+      globalFilter={filterDraftPlayers}
+      ref={dataTableRef}
+    >
+      <Column
+        field="firstName"
+        header={t('Organisms.DraftPlayersTable.FirstName')}
+        sortable={true}
+        filter={true}
+      />
+      <Column
+        field="lastName"
+        header={t('Organisms.DraftPlayersTable.LastName')}
+        sortable={true}
+        filter={true}
+      />
+      <Column
+        field="position"
+        header={t('Organisms.DraftPlayersTable.Position')}
+        sortable={true}
+        filter={true}
+        filterElement={positionFilter}
+      />
+      <Column
+        field="team"
+        header={t('Organisms.DraftPlayersTable.Team')}
+        sortable={true}
+        filter={true}
+      />
+    </DataTable>
   );
 };

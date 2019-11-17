@@ -38,8 +38,7 @@
       "LastName": "Příjmení",
       "Position": "Pozice",
       "Team": "Tým",
-      "DraftPlayersFilter": "Filtrování hráčů",
-      "DraftPlayersFilterPlaceholder": "Filtrujte hráče",
+      "DraftPlayersFilterPlaceholder": "Filtrování hráčů",
       "PickDraftPlayer": "Vybrat hráče"
     }
   },
