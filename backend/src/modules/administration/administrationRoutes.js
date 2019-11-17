@@ -21,11 +21,11 @@ router.post(
       });
     }
 
-    if (!req.files) {
-      return res.send('CSV file was not found');
-    }
+    //if (!req.files) {
+    //  return res.send({ error: 'CSV file was not found' });
+    //}
 
-    const file = req.files.eventPlayers;
+    //const file = req.files.eventPlayers;
 
     const csv = require('csv-parser');
     const fs = require('fs');
@@ -47,11 +47,10 @@ router.post(
       return res.status(422).json({
         error: 'It is too late. You can not upload players to this event',
       });
-    } else {
-      await dbConnection.query('DELETE FROM player_game WHERE game_id = ?;', [
-        eventId,
-      ]);
     }
+    await dbConnection.query('DELETE FROM player_game WHERE game_id = ?;', [
+      eventId,
+    ]);
 
     const dbPlayer = await dbConnection.query(
       'SELECT player_id, firstname, lastname FROM player;',
@@ -59,7 +58,7 @@ router.post(
 
     const dbTeam = await dbConnection.query('SELECT team_id, name FROM team;');
 
-    fs.createReadStream(file)
+    fs.createReadStream('./src/modules/administration/player.csv')
       .pipe(
         csv({
           headers: false,
@@ -67,32 +66,29 @@ router.post(
         }),
       )
       .on('data', async player => {
-        console.log(player);
         let teamId;
         let playerId;
-        const teamExist = dbTeam.filter(function(t) {
-          return t.name == player[4];
-        });
-        if (teamExist.length < 1) {
+        const teamExist = dbTeam.find(t => t.name == player[4]);
+        if (teamExist === 'undefined') {
           const dbTeamResponse = await dbConnection.query(
             'INSERT INTO team (name, created_at, updated_at) VALUES (?, NOW(), NOW());',
             [player[4]],
           );
           teamId = dbTeamResponse.insertId;
         } else {
-          teamId = teamExist[0].team_id;
+          teamId = teamExist.team_id;
         }
-        const playerExist = dbPlayer.filter(function(pl) {
-          return pl.firstname == player[0] && pl.lastname == player[1];
-        });
-        if (playerExist.length < 1) {
+        const playerExist = dbPlayer.find(
+          pl => pl.firstname == player[0] && pl.lastname == player[1],
+        );
+        if (playerExist === 'undefined') {
           const dbPlayerResponse = await dbConnection.query(
             'INSERT INTO player (firstname, lastname, created_at, updated_at) VALUES (?, ?, NOW(), NOW());',
             [player[0], player[1]],
           );
           playerId = dbPlayerResponse.insertId;
         } else {
-          playerId = playerExist[0].player_id;
+          playerId = playerExist.player_id;
         }
         await dbConnection.query(
           'INSERT INTO player_game (game_id, player_id, post_abbr, team_id, number) VALUES (?, ?, ?, ?, ?);',
