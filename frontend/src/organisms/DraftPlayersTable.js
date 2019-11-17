@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DataTable } from 'primereact/datatable';
@@ -7,12 +7,14 @@ import { MultiSelect } from 'primereact/multiselect';
 import { Button, Layout } from '../atoms';
 import { TextInputWithLabel } from '../molecules';
 
-export const DraftPlayersTable = ({ draftPlayersList }) => {
+export const DraftPlayersTable = ({ draftPlayersList, selection }) => {
   const { t } = useTranslation();
 
   const [filterDraftPlayers, setFilterDraftPlayers] = useState('');
   const [filterPositions, setFilterPositions] = useState('');
   const [selectedRow, setSelectedRow] = useState('');
+
+  const dataTableRef = useRef('');
 
   const mockDraftPlayersList = [
     {
@@ -207,8 +209,7 @@ export const DraftPlayersTable = ({ draftPlayersList }) => {
       onChange={event => {
         setFilterPositions(event.target.value);
 
-        //TODO nefunguje, nevim jak udělat :/
-        this.dt.filter(event.target.value, 'position', 'in');
+        dataTableRef.current.filter(event.target.value, 'position', 'in');
       }}
     />
   );
@@ -245,6 +246,7 @@ export const DraftPlayersTable = ({ draftPlayersList }) => {
         selection={selectedRow}
         globalFilter={filterDraftPlayers}
         footer={footer}
+        ref={dataTableRef}
       >
         <Column
           field="firstName"
