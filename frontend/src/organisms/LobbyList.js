@@ -7,6 +7,8 @@ import { Button, Heading, Layout } from '../atoms';
 import { LayoutedLobby, TextInputWithLabel } from '../molecules';
 import { valueContains } from '../utils';
 
+import { CardDeck, Col, Container } from 'reactstrap';
+
 export const LobbyList = ({ lobbyList, header }) => {
   const { t } = useTranslation();
   const history = useHistory();
@@ -31,28 +33,15 @@ export const LobbyList = ({ lobbyList, header }) => {
             />
           </Layout>
         </Layout>
-
-        <Layout flex flex-wrap pt3>
-          {lobbyList
-            .filter(({ name }) => valueContains(name, filterLobby))
-            .map(lobby => (
-              <Layout w-30 ma2 key={lobby.id}>
+        <Container>
+          <CardDeck>
+            {lobbyList
+              .filter(({ name }) => valueContains(name, filterLobby))
+              .map(lobby => (
                 <LayoutedLobby {...lobby} />
-
-                <Layout pt3>
-                  <Button
-                    className="w-100 pt3"
-                    primary
-                    onClick={() =>
-                      history.push(PATHNAMES.getLobbyDetail(lobby.id))
-                    }
-                  >
-                    {t('Organisms.LobbyList.GoToGroupDetailButton')}
-                  </Button>
-                </Layout>
-              </Layout>
-            ))}
-        </Layout>
+              ))}
+          </CardDeck>
+        </Container>
       </>
     )
   );

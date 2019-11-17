@@ -2,7 +2,7 @@
   "Atoms": { "Select": { "Placeholder": "Vyberte hodnotu..." } },
   "Molecules": {
     "HeaderBase": {
-      "HomeLink": "Pasivní sport nikdy nebyl zábavnější"
+      "HomeLink": "TheLeague"
     },
     "LayoutedLobby": { "EventName": "Událost: {{eventName}}" }
   },
