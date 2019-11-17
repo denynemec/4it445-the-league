@@ -4,3 +4,4 @@ export { LoggedInHeader } from './LoggedInHeader';
 export { NewLobbyForm } from './NewLobbyForm';
 export { NotLoggedInHeader } from './NotLoggedInHeader';
 export { SelectField } from './SelectField';
+export { DraftPlayersTable } from './DraftPlayersTable';

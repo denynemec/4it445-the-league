@@ -32,6 +32,15 @@
       "LobbyFilter": "Jméno skupiny",
       "LobbyFilterPlaceholder": "Zadej jméno skupiny",
       "GoToGroupDetailButton": "Detail skupiny"
+    },
+    "DraftPlayersTable": {
+      "FirstName": "Jméno",
+      "LastName": "Příjmení",
+      "Position": "Pozice",
+      "Team": "Tým",
+      "DraftPlayersFilter": "Filtrování hráčů",
+      "DraftPlayersFilterPlaceholder": "Filtrujte hráče",
+      "PickDraftPlayer": "Vybrat hráče"
     }
   },
   "Page": {
