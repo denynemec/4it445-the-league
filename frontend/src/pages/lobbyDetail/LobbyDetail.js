@@ -6,6 +6,7 @@ import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
 import { Button, LoadingSpinner } from '../../atoms';
 import { LoggedInPageLayout } from '../../templates';
+import { LobbyAvailablePlayers } from './LobbyAvailablePlayers';
 import { useFetchRequest, useRequest } from '../../utils';
 
 export const LobbyDetail = () => {
@@ -53,6 +54,7 @@ const DraftButtons = ({ draftStarted, history, draftState, t, lobbyId }) => {
 
   return (
     <>
+      <LobbyAvailablePlayers />
       {draftStarted && (
         <Button
           primary

@@ -8,7 +8,7 @@ import ENDPOINTS from '../../endpoints';
 import { Heading, Button, Layout, Link, InfoBox } from '../../atoms';
 import { NotLoggedInPageLayout } from '../../templates';
 import { useRequest, translatedValidations } from '../../utils';
-import { Field, DraftPlayersTable } from '../../organisms';
+import { Field } from '../../organisms';
 
 export const RegistrationPage = () => {
   const { t } = useTranslation();
@@ -59,8 +59,6 @@ export const RegistrationPage = () => {
       <Heading className="flex justify-center pb2">
         {t('Page.Registration.FormHeading')}
       </Heading>
-
-      <DraftPlayersTable />
 
       <Formik
         initialValues={{
