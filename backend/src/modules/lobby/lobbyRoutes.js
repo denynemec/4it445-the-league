@@ -65,12 +65,24 @@ router.post(
       });
     }
 
+    const user = await dbConnection.query(
+      'SELECT user_id, email, firstname, lastname FROM users WHERE user_id = ?;',
+      [userId],
+    );
+
+    if (emails.find(email => email === user[0].email)) {
+      return res.status(422).json({
+        error: '422: You can not send the invitation to yourself.',
+      });
+    }
+
     // add lobby to DB
     const lobbyResponse = await dbConnection.query(
       'INSERT INTO lobby (game_id, leader_id, name, max_players, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW());',
-      [eventId, userId, lobbyName, eventDetail[0].max_users],
+      [eventId, userId, lobbyName, emails.length + 1],
     );
     const lobbyId = lobbyResponse.insertId;
+
     await dbConnection.query(
       'INSERT INTO lobby_user (user_id, lobby_id) VALUES (?, ?);',
       [userId, lobbyId],
@@ -123,6 +135,10 @@ router.post('/:lobbyId/startDraft', async (req, res, next) => {
   // todo add check to privilege, if draft starts group owner
 
   const dbConnection = req[DB_CONNECTION_KEY];
+
+  await dbConnection.query('DELETE FROM invitation WHERE lobby_id = ?;', [
+    lobbyId,
+  ]);
 
   const dbResponsePlayers = await dbConnection.query(
     `SELECT user_id FROM lobby_user WHERE draft_order IS NULL and lobby_id = ? ORDER BY RAND();`,
