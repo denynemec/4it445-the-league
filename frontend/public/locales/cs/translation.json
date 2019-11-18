@@ -139,11 +139,30 @@
       "SubmitResetPasswordConfirmationButton": "Odeslat"
     },
     "LobbyDetail": {
+      "LobbyAvailablePlayersTable": {
+        "FirstName": "Jméno",
+        "LastName": "Příjmení",
+        "Position": "Pozice",
+        "Team": "Tým",
+        "PlayersFilterPlaceholder": "Globální filtr hráčů",
+        "PageReport": "Stránka {currentPage} z {totalPages}"
+      },
       "StartDraft": "Začit draft",
       "ToDraft": "Do draftu",
       "DraftNotStarted": "Draft ještě nezačal, kontaktuje zakladete skupiny"
     },
-    "Draft": { "Heading": "Draft " }
+    "Draft": {
+      "Heading": "Draft ",
+      "DraftPlayersTable": {
+        "FirstName": "Jméno",
+        "LastName": "Příjmení",
+        "Position": "Pozice",
+        "Team": "Tým",
+        "DraftPlayersFilterPlaceholder": "Globální filtr hráčů",
+        "PickDraftPlayer": "Vybrat hráče",
+        "PageReport": "Stránka {currentPage} z {totalPages}"
+      }
+    }
   },
   "Validations": {
     "Required": "Povinný údaj",

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import ENDPOINTS from '../../endpoints';
 import { LoadingSpinner, Heading } from '../../atoms';
 import { LoggedInPageLayout } from '../../templates';
+import { DraftPlayersTable } from './DraftPlayersTable';
 import { useFetchRequest } from '../../utils';
 import { DraftOrder } from './DraftOrder';
 
@@ -30,6 +31,7 @@ export const DraftDetail = () => {
           />
         </>
       )}
+      <DraftPlayersTable />
     </LoggedInPageLayout>
   );
 };
