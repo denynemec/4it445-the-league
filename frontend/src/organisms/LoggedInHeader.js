@@ -1,16 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 
-import { Layout, Link } from '../atoms';
-import {
-  HeaderBase,
-  navLinkStyle,
-  navButtonStyle,
-} from '../molecules/HeaderBase';
+import { Layout } from '../atoms';
+import { HeaderBase } from '../molecules/HeaderBase';
 import { useAuth, hasPrivilege } from '../utils';
 import PATHNAMES from '../pathnames';
 import {
@@ -35,20 +30,17 @@ const LoggedInHeaderBase = ({ history }) => {
     privileges,
     'AdministrationPage',
   );
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const toggle = () => setDropdownOpen(!dropdownOpen);
 
   return (
     <HeaderBase homeLinkTo={PATHNAMES.home()}>
       <Layout flex-grow flex items-center>
-        <NavItem>
+        <NavItem className="m-1">
           <NavLink href={PATHNAMES.home()}>
             {t('Organisms.LoggedInHeader.HomeLink')}
           </NavLink>
         </NavItem>
 
-        <UncontrolledDropdown nav inNavbar>
+        <UncontrolledDropdown nav inNavbar className="m-1">
           <DropdownToggle nav caret>
             <FontAwesomeIcon icon={faUser} />
             {user && user.nickname}
@@ -70,7 +62,12 @@ const LoggedInHeaderBase = ({ history }) => {
           </DropdownMenu>
         </UncontrolledDropdown>
         <NavItem>
-          <Button onClick={logoutCallback} outline color="secondary">
+          <Button
+            onClick={logoutCallback}
+            outline
+            color="secondary"
+            className="m-1"
+          >
             <Layout flex flex-row>
               {t('Organisms.LoggedInHeader.LogoutLink')}
               <Layout pl2>

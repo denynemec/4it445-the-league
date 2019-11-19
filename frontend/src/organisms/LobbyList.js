@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
 
-import PATHNAMES from '../pathnames';
-import { Button, Heading, Layout } from '../atoms';
+import { Heading, Layout } from '../atoms';
 import { LayoutedLobby, TextInputWithLabel } from '../molecules';
 import { valueContains } from '../utils';
 
-import { CardDeck, Col, Container } from 'reactstrap';
+import { CardDeck, Container } from 'reactstrap';
 
 export const LobbyList = ({ lobbyList, header }) => {
   const { t } = useTranslation();
-  const history = useHistory();
 
   const [filterLobby, setFilterLobby] = useState('');
 
@@ -33,15 +30,13 @@ export const LobbyList = ({ lobbyList, header }) => {
             />
           </Layout>
         </Layout>
-        <Container>
-          <CardDeck>
-            {lobbyList
-              .filter(({ name }) => valueContains(name, filterLobby))
-              .map(lobby => (
-                <LayoutedLobby {...lobby} />
-              ))}
-          </CardDeck>
-        </Container>
+        <CardDeck>
+          {lobbyList
+            .filter(({ name }) => valueContains(name, filterLobby))
+            .map(lobby => (
+              <LayoutedLobby {...lobby} />
+            ))}
+        </CardDeck>
       </>
     )
   );
