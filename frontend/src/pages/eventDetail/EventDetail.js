@@ -1,10 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import classNames from 'classnames';
 
 import ENDPOINTS from '../../endpoints';
-import { Heading, Layout, LoadingSpinner, Label, Paragraph } from '../../atoms';
+import { Layout, LoadingSpinner, Paragraph } from '../../atoms';
 import { Jumbo } from '../../molecules';
 import { LobbyList, NewLobbyForm } from '../../organisms';
 import { LoggedInPageLayout } from '../../templates';
