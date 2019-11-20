@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
-import { Heading, LoadingSpinner, Layout, InfoBox } from '../../atoms';
+import { Heading, LoadingSpinner, InfoBox } from '../../atoms';
 import { LayoutedLobby } from '../../molecules';
 import { NotLoggedInPageLayout } from '../../templates';
 import { useAuth, useFetchRequest, useRequest } from '../../utils';

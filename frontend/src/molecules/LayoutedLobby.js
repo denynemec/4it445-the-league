@@ -1,11 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
-import PATHNAMES from '../pathnames';
 
 import {
   Card,
-  Button,
   CardFooter,
   CardBody,
   CardText,
@@ -25,7 +22,6 @@ export const LayoutedLobby = ({
   footer,
 }) => {
   const { t } = useTranslation();
-  const history = useHistory();
 
   return (
     <Col sm="4">
