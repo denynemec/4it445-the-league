@@ -22,6 +22,7 @@ export const LayoutedLobby = ({
   minUsers,
   name,
   id,
+  ...props
 }) => {
   const { t } = useTranslation();
   const history = useHistory();
@@ -38,12 +39,17 @@ export const LayoutedLobby = ({
         <CardBody>
           <CardText>
             <ListGroup flush>
-              <ListGroupItem>Název: {name}</ListGroupItem>
+              <ListGroupItem>
+                {t('Molecules.LayoutedLobby.LobbyName', { name })}
+              </ListGroupItem>
               <ListGroupItem>
                 {t('Molecules.LayoutedLobby.EventName', { eventName })}
               </ListGroupItem>
               <ListGroupItem>
-                Hráči: {`${joinedUsers}/${maxUsers}`}
+                {t('Molecules.LayoutedLobby.Players', {
+                  joinedUsers,
+                  maxUsers,
+                })}
               </ListGroupItem>
             </ListGroup>
           </CardText>
@@ -56,6 +62,7 @@ export const LayoutedLobby = ({
           >
             {t('Organisms.LobbyList.GoToGroupDetailButton')}
           </Button>
+          {props.JoinToLobby}
         </CardFooter>
       </Card>
     </Col>

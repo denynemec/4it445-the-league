@@ -52,12 +52,13 @@ export const LayoutedEvent = ({
           top
           width="100%"
           src="https://oddschanger.com/wp-content/uploads/2019/03/PA-40059445-min.jpg"
-          alt="TEST"
         />
         <CardBody>
           <CardText>
             <ListGroup flush>
-              <ListGroupItem>Název: {name}</ListGroupItem>
+              <ListGroupItem>
+                {t('Page.Home.EventName', { name })}
+              </ListGroupItem>
               <ListGroupItem>
                 {t('Page.Home.EventStartDateLabel')} {formatDate(startDate)}
               </ListGroupItem>

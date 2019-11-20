@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 
 import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
-import { Heading, LoadingSpinner, Layout, Button, InfoBox } from '../../atoms';
+import { Heading, LoadingSpinner, Layout, InfoBox } from '../../atoms';
 import { LayoutedLobby } from '../../molecules';
 import { NotLoggedInPageLayout } from '../../templates';
 import { useAuth, useFetchRequest, useRequest } from '../../utils';
-
+import { Button } from 'reactstrap';
 export const JoinToLobbyPage = () => {
   const { t } = useTranslation();
   const { lobbyHash } = useParams();
@@ -63,19 +63,19 @@ export const JoinToLobbyPage = () => {
             />
           )}
 
-          <Layout pt3>
-            <LayoutedLobby {...lobbyDetailState.data} />
-          </Layout>
-
-          <Layout flex justify-center pt3>
-            <Button
-              primary
-              disabled={joinToLobbyState.isLoading}
-              onClick={onJoinToLobbyMemoized}
-            >
-              {t('Page.JoinToLobby.JoinButton')}
-            </Button>
-          </Layout>
+          <LayoutedLobby
+            {...lobbyDetailState.data}
+            JoinToLobby={
+              <Button
+                block
+                color="primary"
+                disabled={joinToLobbyState.isLoading}
+                onClick={onJoinToLobbyMemoized}
+              >
+                {t('Page.JoinToLobby.JoinButton')}
+              </Button>
+            }
+          />
         </>
       )}
     </NotLoggedInPageLayout>
