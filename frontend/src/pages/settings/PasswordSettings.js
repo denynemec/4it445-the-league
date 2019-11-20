@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../../endpoints';
-import { ErrorBox, Heading, Button, Layout } from '../../atoms';
+import { ErrorBox, Heading, Layout } from '../../atoms';
 import { Field } from '../../organisms';
 import { useRequest, translatedValidations } from '../../utils';
+import { Button } from 'reactstrap';
 
 export const PasswordSettings = () => {
   const { t } = useTranslation();
@@ -49,7 +50,7 @@ export const PasswordSettings = () => {
         onSubmit={onSubmitMemoized}
       >
         <Form>
-          <Heading className="pa2" size="md">
+          <Heading className="pa2" size="lg">
             {t('Page.Settings.PasswordSettings.FormHeading')}
           </Heading>
 
@@ -85,7 +86,7 @@ export const PasswordSettings = () => {
           <Layout flex justify-center>
             <Button
               submit
-              primary
+              color="primary"
               disabled={updatePasswordSettingsState.isLoading}
             >
               {t('Page.Settings.PasswordSettings.SubmitPasswordSettingsButton')}

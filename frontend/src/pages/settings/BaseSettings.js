@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../../endpoints';
-import { Heading, Button, ErrorBox, Layout, LoadingSpinner } from '../../atoms';
+import { Heading, ErrorBox, Layout, LoadingSpinner } from '../../atoms';
 import { Field } from '../../organisms';
 import {
   useRequest,
@@ -11,6 +11,8 @@ import {
   useFetchRequest,
   translatedValidations,
 } from '../../utils';
+
+import { Button } from 'reactstrap';
 
 export const BaseSettings = () => {
   const { t } = useTranslation();
@@ -61,7 +63,7 @@ export const BaseSettings = () => {
         >
           <Form>
             <Layout pa2>
-              <Heading size="md">
+              <Heading size="lg">
                 {t('Page.Settings.BaseSettings.FormHeading')}
               </Heading>
             </Layout>
@@ -90,7 +92,7 @@ export const BaseSettings = () => {
             <Layout flex justify-center>
               <Button
                 submit
-                primary
+                color="primary"
                 disabled={updateBaseSettingsState.isLoading}
               >
                 {t('Page.Settings.BaseSettings.SubmitSettingsButton')}
