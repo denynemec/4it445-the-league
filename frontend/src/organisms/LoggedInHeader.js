@@ -40,7 +40,7 @@ const LoggedInHeaderBase = ({ history }) => {
 
       <UncontrolledDropdown nav inNavbar className="m-1">
         <DropdownToggle nav caret>
-          <FontAwesomeIcon icon={faUser} />
+          <FontAwesomeIcon className="mr-1" icon={faUser} />
           {user && user.nickname}
         </DropdownToggle>
         <DropdownMenu right>
@@ -68,7 +68,7 @@ const LoggedInHeaderBase = ({ history }) => {
         >
           {t('Organisms.LoggedInHeader.LogoutLink')}
 
-          <FontAwesomeIcon icon={faSignOutAlt} />
+          <FontAwesomeIcon className="ml-2" icon={faSignOutAlt} />
         </Button>
       </NavItem>
     </HeaderBase>
