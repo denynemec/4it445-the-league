@@ -1,13 +1,14 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../endpoints';
 import PATHNAMES from '../pathnames';
-import { Button, Layout, ErrorBox } from '../atoms';
+import { ErrorBox } from '../atoms';
 import { Field } from '../organisms';
-import { Modal } from '../molecules';
+
+import { Modal, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import {
   useRequest,
   translatedValidations,
@@ -55,14 +56,20 @@ export const NewLobbyForm = ({
     emails: uniqueMinMaxEmails({ min: minEmails, max: maxEmails }),
   });
 
+  const [modal, setModal] = useState(false);
+
+  const toggle = () => setModal(!modal);
+
   return (
     <Modal
-      headerLabel={t('Organisms.NewLobbyForm.ModalHeaderLabel', { eventName })}
       isOpen={isOpen}
       withFooter={false}
       onCloseClick={onCloseClick}
       isDisabled={newLobbyState.isLoading}
     >
+      <ModalHeader toggle={toggle}>
+        {t('Organisms.NewLobbyForm.ModalHeaderLabel', { eventName })}
+      </ModalHeader>
       <ErrorBox errorList={[{ id: 1, error: newLobbyState.error }]} />
 
       <Formik
@@ -87,12 +94,11 @@ export const NewLobbyForm = ({
               max: maxEmails,
             })}
           />
-
-          <Layout flex justify-center>
-            <Button submit primary disabled={newLobbyState.isLoading}>
+          <ModalFooter>
+            <Button submit color="primary" disabled={newLobbyState.isLoading}>
               {t('Organisms.NewLobbyForm.SubmitNewLobbyForm')}
             </Button>
-          </Layout>
+          </ModalFooter>
         </Form>
       </Formik>
     </Modal>

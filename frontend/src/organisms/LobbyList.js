@@ -5,7 +5,7 @@ import { Heading, Layout } from '../atoms';
 import { LayoutedLobby, TextInputWithLabel } from '../molecules';
 import { valueContains } from '../utils';
 
-import { CardDeck, Container } from 'reactstrap';
+import { CardDeck } from 'reactstrap';
 
 export const LobbyList = ({ lobbyList, header }) => {
   const { t } = useTranslation();

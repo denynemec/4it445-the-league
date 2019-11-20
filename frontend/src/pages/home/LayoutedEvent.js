@@ -1,9 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
 
-import { Heading, Layout, Label } from '../../atoms';
 import { NewLobbyForm } from '../../organisms';
 import PATHNAMES from '../../pathnames';
 import { formatDate } from '../../utils';

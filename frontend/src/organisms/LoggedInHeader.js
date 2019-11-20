@@ -1,10 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 
-import { Layout } from '../atoms';
 import { HeaderBase } from '../molecules/HeaderBase';
 import { useAuth, hasPrivilege } from '../utils';
 import PATHNAMES from '../pathnames';
@@ -33,50 +32,45 @@ const LoggedInHeaderBase = ({ history }) => {
 
   return (
     <HeaderBase homeLinkTo={PATHNAMES.home()}>
-      <Layout flex-grow flex items-center>
-        <NavItem className="m-1">
-          <NavLink href={PATHNAMES.home()}>
-            {t('Organisms.LoggedInHeader.HomeLink')}
-          </NavLink>
-        </NavItem>
+      <NavItem className="m-1">
+        <NavLink href={PATHNAMES.home()}>
+          {t('Organisms.LoggedInHeader.HomeLink')}
+        </NavLink>
+      </NavItem>
 
-        <UncontrolledDropdown nav inNavbar className="m-1">
-          <DropdownToggle nav caret>
-            <FontAwesomeIcon icon={faUser} />
-            {user && user.nickname}
-          </DropdownToggle>
-          <DropdownMenu right>
+      <UncontrolledDropdown nav inNavbar className="m-1">
+        <DropdownToggle nav caret>
+          <FontAwesomeIcon icon={faUser} />
+          {user && user.nickname}
+        </DropdownToggle>
+        <DropdownMenu right>
+          <DropdownItem>
+            <NavLink href={PATHNAMES.settings()}>
+              {t('Organisms.LoggedInHeader.SettingsLink')}
+            </NavLink>
+          </DropdownItem>
+          <DropdownItem divider />
+          {hasAdministrationPagePrivilege && (
             <DropdownItem>
-              <NavLink href={PATHNAMES.settings()}>
-                {t('Organisms.LoggedInHeader.SettingsLink')}
+              <NavLink href={PATHNAMES.administration()}>
+                {t('Organisms.LoggedInHeader.AdministrationLink')}
               </NavLink>
             </DropdownItem>
-            <DropdownItem divider />
-            {hasAdministrationPagePrivilege && (
-              <DropdownItem>
-                <NavLink href={PATHNAMES.administration()}>
-                  {t('Organisms.LoggedInHeader.AdministrationLink')}
-                </NavLink>
-              </DropdownItem>
-            )}
-          </DropdownMenu>
-        </UncontrolledDropdown>
-        <NavItem>
-          <Button
-            onClick={logoutCallback}
-            outline
-            color="secondary"
-            className="m-1"
-          >
-            <Layout flex flex-row>
-              {t('Organisms.LoggedInHeader.LogoutLink')}
-              <Layout pl2>
-                <FontAwesomeIcon icon={faSignOutAlt} />
-              </Layout>
-            </Layout>
-          </Button>
-        </NavItem>
-      </Layout>
+          )}
+        </DropdownMenu>
+      </UncontrolledDropdown>
+      <NavItem>
+        <Button
+          onClick={logoutCallback}
+          outline
+          color="secondary"
+          className="m-1"
+        >
+          {t('Organisms.LoggedInHeader.LogoutLink')}
+
+          <FontAwesomeIcon icon={faSignOutAlt} />
+        </Button>
+      </NavItem>
     </HeaderBase>
   );
 };

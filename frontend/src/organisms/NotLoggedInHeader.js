@@ -1,13 +1,7 @@
 import React from 'react';
-import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-
-import { Layout, Link } from '../atoms';
-import {
-  HeaderBase,
-  navLinkStyle,
-  navButtonStyle,
-} from '../molecules/HeaderBase';
+import { NavLink, NavItem } from 'reactstrap';
+import { HeaderBase } from '../molecules/HeaderBase';
 import PATHNAMES from '../pathnames';
 
 export const NotLoggedInHeader = () => {
@@ -15,22 +9,17 @@ export const NotLoggedInHeader = () => {
 
   return (
     <HeaderBase homeLinkTo={PATHNAMES.login()}>
-      <Layout flex-grow flex items-center>
-        <Link
-          to={PATHNAMES.login()}
-          className={classNames(navLinkStyle, 'pa3')}
-        >
+      <NavItem className="m-1">
+        <NavLink href={PATHNAMES.login()}>
           {t('Organisms.NotLoggedInHeader.LoginLink')}
-        </Link>
+        </NavLink>
+      </NavItem>
 
-        <Link
-          to={PATHNAMES.registration()}
-          noUnderline
-          className={navButtonStyle}
-        >
+      <NavItem className="m-1">
+        <NavLink href={PATHNAMES.registration()}>
           {t('Organisms.NotLoggedInHeader.RegisterLink')}
-        </Link>
-      </Layout>
+        </NavLink>
+      </NavItem>
     </HeaderBase>
   );
 };

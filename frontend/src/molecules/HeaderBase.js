@@ -16,7 +16,7 @@ export const HeaderBase = ({ homeLinkTo, children }) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggle = () => setIsOpen(!isOpen);
+  const toggle = () => setIsOpen(prevState => !prevState);
 
   return (
     <Navbar color="light" light expand="md">
