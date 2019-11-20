@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-
 import PATHNAMES from '../pathnames';
-import { Button, Heading, Layout } from '../atoms';
+
+import { Heading, Layout } from '../atoms';
 import { LayoutedLobby, TextInputWithLabel } from '../molecules';
 import { valueContains } from '../utils';
+
+import { CardDeck, Button } from 'reactstrap';
 
 export const LobbyList = ({ lobbyList, header }) => {
   const { t } = useTranslation();
   const history = useHistory();
-
   const [filterLobby, setFilterLobby] = useState('');
 
   return (
@@ -31,28 +32,26 @@ export const LobbyList = ({ lobbyList, header }) => {
             />
           </Layout>
         </Layout>
-
-        <Layout flex flex-wrap pt3>
+        <CardDeck>
           {lobbyList
             .filter(({ name }) => valueContains(name, filterLobby))
             .map(lobby => (
-              <Layout w-30 ma2 key={lobby.id}>
-                <LayoutedLobby {...lobby} />
-
-                <Layout pt3>
+              <LayoutedLobby
+                {...lobby}
+                footer={
                   <Button
-                    className="w-100 pt3"
-                    primary
+                    block
+                    color="primary"
                     onClick={() =>
                       history.push(PATHNAMES.getLobbyDetail(lobby.id))
                     }
                   >
                     {t('Organisms.LobbyList.GoToGroupDetailButton')}
                   </Button>
-                </Layout>
-              </Layout>
+                }
+              />
             ))}
-        </Layout>
+        </CardDeck>
       </>
     )
   );

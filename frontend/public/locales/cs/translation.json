@@ -2,9 +2,13 @@
   "Atoms": { "Select": { "Placeholder": "Vyberte hodnotu..." } },
   "Molecules": {
     "HeaderBase": {
-      "HomeLink": "Pasivní sport nikdy nebyl zábavnější"
+      "HomeLink": "TheLeague"
     },
-    "LayoutedLobby": { "EventName": "Událost: {{eventName}}" }
+    "LayoutedLobby": {
+      "LobbyName": "Název: {{name}}",
+      "EventName": "Událost: {{eventName}}",
+      "Players": "Hráči: {{joinedUsers}}/{{maxUsers}}"
+    }
   },
   "Organisms": {
     "LoggedInHeader": {
@@ -80,7 +84,8 @@
       "GoToEventDetailButton": "Detail události",
       "EventHeader": "Události",
       "EventStartDateLabel": "Začátek:",
-      "EventEndDateLabel": "Konec:"
+      "EventEndDateLabel": "Konec:",
+      "EventName": "Název: {{name}}"
     },
     "Settings": {
       "PageHeading": "Nastavení",

@@ -1,13 +1,21 @@
 import React, { useCallback } from 'react';
+
 import { useHistory } from 'react-router-dom';
+
 import { useTranslation } from 'react-i18next';
+
 import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../endpoints';
+
 import PATHNAMES from '../pathnames';
+
 import { Button, Layout, ErrorBox } from '../atoms';
+
 import { Field } from '../organisms';
+
 import { Modal } from '../molecules';
+
 import {
   useRequest,
   translatedValidations,
@@ -16,33 +24,46 @@ import {
 
 export const NewLobbyForm = ({
   isOpen,
+
   onCloseClick,
+
   eventName,
+
   minUsers,
+
   maxUsers,
+
   eventId,
 }) => {
   const { t } = useTranslation();
+
   const history = useHistory();
+
   const newLobbyState = useRequest();
 
   const minEmails = minUsers - 1;
+
   const maxEmails = maxUsers - 1;
 
   const onSubmitMemoized = useCallback(
     ({ lobbyName, emails }) => {
       newLobbyState.request(ENDPOINTS.newLobby(), {
         method: 'POST',
+
         onSuccess: ({ data: { lobbyId } }) => {
           history.push(PATHNAMES.getLobbyDetail(lobbyId));
         },
+
         data: {
           lobbyName,
+
           emails: Object.values(emailsStringToEmailArray(emails)),
+
           eventId,
         },
       });
     },
+
     [newLobbyState, history, eventId],
   );
 
@@ -52,6 +73,7 @@ export const NewLobbyForm = ({
 
   const schema = object({
     lobbyName: requiredString,
+
     emails: uniqueMinMaxEmails({ min: minEmails, max: maxEmails }),
   });
 
@@ -84,6 +106,7 @@ export const NewLobbyForm = ({
             label={t('Organisms.NewLobbyForm.Emails')}
             placeholder={t('Organisms.NewLobbyForm.EmailsPlaceholder', {
               min: minEmails,
+
               max: maxEmails,
             })}
           />

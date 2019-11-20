@@ -1,12 +1,22 @@
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
 
-import { Heading, Layout, Button, Label } from '../../atoms';
 import { NewLobbyForm } from '../../organisms';
 import PATHNAMES from '../../pathnames';
 import { formatDate } from '../../utils';
+
+import {
+  Card,
+  Button,
+  CardFooter,
+  CardBody,
+  CardText,
+  CardImg,
+  ListGroup,
+  ListGroupItem,
+  Col,
+} from 'reactstrap';
 
 export const LayoutedEvent = ({
   description,
@@ -36,47 +46,46 @@ export const LayoutedEvent = ({
   );
 
   return (
-    <Layout ba b--black-100 w-30 pa3 ma2 br2 flex flex-column shadow-1>
-      <Heading className="self-center" size="sm">
-        {name}
-      </Heading>
-
-      <Layout pt3 flex flex-row justify-between>
-        <Label>{t('Page.Home.EventStartDateLabel')}</Label>
-
-        <span className={classNames('b')}>{formatDate(startDate)}</span>
-      </Layout>
-
-      <Layout pt2 flex flex-row justify-between>
-        <Label>{t('Page.Home.EventEndDateLabel')}</Label>
-
-        <span className={classNames('b')}>{formatDate(endDate)}</span>
-      </Layout>
-
-      <Layout pt2>
-        <span>{description}</span>
-      </Layout>
-
-      <Layout pt3>
-        <Button className="w-100" primary onClick={onOpenModalClick}>
-          {t('Page.Home.AddNewLobbyButton')}
-        </Button>
-
-        <NewLobbyForm
-          isOpen={addNewLobbyModalIsOpen}
-          onCloseClick={onCloseModalClick}
-          minUsers={minUsers}
-          maxUsers={maxUsers}
-          eventName={name}
-          eventId={id}
+    <Col sm="4">
+      <Card className="mt-5">
+        <CardImg
+          top
+          width="100%"
+          src="https://oddschanger.com/wp-content/uploads/2019/03/PA-40059445-min.jpg"
         />
-      </Layout>
-
-      <Layout pt3>
-        <Button className="w-100" primary onClick={onGoToDetailClick}>
-          {t('Page.Home.GoToEventDetailButton')}
-        </Button>
-      </Layout>
-    </Layout>
+        <CardBody>
+          <CardText>
+            <ListGroup flush>
+              <ListGroupItem>
+                {t('Page.Home.EventName', { name })}
+              </ListGroupItem>
+              <ListGroupItem>
+                {t('Page.Home.EventStartDateLabel')} {formatDate(startDate)}
+              </ListGroupItem>
+              <ListGroupItem>
+                {t('Page.Home.EventEndDateLabel')} {formatDate(endDate)}
+              </ListGroupItem>
+              <ListGroupItem>{description}</ListGroupItem>
+            </ListGroup>
+          </CardText>
+        </CardBody>
+        <CardFooter>
+          <Button block color="primary" onClick={onOpenModalClick}>
+            {t('Page.Home.AddNewLobbyButton')}
+          </Button>
+          <NewLobbyForm
+            isOpen={addNewLobbyModalIsOpen}
+            onCloseClick={onCloseModalClick}
+            minUsers={minUsers}
+            maxUsers={maxUsers}
+            eventName={name}
+            eventId={id}
+          />
+          <Button block color="primary" onClick={onGoToDetailClick}>
+            {t('Page.Home.GoToEventDetailButton')}
+          </Button>
+        </CardFooter>
+      </Card>
+    </Col>
   );
 };

@@ -68,7 +68,7 @@ const LayoutedEvents = ({ eventList }) => {
         </Layout>
       </Layout>
 
-      <Layout flex flex-wrap pt3>
+      <Layout flex flex-wrap>
         {eventList
           .filter(({ name }) => valueContains(name, filterEvent))
           .map(event => (
