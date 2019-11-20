@@ -54,16 +54,7 @@ export const LayoutedLobby = ({
             </ListGroup>
           </CardText>
         </CardBody>
-        <CardFooter>
-          <Button
-            block
-            color="primary"
-            onClick={() => history.push(PATHNAMES.getLobbyDetail(id))}
-          >
-            {t('Organisms.LobbyList.GoToGroupDetailButton')}
-          </Button>
-          {props.JoinToLobby}
-        </CardFooter>
+        <CardFooter>{props.footer}</CardFooter>
       </Card>
     </Col>
   );

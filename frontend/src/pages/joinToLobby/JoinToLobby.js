@@ -65,7 +65,7 @@ export const JoinToLobbyPage = () => {
 
           <LayoutedLobby
             {...lobbyDetailState.data}
-            JoinToLobby={
+            footer={
               <Button
                 block
                 color="primary"
