@@ -22,7 +22,7 @@ export const LayoutedLobby = ({
   minUsers,
   name,
   id,
-  ...props
+  footer,
 }) => {
   const { t } = useTranslation();
   const history = useHistory();
@@ -54,7 +54,7 @@ export const LayoutedLobby = ({
             </ListGroup>
           </CardText>
         </CardBody>
-        <CardFooter>{props.footer}</CardFooter>
+        <CardFooter>{footer}</CardFooter>
       </Card>
     </Col>
   );
