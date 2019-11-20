@@ -43,12 +43,14 @@ export const EventDetail = () => {
             }
           >
             <Paragraph>
-              {t('Page.EventDetail.EventStartDateLabel')}
-              {formatDate(eventState.data.startDate)}
+              {t('Page.EventDetail.EventStartDateLabel', {
+                date: formatDate(eventState.data.startDate),
+              })}
             </Paragraph>
             <Paragraph>
-              {t('Page.EventDetail.EventEndDateLabel')}
-              {formatDate(eventState.data.endDate)}
+              {t('Page.EventDetail.EventEndDateLabel', {
+                date: formatDate(eventState.data.endDate),
+              })}
             </Paragraph>
           </Jumbo>
 

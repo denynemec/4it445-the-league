@@ -115,8 +115,8 @@
     },
     "EventDetail": {
       "Heading": "Událost {{name}}",
-      "EventStartDateLabel": "Začátek:",
-      "EventEndDateLabel": "Konec:",
+      "EventStartDateLabel": "Začátek: {{date}}",
+      "EventEndDateLabel": "Konec: {{date}}",
       "AddNewLobbyButton": "Vytvořit skupinu",
       "LobbyHeader": "Skupiny"
     },
