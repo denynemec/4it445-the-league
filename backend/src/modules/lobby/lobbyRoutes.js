@@ -113,9 +113,42 @@ router.get('/:lobbyId', async (req, res, next) => {
     [lobbyId],
   );
 
+  // const
+
+  // const allAvailableRoles = await dbConnection.query(
+  //   `SELECT name FROM player_role WHERE sport_id = 1;`
+  // );
+
+  // selects all players roles based on a game in the lobby
+
+  // const allAvailableRoles = await dbConnection.query(
+  //   `SELECT player_role.name,player_role.post_abbr FROM lobby INNER JOIN game USING(game_id)
+  //   INNER JOIN sport USING(sport_id)
+  //   INNER JOIN player_role USING(sport_id) WHERE lobby_id = ?;`,
+  //   [lobbyId],
+  // );
+
+  // const playersInLobby = await dbConnection.query(`SELECT firstname,lastname,team.name,post_abbr FROM game INNER JOIN player_game USING(game_id)
+  // INNER JOIN player USING(player_id) INNER JOIN team USING(team_id);`);
+
+  const playersInLobby = await dbConnection.query(`SELECT firstname, lastname,team.name AS team ,post_abbr,player_role.name as post FROM game 
+  INNER JOIN player_game USING(game_id) INNER JOIN player USING(player_id) INNER JOIN 
+  team USING(team_id) INNER JOIN player_role USING(post_abbr);`);
+
+  const bonificationForGame = await dbConnection.query(
+    `SELECT goal,assist,clean_sheet_goalkeeper,clean_sheet_defender,win_mid_fielders,win_defender,
+  minimal_time FROM lobby INNER JOIN game USING(game_id) INNER JOIN bonification ON game.bonification_id = bonification.config_id 
+  WHERE lobby_id = ?;`,
+    [lobbyId],
+  );
+
   const draftStarted = dbResponsePlayersWithoutDrafOrder.length === 0;
 
-  res.json({ draftStarted });
+  res.json({
+    draftStarted,
+    playersInLobby,
+    bonificationForGame,
+  });
 });
 
 router.post('/:lobbyId/startDraft', async (req, res, next) => {

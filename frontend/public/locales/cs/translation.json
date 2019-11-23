@@ -143,7 +143,16 @@
       "ToDraft": "Do draftu",
       "DraftNotStarted": "Draft ještě nezačal, kontaktuje zakladete skupiny"
     },
-    "Draft": { "Heading": "Draft " }
+    "Draft": { "Heading": "Draft " },
+    "PlayersTableHeader": {
+      "PlayerName": "Jméno hráče",
+      "Team": "Tým",
+      "Position": "Pozice",
+      "Earnings": "Výdělek",
+      "EarningsPercent": "% na výdělku",
+      "ProfitLoss": "Ušlý zisk",
+      "Round": "Kolo"
+    }
   },
   "Validations": {
     "Required": "Povinný údaj",

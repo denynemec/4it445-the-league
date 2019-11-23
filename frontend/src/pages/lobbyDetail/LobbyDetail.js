@@ -7,6 +7,7 @@ import PATHNAMES from '../../pathnames';
 import { Button, LoadingSpinner } from '../../atoms';
 import { LoggedInPageLayout } from '../../templates';
 import { useFetchRequest, useRequest } from '../../utils';
+import { PlayersTable } from './PlayersTable';
 
 export const LobbyDetail = () => {
   const { t } = useTranslation();
@@ -32,6 +33,12 @@ export const LobbyDetail = () => {
           draftState={draftState}
           t={t}
           lobbyId={lobbyId}
+        />
+      )}
+      {lobbyState.data && (
+        <PlayersTable
+          players={lobbyState.data.playersInLobby}
+          // playerPos={lobbyState.data.allAvailableRoles}
         />
       )}
     </LoggedInPageLayout>
