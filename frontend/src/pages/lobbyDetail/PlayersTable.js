@@ -1,5 +1,4 @@
 import React from 'react';
-// import { MultiSelect } from 'primereact/multiselect';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { useTranslation } from 'react-i18next';
@@ -22,14 +21,17 @@ export const PlayersTable = ({ players }) => {
 
   const resultsHeader = [];
   const names = [];
+  const roundTranslated = t('Page.PlayersTableHeader.Round');
 
-  // filter and select all rounds
+  // filter and select all unique rounds
   const countRounds = players
     .map(rnd => rnd.note)
     .filter((value, index, self) => self.indexOf(value) === index);
 
+  // get the number of rounds
   const rounds = Object.keys(countRounds).length;
 
+  // push columns for goals, assists, wins and clean sheets to header and to columns
   for (let i = 1; i <= rounds; i++) {
     cols.push({ field: 'H' + i, header: 'H' });
     resultsHeader.push({ field: 'H' + i, header: 'H' });
@@ -43,11 +45,16 @@ export const PlayersTable = ({ players }) => {
     resultsHeader.push({ field: 'K' + i, header: 'K' });
   }
 
+  // push number of rounds to columns
+
   for (let i = 1; i <= rounds; i++) {
-    cols.push({ field: 'Kolo' + i, header: 'Kolo ' + i });
+    cols.push({
+      field: roundTranslated + i,
+      header: roundTranslated + ' ' + i,
+    });
   }
 
-  // function to make an array of players from raw data from database
+  // function to make an array of unique players from raw data from database
 
   const map = new Map();
   for (const plr of players) {
@@ -62,25 +69,8 @@ export const PlayersTable = ({ players }) => {
     }
   }
 
-  const gggg = [];
-  // for (let i = 1; i <= rounds; i++) {
-  //   players.map(plr => {
-  //     if (i === parseInt(plr.note)) {
-  //       let playerStats = {};
-  //       let goals = 'G' + i;
-  //       let assists = 'A' + i;
-  //       let win = 'V' + i;
-  //       let clean_sheet = 'K' + i;
-  //
-  //       playerStats[goals] = plr.goal;
-  //       playerStats[assists] = plr.assist;
-  //       playerStats[win] = plr.win;
-  //       playerStats[clean_sheet] = plr.clean_sheet;
-  //       gggg.push(playerStats);
-  //     }
-  //   });
-  // }
-
+  // function to push stats of players to an array
+  const playersStats = [];
   for (let i = 1; i <= rounds; i++) {
     players.map(plr => {
       if (i === parseInt(plr.note)) {
@@ -96,81 +86,24 @@ export const PlayersTable = ({ players }) => {
         playerStats[assists] = plr.assist;
         playerStats[win] = plr.win;
         playerStats[clean_sheet] = plr.clean_sheet;
-        gggg.push(playerStats);
+        playersStats.push(playerStats);
       }
-      return gggg;
+      return playersStats;
     });
   }
 
-  console.log('gggg', gggg);
-
-  // const map = new Map();
-  // for (const plr of players) {
-  //   if (!map.has(plr.player_id)) {
-  //     map.set(plr.player_id, true); // set any value to Map
-  //     names.push({
-  //       playerName: plr.firstname + ' ' + plr.lastname,
-  //       team: plr.team,
-  //       position: plr.post,
-  //     });
-  //   }
-  // }
-
-  console.log('names: ', names);
-  console.log('players: ', players);
-  // players.map(plr => {
-  //   gg.map(rd => {});
-  // });
-
-  // players.map(plr => {
-  //   for (let i = 1; i <= rounds; i++) {
-  //     gg.push({
-  //       G: plr.H,
-  //     });
-  //   }
-  // });
-
-  // console.log('gg:', gg);
-
-  // players.map(plr => {
-  //   names.push({
-  //     playerName: plr.firstname + ' ' + plr.lastname,
-  //     team: plr.team,
-  //     position: plr.post,
-  //     // earnings: null,
-  //     // earningsPercent: null,
-  //     // profitLoss: null,
-  //   });
-  //   return names;
-  // });
-
   let iteratorDynamicCols = 1;
-  // let iteratorResults = 0;
-  // let iteratorArr = [1, 1, 1, 1, 1];
   const dynamicColumns = cols.map(col => {
-    if (col.field === 'Kolo' + iteratorDynamicCols) {
+    if (col.field === roundTranslated + iteratorDynamicCols) {
       iteratorDynamicCols++;
       return null;
     }
-    // if (
-    //   col.field === 'H' + iteratorArr[iteratorResults] ||
-    //   col.field === 'G' + iteratorArr[iteratorResults] ||
-    //   col.field === 'A' + iteratorArr[iteratorResults] ||
-    //   col.field === 'V' + iteratorArr[iteratorResults] ||
-    //   col.field === 'K' + iteratorArr[iteratorResults]
-    // ) {
-    //   iteratorArr[iteratorResults] = iteratorResults++;
-    // }
     return (
-      <Column
-        key={col.field}
-        field={col.field}
-        // header={t(col.header)}
-        style={{ width: '150px' }}
-      />
+      <Column key={col.field} field={col.field} style={{ width: '120px' }} />
     );
   });
 
+  // creates the first row of header of the table
   let iteratorHeaderRound = 1;
   const rowHeaderGroup = cols.map(col => {
     if (
@@ -182,7 +115,7 @@ export const PlayersTable = ({ players }) => {
       col.field === 'profitLoss'
     ) {
       return <Column key={col.field} header={t(col.header)} rowSpan={2} />;
-    } else if (col.field === 'Kolo' + iteratorHeaderRound) {
+    } else if (col.field === roundTranslated + iteratorHeaderRound) {
       iteratorHeaderRound++;
       return <Column key={col.field} header={t(col.header)} colSpan={5} />;
     } else {
@@ -190,10 +123,13 @@ export const PlayersTable = ({ players }) => {
     }
   });
 
+  // creates the second row of header of the table
+
   const hgavkHeaderGroup = resultsHeader.map(col => {
     return <Column key={col.field} header={col.header} />;
   });
 
+  // assembled header
   const headerGroup = (
     <ColumnGroup>
       <Row>{rowHeaderGroup}</Row>
@@ -201,15 +137,12 @@ export const PlayersTable = ({ players }) => {
     </ColumnGroup>
   );
 
-  // console.log('cols', cols);
-
-  // const bla = names.concat(gggg);
-
-  // const output = [...names, ...gggg];
+  // merge arrays ? questionable functionality
   const output = [];
 
+  // merge arrays of players and their stats by using their id
   names.map(plr => {
-    gggg.map(res => {
+    playersStats.map(res => {
       if (plr.playerId === res.playerId) {
         let temp = { ...res, ...plr };
         output.push(temp);
@@ -217,52 +150,51 @@ export const PlayersTable = ({ players }) => {
     });
   });
 
-  console.log('names', names);
-  console.log('output', output);
+  console.log(output);
 
-  // const output = [];
-  // bla.forEach(function(item) {
-  //   let existing = output.filter(function(v, i) {
-  //     return v.name == item.name;
-  //   });
-  //   if (existing.length) {
-  //     var existingIndex = output.indexOf(existing[0]);
-  //     output[existingIndex].value = output[existingIndex].playerId.concat(
-  //       item.playerId,
-  //     );
-  //   } else {
-  //     if (typeof item.playerId == 'string') item.playerId = [item.playerId];
-  //     output.push(item);
-  //   }
-  // });
+  // merge players and their stats for all rounds
+  const mergedPlayersAndStats = [];
+  let maxLength = 0;
+  for (let i = 0; i < output.length; i++) {
+    for (let j = 1; j < output.length; j++) {
+      if (output[i].playerId === output[j].playerId) {
+        let temp = { ...output[i], ...output[j] };
+        let lengthOfObject = Object.keys(temp).length;
+        if (maxLength < lengthOfObject) {
+          maxLength = lengthOfObject;
+        }
+        mergedPlayersAndStats.push(temp);
+      }
+    }
+  }
 
-  // console.log('output:', output);
+  const rightLength = [];
+
+  // select only players that have complete stats
+  mergedPlayersAndStats.map(plr => {
+    if (Object.keys(plr).length === maxLength) {
+      rightLength.push(plr);
+    }
+  });
+
+  // delete all duplicates
+  const finalOutput = [];
+  const map1 = new Map();
+  for (const plr of rightLength) {
+    if (!map1.has(plr.playerId)) {
+      map1.set(plr.playerId, true); // set any value to Map
+      finalOutput.push(plr);
+    }
+  }
+
   return (
     <DataTable
-      value={output}
+      value={finalOutput}
       responsive={true}
-      // ref={dt}
       scrollable={true}
       headerColumnGroup={headerGroup}
-      // style={{ width: '800px' }}
-      // frozenWidth="600px"
-      // unfrozenWidth="100px"
     >
       {dynamicColumns}
     </DataTable>
   );
 };
-
-// const hgavkColumns = resultsHeader.map(col => {
-//   return <Column key={col.field} field={col.field} />;
-// });
-
-//   'playerName', header: 'Page.PlayersTableHeader.PlayerName' },
-// { field: 'team', header: 'Page.PlayersTableHeader.Team' },
-// { field: 'position', header: 'Page.PlayersTableHeader.Position' },
-// { field: 'earnings', header: 'Page.PlayersTableHeader.Earnings' },
-// {
-//   field: 'earningsPercent',
-//   header: 'Page.PlayersTableHeader.EarningsPercent',
-// },
-// { field: 'profitLoss
