@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { ErrorBox } from '../atoms';
 
-export const NotLoggedMainSectionWithErrorBox = ({
+export const NoContainerSectionWithErrorBox = ({
   children,
   errorList,
   className,
