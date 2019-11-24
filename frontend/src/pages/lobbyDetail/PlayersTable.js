@@ -98,6 +98,7 @@ export const PlayersTable = ({ players }) => {
         playerStats[clean_sheet] = plr.clean_sheet;
         gggg.push(playerStats);
       }
+      return gggg;
     });
   }
 

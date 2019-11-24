@@ -12,6 +12,7 @@ export const UsersMenu = ({ usersInLobby }) => {
 
   usersInLobby.map(usr => {
     users.push({ label: usr.nickname });
+    return users;
   });
 
   return <TabMenu model={users} />;

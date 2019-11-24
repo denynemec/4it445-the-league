@@ -316,7 +316,7 @@ router.put(
           userId,
           dbConnection,
         });
-        
+
         dbConnection.query('DELETE FROM password_resets WHERE token = ?', [
           userHash,
         ]);

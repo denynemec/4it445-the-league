@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { Layout, Link } from '../atoms';
+import { Nav, Navbar, NavbarBrand, Collapse, NavbarToggler } from 'reactstrap';
 
 const navLinkTextStyle = 'f6 dib white';
 
@@ -14,20 +14,21 @@ export const navButtonStyle = classNames(
 
 export const HeaderBase = ({ homeLinkTo, children }) => {
   const { t } = useTranslation();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggle = () => setIsOpen(prevState => !prevState);
 
   return (
-    <nav className="flex justify-between bb b--white-10 bg-dodger-blue white h3">
-      <Link
-        to={homeLinkTo}
-        noUnderline
-        className="b white flex items-center pv2 ph3"
-      >
+    <Navbar color="light" light expand="md">
+      <NavbarBrand href={homeLinkTo}>
         {t('Molecules.HeaderBase.HomeLink')}
-      </Link>
-
-      <Layout flex-grow flex items-center>
-        {children}
-      </Layout>
-    </nav>
+      </NavbarBrand>
+      <NavbarToggler onClick={toggle} />
+      <Collapse isOpen={isOpen} navbar>
+        <Nav className="ml-auto" navbar>
+          {children}
+        </Nav>
+      </Collapse>
+    </Navbar>
   );
 };

@@ -6,6 +6,7 @@ import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
 import { Button, LoadingSpinner } from '../../atoms';
 import { LoggedInPageLayout } from '../../templates';
+import { LobbyAvailablePlayersTable } from './LobbyAvailablePlayersTable';
 import { useFetchRequest, useRequest } from '../../utils';
 import { PlayersTable } from './PlayersTable';
 import { UsersMenu } from './UsersMenu';
@@ -61,6 +62,7 @@ const DraftButtons = ({ draftStarted, history, draftState, t, lobbyId }) => {
 
   return (
     <>
+      <LobbyAvailablePlayersTable />
       {draftStarted && (
         <Button
           primary

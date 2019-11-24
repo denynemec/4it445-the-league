@@ -1,7 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Heading, Layout } from '../atoms';
+import {
+  Card,
+  CardFooter,
+  CardBody,
+  CardText,
+  CardImg,
+  ListGroup,
+  ListGroupItem,
+  Col,
+} from 'reactstrap';
 
 export const LayoutedLobby = ({
   eventName,
@@ -9,31 +18,40 @@ export const LayoutedLobby = ({
   maxUsers,
   minUsers,
   name,
+  id,
+  footer,
 }) => {
   const { t } = useTranslation();
 
-  let groupUserIndicatorColorClass = 'bg-red';
-
-  if (joinedUsers >= minUsers) {
-    groupUserIndicatorColorClass = 'bg-yellow';
-  } else if (joinedUsers === maxUsers) {
-    groupUserIndicatorColorClass = 'bg-spring-green';
-  }
-
   return (
-    <Layout ba b--black-100 pa3 br2 flex flex-column shadow-1>
-      <Layout flex justify-between items-center>
-        <Heading size="sm">{name}</Heading>
-
-        <Heading
-          className={`ba br-pill pa2 ml2 ${groupUserIndicatorColorClass}`}
-          size="sm"
-        >{`${joinedUsers}/${maxUsers}`}</Heading>
-      </Layout>
-
-      <Layout pt2>
-        {t('Molecules.LayoutedLobby.EventName', { eventName })}
-      </Layout>
-    </Layout>
+    <Col sm="4">
+      <Card className="mt-5">
+        <CardImg
+          top
+          width="100%"
+          src="https://oddschanger.com/wp-content/uploads/2019/03/PA-40059445-min.jpg"
+          alt={eventName}
+        />
+        <CardBody>
+          <CardText>
+            <ListGroup flush>
+              <ListGroupItem>
+                {t('Molecules.LayoutedLobby.LobbyName', { name })}
+              </ListGroupItem>
+              <ListGroupItem>
+                {t('Molecules.LayoutedLobby.EventName', { eventName })}
+              </ListGroupItem>
+              <ListGroupItem>
+                {t('Molecules.LayoutedLobby.Players', {
+                  joinedUsers,
+                  maxUsers,
+                })}
+              </ListGroupItem>
+            </ListGroup>
+          </CardText>
+        </CardBody>
+        <CardFooter>{footer}</CardFooter>
+      </Card>
+    </Col>
   );
 };
