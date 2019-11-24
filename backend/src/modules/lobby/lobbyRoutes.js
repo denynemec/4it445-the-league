@@ -131,14 +131,32 @@ router.get('/:lobbyId', async (req, res, next) => {
   // const playersInLobby = await dbConnection.query(`SELECT firstname,lastname,team.name,post_abbr FROM game INNER JOIN player_game USING(game_id)
   // INNER JOIN player USING(player_id) INNER JOIN team USING(team_id);`);
 
-  const playersInLobby = await dbConnection.query(`SELECT firstname, lastname,team.name AS team ,post_abbr,player_role.name as post FROM game 
-  INNER JOIN player_game USING(game_id) INNER JOIN player USING(player_id) INNER JOIN 
-  team USING(team_id) INNER JOIN player_role USING(post_abbr);`);
+  // const playersInLobby = await dbConnection.query(`SELECT firstname, lastname,team.name AS team ,post_abbr,player_role.name as post FROM game
+  //   // INNER JOIN player_game USING(game_id) INNER JOIN player USING(player_id) INNER JOIN
+  //   // team USING(team_id) INNER JOIN player_role USING(post_abbr);`);
+
+  const playersInLobby = await dbConnection.query(
+    `SELECT player_id,firstname, lastname,team.name AS team ,post_abbr,player_role.name as post,goal,assist,win,clean_sheet,note FROM
+  game INNER JOIN player_game USING(game_id) INNER JOIN player USING(player_id) INNER JOIN team USING(team_id)
+  INNER JOIN player_role USING(post_abbr) INNER JOIN result USING(player_id) INNER JOIN matches USING(match_id);`,
+  );
+
+  // SELECT firstname, lastname,team.name AS team ,post_abbr,player_role.name as post,goal,assist,win,clean_sheet,note FROM
+  // game INNER JOIN player_game USING(game_id) INNER JOIN player USING(player_id) INNER JOIN team USING(team_id)
+  // INNER JOIN player_role USING(post_abbr) INNER JOIN result USING(player_id) INNER JOIN matches USING(match_id)
+
+  // SELECT player_id,firstname,lastname,note,goal,assist
+  //   ,win,clean_sheet FROM matches INNER JOIN result USING(match_id) INNER JOIN player USING(player_id)
 
   const bonificationForGame = await dbConnection.query(
     `SELECT goal,assist,clean_sheet_goalkeeper,clean_sheet_defender,win_mid_fielders,win_defender,
   minimal_time FROM lobby INNER JOIN game USING(game_id) INNER JOIN bonification ON game.bonification_id = bonification.config_id 
   WHERE lobby_id = ?;`,
+    [lobbyId],
+  );
+
+  const usersInLobby = await dbConnection.query(
+    `SELECT nickname FROM lobby INNER JOIN lobby_user USING(lobby_id) INNER JOIN users USING(user_id) WHERE lobby_id = ?;`,
     [lobbyId],
   );
 
@@ -148,6 +166,7 @@ router.get('/:lobbyId', async (req, res, next) => {
     draftStarted,
     playersInLobby,
     bonificationForGame,
+    usersInLobby,
   });
 });
 

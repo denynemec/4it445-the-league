@@ -8,6 +8,7 @@ import { Button, LoadingSpinner } from '../../atoms';
 import { LoggedInPageLayout } from '../../templates';
 import { useFetchRequest, useRequest } from '../../utils';
 import { PlayersTable } from './PlayersTable';
+import { UsersMenu } from './UsersMenu';
 
 export const LobbyDetail = () => {
   const { t } = useTranslation();
@@ -36,10 +37,10 @@ export const LobbyDetail = () => {
         />
       )}
       {lobbyState.data && (
-        <PlayersTable
-          players={lobbyState.data.playersInLobby}
-          // playerPos={lobbyState.data.allAvailableRoles}
-        />
+        <UsersMenu usersInLobby={lobbyState.data.usersInLobby} />
+      )}
+      {lobbyState.data && (
+        <PlayersTable players={lobbyState.data.playersInLobby} />
       )}
     </LoggedInPageLayout>
   );
