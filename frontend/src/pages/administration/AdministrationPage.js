@@ -9,7 +9,6 @@ import {
   useRequest,
   translatedValidations,
   useFetchRequest,
-  useApi,
 } from '../../utils';
 import ENDPOINTS from '../../endpoints';
 
@@ -19,7 +18,7 @@ export const AdministrationPage = () => {
   const eventState = useFetchRequest(ENDPOINTS.enumEvents());
 
   const administrationState = useRequest();
-  const api = useApi();
+
   const eventPlayersInputRef = useRef(null);
 
   const onSubmitMemoized = useCallback(
@@ -30,23 +29,27 @@ export const AdministrationPage = () => {
         formData.append(key, value),
       );
 
-      api.post('/abc', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      administrationState.request(ENDPOINTS.uploadPlayersToEvent(), {
+        method: 'POST',
+        onSuccess: () => {
+          // TODO add sucess message
+          resetForm();
+          if (eventPlayersInputRef.current) {
+            eventPlayersInputRef.current.value = '';
+          }
         },
+        data: formData,
       });
-
-      resetForm();
-      if (eventPlayersInputRef.current) {
-        eventPlayersInputRef.current.value = '';
-      }
     },
-    [eventPlayersInputRef, api],
+    [eventPlayersInputRef, administrationState],
   );
 
   const { object, selectRequired, fileRequired } = translatedValidations(t);
 
-  const schema = object({ events: selectRequired, eventPlayers: fileRequired });
+  const schema = object({
+    eventId: selectRequired,
+    eventPlayers: fileRequired,
+  });
 
   return (
     <LoggedInPageLayout
@@ -65,7 +68,7 @@ export const AdministrationPage = () => {
 
           <Formik
             initialValues={{
-              event: -1,
+              eventId: -1,
               eventPlayers: '',
             }}
             validationSchema={schema}
@@ -74,7 +77,7 @@ export const AdministrationPage = () => {
             {({ setFieldValue }) => (
               <Form>
                 <SelectField
-                  name="event"
+                  name="eventId"
                   data={eventState.data}
                   label={t('Page.Administration.EventLabel')}
                 />

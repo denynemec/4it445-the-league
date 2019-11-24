@@ -1,31 +1,23 @@
 import { Router } from 'express';
-import { check, validationResult } from 'express-validator';
+import multer from 'multer';
 
 import { DB_CONNECTION_KEY } from '../../libs/connection';
-import { formatErrors } from '../../utils/errors';
 
 const router = Router();
 
+const upload = multer({ dest: 'uploads/' });
+
 router.post(
   '/upload-players-to-event',
-  [
-    check('eventId')
-      .not()
-      .isEmpty(),
-  ],
+  upload.single('eventPlayers'),
   async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json({
-        error: formatErrors(errors),
-      });
+    if (!req.body.eventId || req.body.event < 0) {
+      return res.status(422).json({ error: '422: missing eventId' });
     }
 
-    //if (!req.files) {
-    //  return res.send({ error: 'CSV file was not found' });
-    //}
-
-    //const file = req.files.eventPlayers;
+    if (!req.file) {
+      return res.status(422).json({ error: '422: CSV file was not found' });
+    }
 
     const csv = require('csv-parser');
     const fs = require('fs');
@@ -58,7 +50,7 @@ router.post(
 
     const dbTeam = await dbConnection.query('SELECT team_id, name FROM team;');
 
-    fs.createReadStream('./src/modules/administration/player.csv')
+    fs.createReadStream(req.file.path)
       .pipe(
         csv({
           headers: false,
@@ -69,7 +61,7 @@ router.post(
         let teamId;
         let playerId;
         const teamExist = dbTeam.find(t => t.name == player[4]);
-        if (teamExist === 'undefined') {
+        if (typeof teamExist === 'undefined') {
           const dbTeamResponse = await dbConnection.query(
             'INSERT INTO team (name, created_at, updated_at) VALUES (?, NOW(), NOW());',
             [player[4]],
@@ -81,7 +73,7 @@ router.post(
         const playerExist = dbPlayer.find(
           pl => pl.firstname == player[0] && pl.lastname == player[1],
         );
-        if (playerExist === 'undefined') {
+        if (typeof playerExist === 'undefined') {
           const dbPlayerResponse = await dbConnection.query(
             'INSERT INTO player (firstname, lastname, created_at, updated_at) VALUES (?, ?, NOW(), NOW());',
             [player[0], player[1]],
@@ -102,4 +94,5 @@ router.post(
     res.json({ message: 'CSV file successfully processed' });
   },
 );
+
 export default router;

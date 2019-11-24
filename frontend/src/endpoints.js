@@ -22,6 +22,8 @@ export default {
   joinToLobby: () => `${apiPrefix}/joinToLobby/join-to-lobby`,
   resetPasswordConfirmation: () =>
     `${apiPrefix}/auth/reset-password-confirmation`,
+  uploadPlayersToEvent: () =>
+    `${apiPrefix}/administration/upload-players-to-event`,
 
   // enums
   enumEvents: () => `${enumPrefix}/events`,
