@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Heading, Layout } from '../../atoms';
+import { Heading } from '../../atoms';
 import { LoggedInPageLayout } from '../../templates';
 import { BaseSettings } from './BaseSettings';
 import { PasswordSettings } from './PasswordSettings';

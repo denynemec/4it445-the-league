@@ -5,10 +5,11 @@ import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
-import { Heading, Button, Layout, Link } from '../../atoms';
+import { Heading, Layout, Link } from '../../atoms';
 import { NotLoggedInPageLayout } from '../../templates';
 import { Field } from '../../organisms';
 import { useAuth, useRequest, translatedValidations } from '../../utils';
+import { Button } from 'reactstrap';
 
 export const LoginPage = () => {
   const { t } = useTranslation();
@@ -75,7 +76,7 @@ export const LoginPage = () => {
           </Layout>
 
           <Layout flex justify-center>
-            <Button submit primary disabled={loginState.isLoading}>
+            <Button submit color="primary" disabled={loginState.isLoading}>
               {t('Page.Login.SubmitLoginButton')}
             </Button>
           </Layout>

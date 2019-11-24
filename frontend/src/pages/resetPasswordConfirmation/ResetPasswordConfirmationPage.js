@@ -5,10 +5,11 @@ import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
-import { Heading, Button, Layout } from '../../atoms';
+import { Heading, Layout } from '../../atoms';
 import { Field } from '../../organisms';
 import { NotLoggedInPageLayout } from '../../templates';
 import { useAuth, useRequest, translatedValidations } from '../../utils';
+import { Button } from 'reactstrap';
 
 export const ResetPasswordConfirmationPage = () => {
   const { t } = useTranslation();
@@ -81,7 +82,7 @@ export const ResetPasswordConfirmationPage = () => {
           <Layout flex justify-center>
             <Button
               submit
-              primary
+              color="primary"
               disabled={resetPasswordConfirmationState.isLoading}
             >
               {t(

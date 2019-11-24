@@ -5,10 +5,11 @@ import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
-import { Heading, Button, Layout } from '../../atoms';
+import { Heading, Layout } from '../../atoms';
 import { NotLoggedInPageLayout } from '../../templates';
 import { Field } from '../../organisms';
 import { useAuth, useRequest, translatedValidations } from '../../utils';
+import { Button } from 'reactstrap';
 
 export const ActivateUserPage = () => {
   const { t } = useTranslation();
@@ -81,7 +82,11 @@ export const ActivateUserPage = () => {
           />
 
           <Layout flex justify-center>
-            <Button submit primary disabled={activateUserState.isLoading}>
+            <Button
+              submit
+              color="primary"
+              disabled={activateUserState.isLoading}
+            >
               {t('Page.ActivateUser.SubmitActivateUserButton')}
             </Button>
           </Layout>

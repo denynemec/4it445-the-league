@@ -5,10 +5,11 @@ import { useParams } from 'react-router-dom';
 
 import PATHNAMES from '../../pathnames';
 import ENDPOINTS from '../../endpoints';
-import { Heading, Button, Layout, Link, InfoBox } from '../../atoms';
+import { Heading, Layout, Link, InfoBox } from '../../atoms';
 import { NotLoggedInPageLayout } from '../../templates';
 import { useRequest, translatedValidations } from '../../utils';
 import { Field } from '../../organisms';
+import { Button } from 'reactstrap';
 
 export const RegistrationPage = () => {
   const { t } = useTranslation();
@@ -98,7 +99,11 @@ export const RegistrationPage = () => {
           </Layout>
 
           <Layout flex justify-center>
-            <Button submit primary disabled={registrationState.isLoading}>
+            <Button
+              submit
+              color="primary"
+              disabled={registrationState.isLoading}
+            >
               {t('Page.Registration.SubmitRegistrationButton')}
             </Button>
           </Layout>
