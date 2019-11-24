@@ -7,8 +7,8 @@ import { MultiSelect } from 'primereact/multiselect';
 import { InputText } from 'primereact/inputtext';
 
 export const LobbyAvailablePlayersTable = ({
-  draftPlayersList,
-  positionLov,
+  lobbyPlayersList,
+  positions,
   loading,
 }) => {
   const { t } = useTranslation();
@@ -18,30 +18,12 @@ export const LobbyAvailablePlayersTable = ({
 
   const dataTableRef = useRef('');
 
-  // Data template
-  // const mockDraftPlayersList = [
-  //   {
-  //     id: '51cb9d0c-f172-48de-ab72-6fe8871c87ad',
-  //     firstName: 'Raffarty',
-  //     lastName: 'McGlue',
-  //     position: 'defense',
-  //     team: 'KE',
-  //     selected: false,
-  //   },
-  // ];
-  //
-  // const mockPositionLov = [
-  //   { label: 'attack', value: 'attack' },
-  //   { label: 'defense', value: 'defense' },
-  //   { label: 'goalkeeper', value: 'goalkeeper' },
-  // ];
-
   const positionFilter = (
     <MultiSelect
       style={{ width: '100%' }}
       className="ui-column-filter"
       value={filterPositions}
-      options={positionLov}
+      options={positions}
       onChange={event => {
         setFilterPositions(event.target.value);
 
@@ -66,9 +48,9 @@ export const LobbyAvailablePlayersTable = ({
 
   return (
     <DataTable
-      value={draftPlayersList}
+      value={lobbyPlayersList}
       header={header}
-      paginator={true}
+      paginator
       rows={10}
       rowsPerPageOptions={[10, 20, 50, 100]}
       currentPageReportTemplate={t(
@@ -82,27 +64,27 @@ export const LobbyAvailablePlayersTable = ({
       <Column
         field="firstName"
         header={t('Page.LobbyDetail.LobbyAvailablePlayersTable.FirstName')}
-        sortable={true}
-        filter={true}
+        sortable
+        filter
       />
       <Column
         field="lastName"
         header={t('Page.LobbyDetail.LobbyAvailablePlayersTable.LastName')}
-        sortable={true}
-        filter={true}
+        sortable
+        filter
       />
       <Column
         field="position"
         header={t('Page.LobbyDetail.LobbyAvailablePlayersTable.Position')}
-        sortable={true}
-        filter={true}
+        sortable
+        filter
         filterElement={positionFilter}
       />
       <Column
         field="team"
         header={t('Page.LobbyDetail.LobbyAvailablePlayersTable.Team')}
-        sortable={true}
-        filter={true}
+        sortable
+        filter
       />
     </DataTable>
   );

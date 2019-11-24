@@ -83,8 +83,8 @@
       "AddNewLobbyButton": "Vytvořit skupinu",
       "GoToEventDetailButton": "Detail události",
       "EventHeader": "Události",
-      "EventStartDateLabel": "Začátek:",
-      "EventEndDateLabel": "Konec:",
+      "EventStartDateLabel": "Začátek: {{date}}",
+      "EventEndDateLabel": "Konec: {{date}}",
       "EventName": "Název: {{name}}"
     },
     "Settings": {
@@ -152,12 +152,14 @@
         "PlayersFilterPlaceholder": "Globální filtr hráčů",
         "PageReport": "Stránka {currentPage} z {totalPages}"
       },
-      "StartDraft": "Začit draft",
-      "ToDraft": "Do draftu",
-      "DraftNotStarted": "Draft ještě nezačal, kontaktuje zakladete skupiny"
+      "DraftNotStarted": {
+        "StartDraft": "Začit draft"
+      },
+      "DraftInProgress": { "ToDraft": "Do draftu" }
     },
     "Draft": {
       "Heading": "Draft ",
+      "DraftTableHeading": "Hráči",
       "DraftPlayersTable": {
         "FirstName": "Jméno",
         "LastName": "Příjmení",
@@ -166,6 +168,13 @@
         "DraftPlayersFilterPlaceholder": "Globální filtr hráčů",
         "PickDraftPlayer": "Vybrat hráče",
         "PageReport": "Stránka {currentPage} z {totalPages}"
+      },
+      "MyTeamHeading": "Můj tým",
+      "MyTeam": {
+        "FirstName": "Jméno",
+        "LastName": "Příjmení",
+        "Position": "Pozice",
+        "Team": "Tým"
       }
     },
     "PlayersTableHeader": {

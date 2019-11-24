@@ -16,7 +16,7 @@ import { Button } from 'reactstrap';
 
 export const BaseSettings = () => {
   const { t } = useTranslation();
-  const { token, user, signin } = useAuth();
+  const { user, signin, ...restAuth } = useAuth();
   const settingsState = useFetchRequest(ENDPOINTS.getSettings());
   const updateBaseSettingsState = useRequest();
 
@@ -25,12 +25,12 @@ export const BaseSettings = () => {
       updateBaseSettingsState.request(ENDPOINTS.updateSettings(), {
         method: 'PUT',
         onSuccess: ({ data: { nickname } }) => {
-          signin({ token, user: { ...user, nickname } });
+          signin({ ...restAuth, user: { ...user, nickname } });
         },
         data: { nickname, firstName, lastName },
       });
     },
-    [updateBaseSettingsState, signin, token, user],
+    [updateBaseSettingsState, signin, restAuth, user],
   );
 
   const { object, requiredString } = translatedValidations(t);

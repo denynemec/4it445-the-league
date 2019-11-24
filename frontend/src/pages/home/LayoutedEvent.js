@@ -60,10 +60,14 @@ export const LayoutedEvent = ({
                 {t('Page.Home.EventName', { name })}
               </ListGroupItem>
               <ListGroupItem>
-                {t('Page.Home.EventStartDateLabel')} {formatDate(startDate)}
+                {t('Page.Home.EventStartDateLabel', {
+                  date: formatDate(startDate),
+                })}
               </ListGroupItem>
               <ListGroupItem>
-                {t('Page.Home.EventEndDateLabel')} {formatDate(endDate)}
+                {t('Page.Home.EventEndDateLabel', {
+                  date: formatDate(endDate),
+                })}
               </ListGroupItem>
               <ListGroupItem>{description}</ListGroupItem>
             </ListGroup>
