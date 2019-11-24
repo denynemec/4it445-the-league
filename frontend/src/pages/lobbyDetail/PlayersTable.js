@@ -150,8 +150,6 @@ export const PlayersTable = ({ players }) => {
     });
   });
 
-  console.log(output);
-
   // merge players and their stats for all rounds
   const mergedPlayersAndStats = [];
   let maxLength = 0;
