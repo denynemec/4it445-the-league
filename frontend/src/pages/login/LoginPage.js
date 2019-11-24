@@ -5,10 +5,11 @@ import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
-import { Heading, Button, Layout, Link } from '../../atoms';
+import { Heading, Layout, Link } from '../../atoms';
 import { NotLoggedInPageLayout } from '../../templates';
 import { Field } from '../../organisms';
 import { useAuth, useRequest, translatedValidations } from '../../utils';
+import { Col, Button } from 'reactstrap';
 
 export const LoginPage = () => {
   const { t } = useTranslation();
@@ -44,43 +45,49 @@ export const LoginPage = () => {
 
   return (
     <NotLoggedInPageLayout errorList={[{ id: 1, error: loginState.error }]}>
-      <Heading className="flex justify-center pb2">
-        {t('Page.Login.FormHeading')}
-      </Heading>
-
-      <Formik
-        initialValues={{ email: '', password: '' }}
-        validationSchema={schema}
-        onSubmit={onSubmitMemoized}
+      <Col
+        sm={{ size: 6, offset: 3 }}
+        style={{ 'background-color': '#f8f9fa' }}
+        className="p-5"
       >
-        <Form>
-          <Field
-            type="text"
-            name="email"
-            label={t('Page.Login.EmailLabel')}
-            placeholder={t('Page.Login.EmailPlaceholder')}
-          />
+        <Heading className="flex justify-center pb2">
+          {t('Page.Login.FormHeading')}
+        </Heading>
 
-          <Field
-            type="password"
-            name="password"
-            label={t('Page.Login.PasswordLabel')}
-            placeholder={t('Page.Login.PasswordPlaceholder')}
-          />
+        <Formik
+          initialValues={{ email: '', password: '' }}
+          validationSchema={schema}
+          onSubmit={onSubmitMemoized}
+        >
+          <Form>
+            <Field
+              type="text"
+              name="email"
+              label={t('Page.Login.EmailLabel')}
+              placeholder={t('Page.Login.EmailPlaceholder')}
+            />
 
-          <Layout flex justify-end ph2 pb2>
-            <Link to={PATHNAMES.resetPassword()}>
-              {t('Page.Login.DidYouForgetPasswordLink')}
-            </Link>
-          </Layout>
+            <Field
+              type="password"
+              name="password"
+              label={t('Page.Login.PasswordLabel')}
+              placeholder={t('Page.Login.PasswordPlaceholder')}
+            />
 
-          <Layout flex justify-center>
-            <Button submit primary disabled={loginState.isLoading}>
-              {t('Page.Login.SubmitLoginButton')}
-            </Button>
-          </Layout>
-        </Form>
-      </Formik>
+            <Layout flex justify-end ph2 pb2>
+              <Link to={PATHNAMES.resetPassword()}>
+                {t('Page.Login.DidYouForgetPasswordLink')}
+              </Link>
+            </Layout>
+
+            <Layout flex justify-center>
+              <Button submit color="primary" disabled={loginState.isLoading}>
+                {t('Page.Login.SubmitLoginButton')}
+              </Button>
+            </Layout>
+          </Form>
+        </Formik>
+      </Col>
     </NotLoggedInPageLayout>
   );
 };

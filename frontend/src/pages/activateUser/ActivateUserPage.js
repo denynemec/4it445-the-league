@@ -5,10 +5,11 @@ import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
-import { Heading, Button, Layout } from '../../atoms';
+import { Heading, Layout } from '../../atoms';
 import { NotLoggedInPageLayout } from '../../templates';
 import { Field } from '../../organisms';
 import { useAuth, useRequest, translatedValidations } from '../../utils';
+import { Button, Col } from 'reactstrap';
 
 export const ActivateUserPage = () => {
   const { t } = useTranslation();
@@ -49,44 +50,54 @@ export const ActivateUserPage = () => {
     <NotLoggedInPageLayout
       errorList={[{ id: 1, error: activateUserState.error }]}
     >
-      <Heading className="flex justify-center pb2">
-        {t('Page.ActivateUser.FormHeading')}
-      </Heading>
-
-      <Formik
-        initialValues={{ nickname: '', firstName: '', lastName: '' }}
-        validationSchema={schema}
-        onSubmit={onSubmitMemoized}
+      <Col
+        sm={{ size: 6, offset: 3 }}
+        style={{ 'background-color': '#f8f9fa' }}
+        className="p-5"
       >
-        <Form>
-          <Field
-            type="text"
-            name="firstName"
-            label={t('Page.ActivateUser.FirstNameLabel')}
-            placeholder={t('Page.ActivateUser.FirstNamePlaceholder')}
-          />
+        <Heading className="flex justify-center pb2">
+          {t('Page.ActivateUser.FormHeading')}
+        </Heading>
 
-          <Field
-            type="text"
-            name="lastName"
-            label={t('Page.ActivateUser.LastNameLabel')}
-            placeholder={t('Page.ActivateUser.LastNamePlaceholder')}
-          />
+        <Formik
+          initialValues={{ nickname: '', firstName: '', lastName: '' }}
+          validationSchema={schema}
+          onSubmit={onSubmitMemoized}
+        >
+          <Form>
+            <Field
+              type="text"
+              name="firstName"
+              label={t('Page.ActivateUser.FirstNameLabel')}
+              placeholder={t('Page.ActivateUser.FirstNamePlaceholder')}
+            />
 
-          <Field
-            type="text"
-            name="nickname"
-            label={t('Page.ActivateUser.NicknameLabel')}
-            placeholder={t('Page.ActivateUser.NicknamePlaceholder')}
-          />
+            <Field
+              type="text"
+              name="lastName"
+              label={t('Page.ActivateUser.LastNameLabel')}
+              placeholder={t('Page.ActivateUser.LastNamePlaceholder')}
+            />
 
-          <Layout flex justify-center>
-            <Button submit primary disabled={activateUserState.isLoading}>
-              {t('Page.ActivateUser.SubmitActivateUserButton')}
-            </Button>
-          </Layout>
-        </Form>
-      </Formik>
+            <Field
+              type="text"
+              name="nickname"
+              label={t('Page.ActivateUser.NicknameLabel')}
+              placeholder={t('Page.ActivateUser.NicknamePlaceholder')}
+            />
+
+            <Layout flex justify-center>
+              <Button
+                submit
+                color="primary"
+                disabled={activateUserState.isLoading}
+              >
+                {t('Page.ActivateUser.SubmitActivateUserButton')}
+              </Button>
+            </Layout>
+          </Form>
+        </Formik>
+      </Col>
     </NotLoggedInPageLayout>
   );
 };

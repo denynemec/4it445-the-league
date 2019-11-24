@@ -5,10 +5,11 @@ import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
-import { Heading, Button, Layout } from '../../atoms';
+import { Heading, Layout } from '../../atoms';
 import { Field } from '../../organisms';
 import { NotLoggedInPageLayout } from '../../templates';
 import { useAuth, useRequest, translatedValidations } from '../../utils';
+import { Col, Button } from 'reactstrap';
 
 export const ResetPasswordConfirmationPage = () => {
   const { t } = useTranslation();
@@ -48,49 +49,55 @@ export const ResetPasswordConfirmationPage = () => {
     <NotLoggedInPageLayout
       errorList={[{ id: 1, error: resetPasswordConfirmationState.error }]}
     >
-      <Heading className="flex justify-center pb2">
-        {t('Page.ResetPasswordConfirmation.FormHeading')}
-      </Heading>
-
-      <Formik
-        initialValues={{ password: '', passwordConfirmation: '' }}
-        validationSchema={schema}
-        onSubmit={onSubmitMemoized}
+      <Col
+        sm={{ size: 6, offset: 3 }}
+        style={{ 'background-color': '#f8f9fa' }}
+        className="p-5"
       >
-        <Form>
-          <Field
-            type="password"
-            name="password"
-            label={t('Page.ResetPasswordConfirmation.PasswordLabel')}
-            placeholder={t(
-              'Page.ResetPasswordConfirmation.PasswordPlaceholder',
-            )}
-          />
+        <Heading className="flex justify-center pb2">
+          {t('Page.ResetPasswordConfirmation.FormHeading')}
+        </Heading>
 
-          <Field
-            type="password"
-            name="passwordConfirmation"
-            label={t(
-              'Page.ResetPasswordConfirmation.PasswordConfirmationLabel',
-            )}
-            placeholder={t(
-              'Page.ResetPasswordConfirmation.PasswordConfirmationPlaceholder',
-            )}
-          />
-
-          <Layout flex justify-center>
-            <Button
-              submit
-              primary
-              disabled={resetPasswordConfirmationState.isLoading}
-            >
-              {t(
-                'Page.ResetPasswordConfirmation.SubmitResetPasswordConfirmationButton',
+        <Formik
+          initialValues={{ password: '', passwordConfirmation: '' }}
+          validationSchema={schema}
+          onSubmit={onSubmitMemoized}
+        >
+          <Form>
+            <Field
+              type="password"
+              name="password"
+              label={t('Page.ResetPasswordConfirmation.PasswordLabel')}
+              placeholder={t(
+                'Page.ResetPasswordConfirmation.PasswordPlaceholder',
               )}
-            </Button>
-          </Layout>
-        </Form>
-      </Formik>
+            />
+
+            <Field
+              type="password"
+              name="passwordConfirmation"
+              label={t(
+                'Page.ResetPasswordConfirmation.PasswordConfirmationLabel',
+              )}
+              placeholder={t(
+                'Page.ResetPasswordConfirmation.PasswordConfirmationPlaceholder',
+              )}
+            />
+
+            <Layout flex justify-center>
+              <Button
+                submit
+                color="primary"
+                disabled={resetPasswordConfirmationState.isLoading}
+              >
+                {t(
+                  'Page.ResetPasswordConfirmation.SubmitResetPasswordConfirmationButton',
+                )}
+              </Button>
+            </Layout>
+          </Form>
+        </Formik>
+      </Col>
     </NotLoggedInPageLayout>
   );
 };

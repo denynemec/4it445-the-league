@@ -1,15 +1,19 @@
 import React from 'react';
 
-import { MainSectionWithErrorBox } from '../molecules';
+import { NotLoggedMainSectionWithErrorBox } from '../molecules';
 import { NotLoggedInHeader } from '../organisms';
 import { Container } from 'reactstrap';
+import '../index.css';
 
 export const NotLoggedInPageLayout = ({ children, errorList }) => (
   <>
     <NotLoggedInHeader />
 
-    <MainSectionWithErrorBox errorList={errorList || []}>
-      <Container>{children}</Container>
-    </MainSectionWithErrorBox>
+    <NotLoggedMainSectionWithErrorBox
+      errorList={errorList || []}
+      className="notLoggedContainer p-5"
+    >
+      <div className="notLoggedBack">{children}</div>
+    </NotLoggedMainSectionWithErrorBox>
   </>
 );

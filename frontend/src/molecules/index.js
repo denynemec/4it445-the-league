@@ -5,3 +5,6 @@ export { Modal } from './Modal';
 export { SelectWithLabel } from './SelectWithLabel';
 export { TextInputWithLabel } from './TextInputWithLabel';
 export { Jumbo } from './Jumbo';
+export {
+  NotLoggedMainSectionWithErrorBox,
+} from './NotLoggedMainSectionWithErrorBox';
