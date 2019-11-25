@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
+import { useAlert } from 'react-alert';
 
 import ENDPOINTS from '../../endpoints';
 import { ErrorBox, Heading, Layout } from '../../atoms';
@@ -11,16 +12,20 @@ import { Button } from 'reactstrap';
 export const PasswordSettings = () => {
   const { t } = useTranslation();
   const updatePasswordSettingsState = useRequest();
+  const alert = useAlert();
 
   const onSubmitMemoized = useCallback(
     ({ oldPassword, newPassword }, { resetForm }) => {
       updatePasswordSettingsState.request(ENDPOINTS.updatePassword(), {
         method: 'PUT',
-        onSuccess: resetForm,
+        onSuccess: (response) => {
+          alert.success(response.data.message);
+          resetForm();
+        },
         data: { oldPassword, newPassword },
       });
     },
-    [updatePasswordSettingsState],
+    [updatePasswordSettingsState, alert],
   );
 
   const { object, requiredString, passwordsDontMatch } = translatedValidations(
@@ -85,7 +90,6 @@ export const PasswordSettings = () => {
 
           <Layout flex justify-center>
             <Button
-              submit
               color="primary"
               disabled={updatePasswordSettingsState.isLoading}
             >

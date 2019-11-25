@@ -1,21 +1,14 @@
 import React, { useCallback } from 'react';
-
 import { useHistory } from 'react-router-dom';
-
 import { useTranslation } from 'react-i18next';
-
 import { Formik, Form } from 'formik';
-
 import ENDPOINTS from '../endpoints';
-
 import PATHNAMES from '../pathnames';
-
-import { Button, Layout, ErrorBox } from '../atoms';
-
+import { Layout, ErrorBox } from '../atoms';
 import { Field } from '../organisms';
-
 import { Modal } from '../molecules';
-
+import { Button } from 'reactstrap';
+import { useAlert } from 'react-alert';
 import {
   useRequest,
   translatedValidations,
@@ -24,47 +17,37 @@ import {
 
 export const NewLobbyForm = ({
   isOpen,
-
   onCloseClick,
-
   eventName,
-
   minUsers,
-
   maxUsers,
-
   eventId,
 }) => {
   const { t } = useTranslation();
 
   const history = useHistory();
-
+  const alert = useAlert();
   const newLobbyState = useRequest();
-
   const minEmails = minUsers - 1;
-
   const maxEmails = maxUsers - 1;
 
   const onSubmitMemoized = useCallback(
     ({ lobbyName, emails }) => {
       newLobbyState.request(ENDPOINTS.newLobby(), {
         method: 'POST',
-
         onSuccess: ({ data: { lobbyId } }) => {
+          alert.success('Lobby created successfully');
           history.push(PATHNAMES.getLobbyDetail(lobbyId));
         },
-
         data: {
           lobbyName,
-
           emails: Object.values(emailsStringToEmailArray(emails)),
-
           eventId,
         },
       });
     },
 
-    [newLobbyState, history, eventId],
+    [newLobbyState, history, eventId, alert],
   );
 
   const { object, uniqueMinMaxEmails, requiredString } = translatedValidations(
@@ -112,7 +95,7 @@ export const NewLobbyForm = ({
           />
 
           <Layout flex justify-center>
-            <Button submit primary disabled={newLobbyState.isLoading}>
+            <Button submit color="primary" disabled={newLobbyState.isLoading}>
               {t('Organisms.NewLobbyForm.SubmitNewLobbyForm')}
             </Button>
           </Layout>

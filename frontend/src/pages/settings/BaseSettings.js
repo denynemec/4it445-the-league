@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
+import { useAlert } from 'react-alert';
 
 import ENDPOINTS from '../../endpoints';
 import { Heading, ErrorBox, Layout, LoadingSpinner } from '../../atoms';
@@ -17,6 +18,8 @@ import { Button } from 'reactstrap';
 export const BaseSettings = () => {
   const { t } = useTranslation();
   const { user, signin, ...restAuth } = useAuth();
+  const alert = useAlert();
+
   const settingsState = useFetchRequest(ENDPOINTS.getSettings());
   const updateBaseSettingsState = useRequest();
 
@@ -25,12 +28,13 @@ export const BaseSettings = () => {
       updateBaseSettingsState.request(ENDPOINTS.updateSettings(), {
         method: 'PUT',
         onSuccess: ({ data: { nickname } }) => {
+          alert.success('Success');
           signin({ ...restAuth, user: { ...user, nickname } });
         },
         data: { nickname, firstName, lastName },
       });
     },
-    [updateBaseSettingsState, signin, restAuth, user],
+    [updateBaseSettingsState, signin, restAuth, user, alert],
   );
 
   const { object, requiredString } = translatedValidations(t);
@@ -91,7 +95,6 @@ export const BaseSettings = () => {
 
             <Layout flex justify-center>
               <Button
-                submit
                 color="primary"
                 disabled={updateBaseSettingsState.isLoading}
               >

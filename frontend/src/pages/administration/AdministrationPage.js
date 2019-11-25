@@ -1,8 +1,10 @@
 import React, { useCallback, useRef } from 'react';
 import { Formik, Form } from 'formik';
 import { useTranslation } from 'react-i18next';
+import { useAlert } from 'react-alert';
+import { Button } from 'reactstrap';
 
-import { Heading, Layout, Button, LoadingSpinner } from '../../atoms';
+import { Heading, Layout, LoadingSpinner } from '../../atoms';
 import { Field, SelectField } from '../../organisms';
 import { LoggedInPageLayout } from '../../templates';
 import {
@@ -18,21 +20,20 @@ export const AdministrationPage = () => {
   const eventState = useFetchRequest(ENDPOINTS.enumEvents());
 
   const administrationState = useRequest();
-
+  const alert = useAlert();
   const eventPlayersInputRef = useRef(null);
 
   const onSubmitMemoized = useCallback(
     (data, { resetForm }) => {
       const formData = new FormData();
-
       Object.entries(data).forEach(([key, value]) =>
         formData.append(key, value),
       );
 
       administrationState.request(ENDPOINTS.uploadPlayersToEvent(), {
         method: 'POST',
-        onSuccess: () => {
-          // TODO add sucess message
+        onSuccess: (response) => {
+          alert.success(response.data.message);
           resetForm();
           if (eventPlayersInputRef.current) {
             eventPlayersInputRef.current.value = '';
@@ -41,7 +42,7 @@ export const AdministrationPage = () => {
         data: formData,
       });
     },
-    [eventPlayersInputRef, administrationState],
+    [eventPlayersInputRef, administrationState, alert],
   );
 
   const { object, selectRequired, fileRequired } = translatedValidations(t);
@@ -98,8 +99,9 @@ export const AdministrationPage = () => {
 
                 <Layout flex justify-center>
                   <Button
+                    color="primary"
+                    block
                     submit
-                    primary
                     disabled={administrationState.isLoading}
                   >
                     {t('Page.Administration.UploadEventPlayers')}
