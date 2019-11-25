@@ -75,4 +75,5 @@ const DraftButtons = ({ draftStarted, history, draftState, t, lobbyId }) => {
       )}
     </>
   );
+
 };

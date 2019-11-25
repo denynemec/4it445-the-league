@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
+// eslint-disable-next-line
 import { Heading, Layout } from '../../atoms';
 import { LoggedInPageLayout } from '../../templates';
 import { BaseSettings } from './BaseSettings';

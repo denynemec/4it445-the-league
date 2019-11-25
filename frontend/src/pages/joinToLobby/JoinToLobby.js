@@ -9,6 +9,7 @@ import { LayoutedLobby } from '../../molecules';
 import { NotLoggedInPageLayout } from '../../templates';
 import { useAuth, useFetchRequest, useRequest } from '../../utils';
 import { Button } from 'reactstrap';
+
 export const JoinToLobbyPage = () => {
   const { t } = useTranslation();
   const { lobbyHash } = useParams();
