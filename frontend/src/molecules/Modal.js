@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { Layout, Button, Heading } from '../atoms';
+import { Layout, Heading, Button } from '../atoms';
 
 export const Modal = ({
   isOpen,
@@ -66,7 +66,12 @@ export const Modal = ({
 
         {withFooter && (
           <Layout flex relative align-center justify-end pa3 bt>
-            <Button primary onClick={onConfirmClick} isDisabled={isDisabled}>
+            <Button
+              primary
+              submit
+              onClick={onConfirmClick}
+              isDisabled={isDisabled}
+            >
               {confirmButtonLabel ||
                 t('Organisms.Modal.DefaultConfirmButtonLabel')}
             </Button>

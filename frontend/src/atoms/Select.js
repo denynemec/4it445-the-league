@@ -1,13 +1,13 @@
 import React from 'react';
-import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { Input } from 'reactstrap';
 
 export const Select = ({ className, data = [], ...props }) => {
   const { t } = useTranslation();
 
   return (
-    <select
-      className={classNames('ba b--black-20 mv2 db w-100 h2', className)}
+    <Input 
+      type="select"
       {...props}
     >
       <option value={-1}>{t('Atoms.Select.Placeholder')}</option>
@@ -17,6 +17,6 @@ export const Select = ({ className, data = [], ...props }) => {
           {label}
         </option>
       ))}
-    </select>
+    </Input>
   );
 };
