@@ -98,7 +98,7 @@ router.put(
               [hash, userId],
             );
 
-            res.json({});
+            res.json({ userId, message: 'Pasword changed' });
           } else {
             return res
               .status(500)

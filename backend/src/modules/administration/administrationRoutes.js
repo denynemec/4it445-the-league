@@ -91,7 +91,7 @@ router.post(
         console.log('CSV file successfully processed');
       });
 
-    res.json({ message: 'CSV file successfully processed' });
+    res.json({ message: 'File processed successfuly' });
   },
 );
 
