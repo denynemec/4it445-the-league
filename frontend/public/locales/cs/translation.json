@@ -153,6 +153,8 @@
         "PageReport": "Stránka {currentPage} z {totalPages}"
       },
       "DraftNotStarted": {
+        "DraftRoundLimitPlaceholder": "Zadejte časový limit pro kolo draftu",
+        "DraftRoundLimit": "Časový limit pro kolo draftu",
         "StartDraft": "Začit draft"
       },
       "DraftInProgress": { "ToDraft": "Do draftu" }
@@ -195,6 +197,7 @@
     "EmailsUnique": "Emaily musí být unikátní",
     "EmailsMinMax": "Počet emailů musí být minimálně {{min}} a maximálně {{max}}",
     "SelectRequired": "Musíte vybrat hodnotu",
-    "FileRequired": "Nahrajte soubor"
+    "FileRequired": "Nahrajte soubor",
+    "NumberMin": "Zadejte číslo větší než {{min}}"
   }
 }

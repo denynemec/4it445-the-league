@@ -219,36 +219,47 @@ router.get('/:lobbyId', async (req, res, next) => {
   });
 });
 
-router.post('/:lobbyId/startDraft', async (req, res, next) => {
-  const { lobbyId } = req.params;
-  // todo add check to privilege, if draft starts group owner
+router.post(
+  '/:lobbyId/startDraft',
+  [check('draftRoundLimit').isNumeric()],
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: formatErrors(errors),
+      });
+    }
 
-  const dbConnection = req[DB_CONNECTION_KEY];
+    const { lobbyId } = req.params;
+    // todo add check to privilege, if draft starts group owner
 
-  await dbConnection.query('DELETE FROM invitation WHERE lobby_id = ?;', [
-    lobbyId,
-  ]);
+    const dbConnection = req[DB_CONNECTION_KEY];
 
-  const dbResponsePlayers = await dbConnection.query(
-    `SELECT user_id FROM lobby_user WHERE draft_order IS NULL and lobby_id = ? ORDER BY RAND();`,
-    [lobbyId],
-  );
+    await dbConnection.query('DELETE FROM invitation WHERE lobby_id = ?;', [
+      lobbyId,
+    ]);
 
-  if (dbResponsePlayers.length === 0) {
-    return res
-      .status(409)
-      .json({ error: '409: Draft order already generated' });
-  }
-
-  dbResponsePlayers.map(async ({ user_id: userId }, index) => {
-    await dbConnection.query(
-      `UPDATE lobby_user SET draft_order= ? WHERE draft_order IS NULL and lobby_id = ? AND user_id = ? LIMIT 1;`,
-      [index + 1, lobbyId, userId],
+    const dbResponsePlayers = await dbConnection.query(
+      `SELECT user_id FROM lobby_user WHERE draft_order IS NULL and lobby_id = ? ORDER BY RAND();`,
+      [lobbyId],
     );
-  });
 
-  res.json({});
-});
+    if (dbResponsePlayers.length === 0) {
+      return res
+        .status(409)
+        .json({ error: '409: Draft order already generated' });
+    }
+
+    dbResponsePlayers.map(async ({ user_id: userId }, index) => {
+      await dbConnection.query(
+        `UPDATE lobby_user SET draft_order= ? WHERE draft_order IS NULL and lobby_id = ? AND user_id = ? LIMIT 1;`,
+        [index + 1, lobbyId, userId],
+      );
+    });
+
+    res.json({});
+  },
+);
 
 router.get('/:lobbyId/fetchDraft', async (req, res, next) => {
   const { lobbyId } = req.params;
