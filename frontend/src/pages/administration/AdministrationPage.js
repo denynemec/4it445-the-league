@@ -63,7 +63,7 @@ export const AdministrationPage = () => {
 
       {eventState.data && (
         <>
-          <Heading className="flex justify-center pb2">
+          <Heading className="flex justify-center pb2 pt3">
             {t('Page.Administration.Heading')}
           </Heading>
 

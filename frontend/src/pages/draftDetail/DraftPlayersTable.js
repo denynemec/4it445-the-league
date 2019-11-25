@@ -9,9 +9,8 @@ import { Button } from '../../atoms';
 
 export const DraftPlayersTable = ({
   draftPlayersList,
-  positionLov,
-  selection,
-  loading,
+  positions,
+  isDisabled,
 }) => {
   const { t } = useTranslation();
 
@@ -21,30 +20,12 @@ export const DraftPlayersTable = ({
 
   const dataTableRef = useRef('');
 
-  //Data template
-  // const mockDraftPlayersList = [
-  //   {
-  //     id: '51cb9d0c-f172-48de-ab72-6fe8871c87ad',
-  //     firstName: 'Raffarty',
-  //     lastName: 'McGlue',
-  //     position: 'defense',
-  //     team: 'KE',
-  //     selected: false,
-  //   },
-  // ];
-  //
-  // const mockPositionLov = [
-  //   { label: 'attack', value: 'attack' },
-  //   { label: 'defense', value: 'defense' },
-  //   { label: 'goalkeeper', value: 'goalkeeper' },
-  // ];
-
   const positionFilter = (
     <MultiSelect
       style={{ width: '100%' }}
       className="ui-column-filter"
       value={filterPositions}
-      options={positionLov}
+      options={positions}
       onChange={event => {
         setFilterPositions(event.target.value);
 
@@ -54,7 +35,10 @@ export const DraftPlayersTable = ({
   );
 
   const footer = (
-    <Button primary disabled={!selectedRow || selectedRow.selected}>
+    <Button
+      primary
+      disabled={!selectedRow || selectedRow.selected || isDisabled}
+    >
       {t('Page.Draft.DraftPlayersTable.PickDraftPlayer')}
     </Button>
   );
@@ -82,43 +66,42 @@ export const DraftPlayersTable = ({
       value={draftPlayersList}
       header={header}
       footer={footer}
-      paginator={true}
+      paginator
       rows={10}
       rowsPerPageOptions={[10, 20, 50, 100]}
       currentPageReportTemplate={t('Page.Draft.DraftPlayersTable.PageReport')}
       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
       selectionMode="single"
-      onSelectionChange={event => setSelectedRow(event.value)}
+      onSelectionChange={event => !isDisabled && setSelectedRow(event.value)}
       selection={selectedRow}
       globalFilter={filterDraftPlayers}
       ref={dataTableRef}
-      loading={loading}
       rowClassName={disabledRowsClass}
     >
       <Column
         field="firstName"
         header={t('Page.Draft.DraftPlayersTable.FirstName')}
-        sortable={true}
-        filter={true}
+        sortable
+        filter
       />
       <Column
         field="lastName"
         header={t('Page.Draft.DraftPlayersTable.LastName')}
-        sortable={true}
-        filter={true}
+        sortable
+        filter
       />
       <Column
         field="position"
         header={t('Page.Draft.DraftPlayersTable.Position')}
-        sortable={true}
-        filter={true}
+        sortable
+        filter
         filterElement={positionFilter}
       />
       <Column
         field="team"
         header={t('Page.Draft.DraftPlayersTable.Team')}
-        sortable={true}
-        filter={true}
+        sortable
+        filter
       />
     </DataTable>
   );

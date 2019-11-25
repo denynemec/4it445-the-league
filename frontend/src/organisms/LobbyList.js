@@ -37,6 +37,7 @@ export const LobbyList = ({ lobbyList, header }) => {
             .filter(({ name }) => valueContains(name, filterLobby))
             .map(lobby => (
               <LayoutedLobby
+                key={lobby.id}
                 {...lobby}
                 footer={
                   <Button

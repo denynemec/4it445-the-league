@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
+import { Button } from 'reactstrap';
 
 import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
@@ -9,7 +10,6 @@ import { Heading, Layout, Link } from '../../atoms';
 import { NotLoggedInPageLayout } from '../../templates';
 import { Field } from '../../organisms';
 import { useAuth, useRequest, translatedValidations } from '../../utils';
-import { Button } from 'reactstrap';
 
 export const LoginPage = () => {
   const { t } = useTranslation();
@@ -76,7 +76,11 @@ export const LoginPage = () => {
           </Layout>
 
           <Layout flex justify-center>
-            <Button submit color="primary" disabled={loginState.isLoading}>
+            <Button
+              type="submit"
+              color="primary"
+              disabled={loginState.isLoading}
+            >
               {t('Page.Login.SubmitLoginButton')}
             </Button>
           </Layout>

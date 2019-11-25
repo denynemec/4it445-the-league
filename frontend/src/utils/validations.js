@@ -11,6 +11,7 @@ export const translatedValidations = t => ({
   uniqueMinMaxEmails: uniqueMinMaxEmails(t),
   selectRequired: selectRequired(t),
   fileRequired: fileRequired(t),
+  numberMin: numberMin(t),
 });
 
 const string = () => yup.string();
@@ -66,6 +67,9 @@ const uniqueMinMaxEmails = t => ({ min, max }) =>
   });
 
 const selectRequired = t => number().min(0, t('Validations.SelectRequired'));
+
+const numberMin = t => min =>
+  number().min(min, t('Validations.NumberMin', { min }));
 
 const mixed = () => yup.mixed();
 

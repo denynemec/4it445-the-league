@@ -27,4 +27,5 @@ export default {
 
   // enums
   enumEvents: () => `${enumPrefix}/events`,
+  enumLobbyPositions: lobbyId => `${enumPrefix}/positions/${lobbyId}`,
 };

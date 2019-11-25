@@ -141,8 +141,8 @@ export const PlayersTable = ({ players }) => {
   const output = [];
 
   // merge arrays of players and their stats by using their id
-  names.map(plr => {
-    playersStats.map(res => {
+  names.forEach(plr => {
+    playersStats.forEach(res => {
       if (plr.playerId === res.playerId) {
         let temp = { ...res, ...plr };
         output.push(temp);
@@ -169,7 +169,7 @@ export const PlayersTable = ({ players }) => {
   const rightLength = [];
 
   // select only players that have complete stats
-  mergedPlayersAndStats.map(plr => {
+  mergedPlayersAndStats.forEach(plr => {
     if (Object.keys(plr).length === maxLength) {
       rightLength.push(plr);
     }

@@ -14,7 +14,7 @@ export const SettingsPage = () => {
 
   return (
     <LoggedInPageLayout>
-      <Heading className="flex justify-center pb2" size="xl">
+      <Heading className="flex justify-center pb2 pt3" size="xl">
         <FontAwesomeIcon className="text-primary mr-2" icon={faUserCog} />
         {t('Page.Settings.PageHeading')}
       </Heading>
