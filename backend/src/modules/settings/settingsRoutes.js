@@ -13,7 +13,8 @@ router.get('/settings', async (req, res, next) => {
   const { userId } = req.jwtDecoded;
 
   const dbResponse = await dbConnection.query(
-    'SELECT firstname, lastname, nickname FROM users WHERE user_id = ? AND active = true;', [userId],
+    'SELECT firstname, lastname, nickname FROM users WHERE user_id = ? AND active = true;',
+    [userId],
   );
 
   const { firstname: firstName, lastname: lastName, nickname } = dbResponse[0];
@@ -49,7 +50,8 @@ router.put(
     const { userId } = req.jwtDecoded;
 
     await dbConnection.query(
-      'UPDATE users SET nickname = ?, firstname = ?, lastname = ?, active = true WHERE user_id = ? AND active = true;', [nickname, firstName, lastName, userId],
+      'UPDATE users SET nickname = ?, firstname = ?, lastname = ?, active = true WHERE user_id = ? AND active = true;',
+      [nickname, firstName, lastName, userId],
     );
 
     res.json({ nickname });
@@ -81,7 +83,8 @@ router.put(
     const { userId } = req.jwtDecoded;
 
     const dbResponse = await dbConnection.query(
-      'SELECT password FROM users WHERE user_id = ? AND active = true;', [userId],
+      'SELECT password FROM users WHERE user_id = ? AND active = true;',
+      [userId],
     );
 
     const { password: passwordHash } = dbResponse[0];
@@ -91,7 +94,8 @@ router.put(
         bcrypt.hash(newPassword, 10, async (errorHash, hash) => {
           if (!errorHash) {
             const a = await dbConnection.query(
-              'UPDATE users SET password = ? WHERE user_id = ? AND active = true;', [hash, userId],
+              'UPDATE users SET password = ? WHERE user_id = ? AND active = true;',
+              [hash, userId],
             );
 
             res.json({});

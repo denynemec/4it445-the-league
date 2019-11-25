@@ -167,6 +167,15 @@
         "PickDraftPlayer": "Vybrat hráče",
         "PageReport": "Stránka {currentPage} z {totalPages}"
       }
+    },
+    "PlayersTableHeader": {
+      "PlayerName": "Jméno hráče",
+      "Team": "Tým",
+      "Position": "Pozice",
+      "Earnings": "Výdělek",
+      "EarningsPercent": "% na výdělku",
+      "ProfitLoss": "Ušlý zisk",
+      "Round": "Kolo"
     }
   },
   "Validations": {
