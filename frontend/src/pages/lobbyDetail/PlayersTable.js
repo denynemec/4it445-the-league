@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { useTranslation } from 'react-i18next';
 import { ColumnGroup } from 'primereact/columngroup';
+import { MultiSelect } from 'primereact/multiselect';
 import { Row } from 'primereact/row';
 
 export const PlayersTable = ({ players }) => {
@@ -18,6 +19,10 @@ export const PlayersTable = ({ players }) => {
     },
     { field: 'profitLoss', header: 'Page.PlayersTableHeader.ProfitLoss' },
   ];
+
+  const [posValue, setPosValue] = useState(null);
+  const [teamValue, setTeamValue] = useState(null);
+  const dt = useRef('');
 
   const resultsHeader = [];
   const names = [];
@@ -103,21 +108,110 @@ export const PlayersTable = ({ players }) => {
     );
   });
 
+  // custom filters for columns
+  const positions = [];
+  const teams = [];
+
+  const uniquePositions = players
+    .map(plrPost => plrPost.post)
+    .filter((value, index, self) => self.indexOf(value) === index);
+  // filter and select all unique teams
+  const uniqueTeams = players
+    .map(unTeam => unTeam.team)
+    .filter((value, index, self) => self.indexOf(value) === index);
+
+  // put filtered values into positionFilter
+  uniquePositions.map(pos => {
+    positions.push({ label: pos, value: pos });
+    return positions;
+  });
+  // put filtered values into teamFilter
+  uniqueTeams.map(pos => {
+    teams.push({ label: pos, value: pos });
+    return teams;
+  });
+
+  const onPosChange = event => {
+    setPosValue(event.target.value);
+    dt.current.filter(event.target.value, 'position', 'in');
+  };
+  const onTeamChange = event => {
+    setTeamValue(event.target.value);
+    dt.current.filter(event.target.value, 'team', 'in');
+  };
+
+  const positionFilter = (
+    <MultiSelect
+      style={{ width: '100%' }}
+      value={posValue}
+      options={positions}
+      onChange={onPosChange}
+    />
+  );
+  const teamFilter = (
+    <MultiSelect
+      style={{ width: '100%' }}
+      value={teamValue}
+      options={teams}
+      onChange={onTeamChange}
+    />
+  );
+
   // creates the first row of header of the table
   let iteratorHeaderRound = 1;
   const rowHeaderGroup = cols.map(col => {
     if (
       col.field === 'playerName' ||
-      col.field === 'team' ||
-      col.field === 'position' ||
       col.field === 'earnings' ||
       col.field === 'earningsPercent' ||
       col.field === 'profitLoss'
     ) {
-      return <Column key={col.field} header={t(col.header)} rowSpan={2} />;
+      return (
+        <Column
+          key={col.field}
+          field={col.field}
+          header={t(col.header)}
+          rowSpan={2}
+          sortable
+          filter
+        />
+      );
+    } else if (col.field === 'position') {
+      return (
+        <Column
+          key={col.field}
+          field={col.field}
+          header={t(col.header)}
+          rowSpan={2}
+          sortable
+          filter
+          filterElement={positionFilter}
+          style={{ width: '150px' }}
+        />
+      );
+    } else if (col.field === 'team') {
+      return (
+        <Column
+          key={col.field}
+          field={col.field}
+          header={t(col.header)}
+          rowSpan={2}
+          sortable
+          filter
+          filterElement={teamFilter}
+          style={{ width: '150px' }}
+        />
+      );
     } else if (col.field === roundTranslated + iteratorHeaderRound) {
       iteratorHeaderRound++;
-      return <Column key={col.field} header={t(col.header)} colSpan={5} />;
+      return (
+        <Column
+          key={col.field}
+          field={col.field}
+          header={t(col.header)}
+          colSpan={5}
+        />
+      );
     } else {
       return null;
     }
@@ -187,6 +281,7 @@ export const PlayersTable = ({ players }) => {
 
   return (
     <DataTable
+      ref={dt}
       value={finalOutput}
       responsive={true}
       scrollable={true}
