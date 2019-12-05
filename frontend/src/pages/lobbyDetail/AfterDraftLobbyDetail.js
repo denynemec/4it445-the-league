@@ -58,7 +58,36 @@ export const AfterDraftLobbyDetail = ({ data }) => {
     }
   }, new Map());
 
-  console.log(Array.from(testData.values()).sort((a, b) => a.note - b.note));
+  const reducedTestData = Array.from(testData.values()).sort(
+    (a, b) => a.note - b.note,
+  );
+
+  // next ugly transform
+
+  const uglyTransformedData = reducedTestData.map(({ note, ...results }) => {
+    const newResult = { note };
+
+    const otherPlayersCount = Object.keys(results).length - 1;
+
+    for (let key in results) {
+      if (results.hasOwnProperty(key)) {
+        const resultWithoutCurrentUserValue = { ...results, [key]: 0 };
+
+        const otherUsersSum = Object.values(
+          resultWithoutCurrentUserValue,
+        ).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+        const newResultValue =
+          (results[key] - otherUsersSum) / otherPlayersCount;
+
+        newResult[key] = newResultValue;
+      }
+    }
+
+    return newResult;
+  });
+
+  console.log(uglyTransformedData);
 
   let cols = [
     { field: 'username', header: 'Page.PlayersTableHeader.PlayerName' },
