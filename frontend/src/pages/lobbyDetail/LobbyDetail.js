@@ -8,6 +8,7 @@ import { useFetchRequest, useRequest } from '../../utils';
 import { DraftFinished } from './DraftFinished';
 import { DraftInProgress } from './DraftInProgress';
 import { DraftNotStarted } from './DraftNotStarted';
+import { AfterDraftLobbyDetail } from './AfterDraftLobbyDetail';
 
 export const LobbyDetail = () => {
   const { lobbyId } = useParams();
@@ -32,6 +33,7 @@ export const LobbyDetail = () => {
 
       {lobbyState.data && positonsEnumState.data && (
         <>
+          <AfterDraftLobbyDetail />
           {lobbyState.data.draftStatus === 'NOT_STARTED' && (
             <DraftNotStarted
               lobbyPlayersList={lobbyState.data.lobbyPlayersList}
