@@ -1,12 +1,24 @@
 import { Router } from 'express';
 import { check, validationResult } from 'express-validator';
+import { formatErrors } from '../../utils';
 
 import { DB_CONNECTION_KEY } from '../../libs/connection';
-import { formatErrors, Hashids, sendEmail } from '../../utils';
 
 const router = Router();
 
-router.get('/:lobbyId/draftState', async (req, res, next) => {
+router.get('/:lobbyId/draftState',
+[
+  check(':lobbyId').isNumeric(),
+],
+ async (req, res, next) => {
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      error: formatErrors(errors),
+    });
+  }
+
   const { lobbyId } = req.params;
   const { userId } = req.jwtDecoded;
 
@@ -46,55 +58,57 @@ router.get('/:lobbyId/draftState', async (req, res, next) => {
     draftUser = { draftRound: 0 };
   }
 
-  const totalRounds = dbPlayerRound.reduce(function(prev, cur) {
+  let totalRounds = dbPlayerRound.reduce(function(prev, cur) {
     return prev + cur.draftRound;
   }, 0);
 
-  let secondsOnRound = 0;
+  let secondsToNextRound = 0;
   let userOnTurn = false;
   if (isEven(draftUser.draftRound + 1) === true) {
-    secondsOnRound =
-      (draftUser.draftRound + 1) *
-        (draftState.draft_round_limit *
-          (draftState.max_players - draftOrder.draft_order + 1)) +
-      draftState.draft_round_limit * draftUser.draftRound;
-    if (
-      (isEven(totalRounds) &&
-        totalRounds == draftOrder.draft_order * draftUser.draftRound + 2) ||
-      (!isEven(totalRounds) &&
-        totalRounds == draftOrder.draft_order * draftUser.draftRound)
-    ) {
-      userOnTurn = true;
+    if (totalRounds > draftUser.draftRound * draftState.max_players) {
+      if (
+        totalRounds % draftState.max_players ==
+        draftState.max_players - draftOrder.draft_order
+      ) {
+        userOnTurn = true;
+      }
+    }
+    if (userOnTurn) {
+      secondsToNextRound = (totalRounds + 1) * draftState.draft_round_limit;
+    } else {
+      secondsToNextRound =
+        (draftUser.draftRound * draftState.max_players +
+          draftState.max_players -
+          draftOrder.draft_order) *
+        draftState.draft_round_limit;
     }
   } else {
-    secondsOnRound =
-      (draftUser.draftRound + 1) *
-      (draftState.draft_round_limit * draftOrder.draft_order);
-    const userRound =
-      draftOrder.draft_order * draftUser.draftRound +
-        (draftUser.draftRound + 1) !=
-      0
-        ? draftOrder.draft_order * draftUser.draftRound +
-          (draftUser.draftRound + 1)
-        : 1;
-    if (
-      (isEven(totalRounds) &&
-        totalRounds ==
-          draftOrder.draft_order * draftUser.draftRound +
-            (draftUser.draftRound + 1)) ||
-      (!isEven(totalRounds) && totalRounds == userRound)
-    ) {
-      userOnTurn = true;
+    let roundsCount;
+    if (totalRounds == 0) {
+      roundsCount = 1;
+    } else {
+      roundsCount = totalRounds;
+    }
+    if (roundsCount > draftUser.draftRound * draftState.max_players) {
+      if (roundsCount % draftState.max_players == draftOrder.draft_order) {
+        userOnTurn = true;
+      }
+    }
+    if (userOnTurn) {
+      secondsToNextRound = (totalRounds + 1) * draftState.draft_round_limit;
+    } else {
+      secondsToNextRound =
+        (draftUser.draftRound * draftState.max_players +
+          draftOrder.draft_order) *
+        draftState.draft_round_limit;
     }
   }
-  const timeofNextRound = new Date(
-    draftState.draft_start_at.getTime() + 1000 * draftState.draft_time_offset + 1000 * secondsOnRound,
+  const timeOfNextRound = new Date(
+    draftState.draft_start_at.getTime() +
+      (1000 * draftState.draft_time_offset) +
+      (1000 * secondsToNextRound)
   );
-
-  const timeLeft =
-    userOnTurn === true
-      ? (timeofNextRound - Date.now()) / 1000
-      : (timeofNextRound - Date.now()) / 1000 - draftState.draft_round_limit;
+  const timeLeft = (timeOfNextRound - Date.now()) / 1000;
 
   // All already drafted players (picked by all users in lobby)
   const dbResponseDraft = await dbConnection.query(
@@ -111,26 +125,32 @@ router.get('/:lobbyId/draftState', async (req, res, next) => {
   const myDraftPlayerList = dbResponseMyDraft.map(player => player.player_id);
 
   if (userOnTurn && timeLeft < 0) {
-    const dbRandomPlayer = await dbConnection.query(
-      'SELECT player_id FROM player_game WHERE game_id = ? AND player_id NOT IN ? ORDER BY RAND() LIMIT 1',
-      [draftState.game_id, pickedPlayerList],
-    );
+    let dbRandomPlayer;
+    if (pickedPlayerList.length > 0) {
+      dbRandomPlayer = await dbConnection.query(
+        'SELECT player_id FROM player_game WHERE game_id = ? AND player_id NOT IN ? ORDER BY RAND() LIMIT 1',
+        [draftState.game_id, pickedPlayerList],
+      );
+    } else {
+      dbRandomPlayer = await dbConnection.query(
+        'SELECT player_id FROM player_game WHERE game_id = ? ORDER BY RAND() LIMIT 1',
+        [draftState.game_id],
+      );
+    }
 
     dbConnection.query('INSERT INTO draft (user_id, lobby_id, player_id) VALUES (?, ?, ?);',
     [userId, lobbyId, dbRandomPlayer[0].player_id]);
 
     const draftDelay = draftState.draft_time_offset + Math.abs(timeLeft);
 
-    dbConnection.query('UPDATE lobby SET draft_time_offset = ? WHERE lobby_id = ?;',
-    [draftDelay, lobbyId]);
+    dbConnection.query(
+      'UPDATE lobby SET draft_time_offset = ? WHERE lobby_id = ?;',
+      [draftDelay, lobbyId],
+    );
   }
 
   res.json({
-    dbPlayerOrder,
-    dbResponseDraftState,
-    dbPlayerRound,
-    draftUser,
-    timeofNextRound,
+    timeOfNextRound,
     totalRounds,
     userOnTurn,
     timeLeft,
