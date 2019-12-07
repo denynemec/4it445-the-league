@@ -8,7 +8,7 @@ const router = Router();
 
 router.get('/:lobbyId/draftState',
 [
-  check(':lobbyId').isNumeric(),
+  check('lobbyId').isNumeric(),
 ],
  async (req, res, next) => {
 
