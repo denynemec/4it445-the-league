@@ -44,7 +44,7 @@ export const LoginPage = () => {
   });
 
   return (
-    <NotLoggedInPageLayout errorList={[{ id: 1, error: loginState.error }]}>
+    <NotLoggedInPageLayout>
       <Heading className="flex justify-center pb2">
         {t('Page.Login.FormHeading')}
       </Heading>

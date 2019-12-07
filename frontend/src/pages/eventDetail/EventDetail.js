@@ -26,7 +26,7 @@ export const EventDetail = () => {
   );
 
   return (
-    <LoggedInPageLayout errorList={[{ id: 1, error: eventState.error }]}>
+    <LoggedInPageLayout>
       {eventState.isLoading && <LoadingSpinner />}
 
       {eventState.data && (

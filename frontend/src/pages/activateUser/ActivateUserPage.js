@@ -47,9 +47,7 @@ export const ActivateUserPage = () => {
   });
 
   return (
-    <NotLoggedInPageLayout
-      errorList={[{ id: 1, error: activateUserState.error }]}
-    >
+    <NotLoggedInPageLayout>
       <Heading className="flex justify-center pb2">
         {t('Page.ActivateUser.FormHeading')}
       </Heading>

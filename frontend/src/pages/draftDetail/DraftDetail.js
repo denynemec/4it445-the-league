@@ -20,12 +20,7 @@ export const DraftDetail = () => {
   );
 
   return (
-    <LoggedInPageLayout
-      errorList={[
-        { id: 1, error: fetchDraftState.error },
-        { id: 2, error: positonsEnumState.error },
-      ]}
-    >
+    <LoggedInPageLayout>
       {(fetchDraftState.isLoading || positonsEnumState.isLoading) && (
         <LoadingSpinner />
       )}

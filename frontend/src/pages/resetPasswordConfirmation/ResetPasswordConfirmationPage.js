@@ -46,9 +46,7 @@ export const ResetPasswordConfirmationPage = () => {
   });
 
   return (
-    <NotLoggedInPageLayout
-      errorList={[{ id: 1, error: resetPasswordConfirmationState.error }]}
-    >
+    <NotLoggedInPageLayout>
       <Heading className="flex justify-center pb2">
         {t('Page.ResetPasswordConfirmation.FormHeading')}
       </Heading>

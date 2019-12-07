@@ -54,9 +54,7 @@ export const RegistrationPage = () => {
   const prefilledEmail = typeof email === 'undefined' ? '' : email;
 
   return (
-    <NotLoggedInPageLayout
-      errorList={[{ id: 1, error: registrationState.error }]}
-    >
+    <NotLoggedInPageLayout>
       <Heading className="flex justify-center pb2">
         {t('Page.Registration.FormHeading')}
       </Heading>

@@ -4,7 +4,7 @@ import { Formik, Form } from 'formik';
 import { useAlert } from 'react-alert';
 
 import ENDPOINTS from '../../endpoints';
-import { Heading, ErrorBox, Layout, LoadingSpinner } from '../../atoms';
+import { Heading, Layout, LoadingSpinner } from '../../atoms';
 import { Field } from '../../organisms';
 import {
   useRequest,
@@ -47,14 +47,6 @@ export const BaseSettings = () => {
 
   return (
     <>
-      <ErrorBox
-        className="mv2"
-        errorList={[
-          { id: 1, error: settingsState.error },
-          { id: 2, error: updateBaseSettingsState.error },
-        ]}
-      />
-
       {settingsState.data && (
         <Formik
           initialValues={{

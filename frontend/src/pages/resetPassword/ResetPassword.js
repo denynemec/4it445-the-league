@@ -41,9 +41,7 @@ export const ResetPassword = () => {
   });
 
   return (
-    <NotLoggedInPageLayout
-      errorList={[{ id: 1, error: resetPasswordState.error }]}
-    >
+    <NotLoggedInPageLayout>
       <Heading className="flex justify-center pb2">
         {t('Page.ResetPassword.FormHeading')}
       </Heading>

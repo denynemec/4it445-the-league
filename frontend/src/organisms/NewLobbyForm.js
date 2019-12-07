@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import ENDPOINTS from '../endpoints';
 import PATHNAMES from '../pathnames';
-import { Layout, ErrorBox } from '../atoms';
+import { Layout } from '../atoms';
 import { Field } from '../organisms';
 import { Modal } from '../molecules';
 import { Button } from 'reactstrap';
@@ -68,8 +68,6 @@ export const NewLobbyForm = ({
       onCloseClick={onCloseClick}
       isDisabled={newLobbyState.isLoading}
     >
-      <ErrorBox errorList={[{ id: 1, error: newLobbyState.error }]} />
-
       <Formik
         initialValues={{ lobbyName: '', emails: '' }}
         validationSchema={schema}

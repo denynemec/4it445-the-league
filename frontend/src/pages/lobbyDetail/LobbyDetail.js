@@ -19,13 +19,7 @@ export const LobbyDetail = () => {
   );
 
   return (
-    <LoggedInPageLayout
-      errorList={[
-        { id: 1, error: lobbyState.error },
-        { id: 2, error: draftState.error },
-        { id: 3, error: positonsEnumState.error },
-      ]}
-    >
+    <LoggedInPageLayout>
       {(lobbyState.isLoading || positonsEnumState.isLoading) && (
         <LoadingSpinner />
       )}

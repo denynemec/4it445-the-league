@@ -40,12 +40,7 @@ export const JoinToLobbyPage = () => {
   }, [lobbyHash, history, signin, joinToLobbyState]);
 
   return (
-    <NotLoggedInPageLayout
-      errorList={[
-        { id: 1, error: lobbyDetailState.error },
-        { id: 2, error: joinToLobbyState.error },
-      ]}
-    >
+    <NotLoggedInPageLayout>
       {lobbyDetailState.isLoading && <LoadingSpinner />}
 
       {lobbyDetailState.data && (

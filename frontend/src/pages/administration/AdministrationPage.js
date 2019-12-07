@@ -32,7 +32,7 @@ export const AdministrationPage = () => {
 
       administrationState.request(ENDPOINTS.uploadPlayersToEvent(), {
         method: 'POST',
-        onSuccess: (response) => {
+        onSuccess: response => {
           alert.success(response.data.message);
           resetForm();
           if (eventPlayersInputRef.current) {
@@ -53,12 +53,7 @@ export const AdministrationPage = () => {
   });
 
   return (
-    <LoggedInPageLayout
-      errorList={[
-        { id: 1, error: eventState.error },
-        { id: 2, error: administrationState.error },
-      ]}
-    >
+    <LoggedInPageLayout>
       {eventState.isLoading && <LoadingSpinner />}
 
       {eventState.data && (

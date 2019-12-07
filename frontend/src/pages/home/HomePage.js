@@ -14,13 +14,8 @@ export const HomePage = () => {
 
   const { eventListState, lobbyListState } = useFetchData();
 
-  const errorList = [
-    { id: 1, error: eventListState.error },
-    { id: 2, error: lobbyListState.error },
-  ];
-
   return (
-    <LoggedInPageLayout errorList={errorList}>
+    <LoggedInPageLayout>
       {(eventListState.isLoading || lobbyListState.isLoading) && (
         <LoadingSpinner />
       )}

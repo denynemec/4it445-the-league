@@ -4,7 +4,7 @@ import { Formik, Form } from 'formik';
 import { useAlert } from 'react-alert';
 
 import ENDPOINTS from '../../endpoints';
-import { ErrorBox, Heading, Layout } from '../../atoms';
+import { Heading, Layout } from '../../atoms';
 import { Field } from '../../organisms';
 import { useRequest, translatedValidations } from '../../utils';
 import { Button } from 'reactstrap';
@@ -18,7 +18,7 @@ export const PasswordSettings = () => {
     ({ oldPassword, newPassword }, { resetForm }) => {
       updatePasswordSettingsState.request(ENDPOINTS.updatePassword(), {
         method: 'PUT',
-        onSuccess: (response) => {
+        onSuccess: response => {
           alert.success(response.data.message);
           resetForm();
         },
@@ -40,11 +40,6 @@ export const PasswordSettings = () => {
 
   return (
     <>
-      <ErrorBox
-        className="mv2"
-        errorList={[{ id: 1, error: updatePasswordSettingsState.error }]}
-      />
-
       <Formik
         initialValues={{
           oldPassword: '',

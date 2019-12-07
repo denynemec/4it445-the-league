@@ -1,14 +1,12 @@
 import React from 'react';
 
-import { MainSectionWithErrorBox } from '../molecules';
+import { MainSection } from '../atoms';
 import { LoggedInHeader } from '../organisms';
 
-export const LoggedInPageLayout = ({ children, errorList }) => (
+export const LoggedInPageLayout = ({ children }) => (
   <>
     <LoggedInHeader />
 
-    <MainSectionWithErrorBox errorList={errorList || []}>
-      {children}
-    </MainSectionWithErrorBox>
+    <MainSection>{children}</MainSection>
   </>
 );

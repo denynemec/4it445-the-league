@@ -1,6 +1,5 @@
 export { Button } from './Button';
 export { Error } from './Error';
-export { ErrorBox } from './ErrorBox';
 export { Form } from './Form';
 export { Heading } from './Heading';
 export { InfoBox } from './InfoBox';
@@ -9,6 +8,7 @@ export { Layout } from './Layout';
 export { Link } from './Link';
 export { LoadingSpinner } from './LoadingSpinner';
 export { MainSection } from './MainSection';
+export { NoContainerSection } from './NoContainerSection';
 export { ScrollToTop } from './ScrollToTop';
 export { Select } from './Select';
 export { TextInput } from './TextInput';

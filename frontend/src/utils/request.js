@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { CancelToken } from 'axios';
+import { useAlert } from 'react-alert';
 
 import { useApi } from './api';
 import { config } from '../config';
@@ -10,6 +11,7 @@ export function useRequest(initialState = {}) {
   const api = useApi();
   const apiRef = useRef(api);
   const stateRef = useRef(null);
+  const alert = useAlert();
 
   useEffect(() => {
     apiRef.current = api;
@@ -23,7 +25,7 @@ export function useRequest(initialState = {}) {
       cancelSource: null,
       ...initialState,
       request: (url, options) => {
-        sendRequest(url, options, { apiRef, stateRef, setState });
+        sendRequest(url, options, { apiRef, stateRef, setState }, alert);
       },
     };
   });
@@ -45,6 +47,7 @@ function sendRequest(
   url,
   { method = 'GET', onSuccess, ...options } = {},
   { apiRef, stateRef, setState },
+  alert,
 ) {
   log(`[api.${method}] start`, url);
 
@@ -97,6 +100,8 @@ function sendRequest(
         // that falls out of the range of 2xx
         errorText = error.response.data.error;
       }
+
+      alert.error(errorText);
 
       setState(oldState => ({
         ...oldState,
