@@ -156,6 +156,47 @@ router.get('/state', [check('lobbyId').isNumeric()], async (req, res, next) => {
   });
 });
 
+router.post(
+  '/pickplayer',
+  [check('playerId').isNumeric(), check('lobbyId').isNumeric()],
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: formatErrors(errors),
+      });
+    }
+
+    const { lobbyId } = req.params;
+    const { playerId } = req.body;
+    const { userId } = req.jwtDecoded;
+    const dbConnection = req[DB_CONNECTION_KEY];
+
+    // All already drafted players (picked by all users in lobby)
+    const dbResponseDraft = await dbConnection.query(
+      'SELECT player_id FROM draft WHERE lobby_id = ?',
+      [lobbyId],
+    );
+
+    const alreadyPicked = dbResponseDraft.find(
+      ({ player_id }) => player_id === playerId,
+    );
+
+    if (alreadyPicked) {
+      return res.status(422).json({
+        error: '422: You can not select player which is already selected.',
+      });
+    }
+
+    await dbConnection.query(
+      'INSERT INTO draft (user_id, lobby_id, player_id) VALUES (?, ?, ?);',
+      [userId, lobbyId, playerId],
+    );
+
+    res.json({ message: 'Player picked successfully' });
+  },
+);
+
 function isEven(n) {
   return n % 2 == 0;
 }
