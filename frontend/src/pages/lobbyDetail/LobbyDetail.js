@@ -33,7 +33,6 @@ export const LobbyDetail = () => {
 
       {lobbyState.data && positonsEnumState.data && (
         <>
-          <AfterDraftLobbyDetail />
           {lobbyState.data.draftStatus === 'NOT_STARTED' && (
             <DraftNotStarted
               lobbyPlayersList={lobbyState.data.lobbyPlayersList}
@@ -54,6 +53,8 @@ export const LobbyDetail = () => {
             <DraftFinished
               usersInLobby={lobbyState.data.usersInLobby}
               playersInLobby={lobbyState.data.playersInLobby}
+              usersInNomination={lobbyState.data.usersInNomination}
+              profitsPerRound={lobbyState.data.profitsPerRound}
             />
           )}
         </>
