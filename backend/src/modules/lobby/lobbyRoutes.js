@@ -3,8 +3,12 @@ import { check, validationResult } from 'express-validator';
 
 import { DB_CONNECTION_KEY } from '../../libs/connection';
 import { formatErrors, Hashids, sendEmail } from '../../utils';
+import draftRoutes from './draft/draftRoutes';
 
 const router = Router();
+
+// Link all submodules here
+router.use('/:lobbyId/draft', draftRoutes);
 
 router.get('/list', async (req, res, next) => {
   const dbConnection = req[DB_CONNECTION_KEY];

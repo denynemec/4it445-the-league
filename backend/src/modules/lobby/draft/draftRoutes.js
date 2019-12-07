@@ -1,17 +1,12 @@
 import { Router } from 'express';
 import { check, validationResult } from 'express-validator';
-import { formatErrors } from '../../utils';
+import { formatErrors } from '../../../utils';
 
-import { DB_CONNECTION_KEY } from '../../libs/connection';
+import { DB_CONNECTION_KEY } from '../../../libs/connection';
 
-const router = Router();
+const router = Router({ mergeParams: true });
 
-router.get('/:lobbyId/draftState',
-[
-  check('lobbyId').isNumeric(),
-],
- async (req, res, next) => {
-
+router.get('/state', [check('lobbyId').isNumeric()], async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -105,8 +100,8 @@ router.get('/:lobbyId/draftState',
   }
   const timeOfNextRound = new Date(
     draftState.draft_start_at.getTime() +
-      (1000 * draftState.draft_time_offset) +
-      (1000 * secondsToNextRound)
+      1000 * draftState.draft_time_offset +
+      1000 * secondsToNextRound,
   );
   const timeLeft = (timeOfNextRound - Date.now()) / 1000;
 
@@ -138,8 +133,10 @@ router.get('/:lobbyId/draftState',
       );
     }
 
-    dbConnection.query('INSERT INTO draft (user_id, lobby_id, player_id) VALUES (?, ?, ?);',
-    [userId, lobbyId, dbRandomPlayer[0].player_id]);
+    dbConnection.query(
+      'INSERT INTO draft (user_id, lobby_id, player_id) VALUES (?, ?, ?);',
+      [userId, lobbyId, dbRandomPlayer[0].player_id],
+    );
 
     const draftDelay = draftState.draft_time_offset + Math.abs(timeLeft);
 
