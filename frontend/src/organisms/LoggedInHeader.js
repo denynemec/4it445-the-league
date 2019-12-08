@@ -33,13 +33,13 @@ const LoggedInHeaderBase = ({ history }) => {
   return (
     <HeaderBase homeLinkTo={PATHNAMES.home()}>
       <NavItem className="m-1">
-        <NavLink href={PATHNAMES.home()}>
+        <NavLink href={PATHNAMES.home()} className="text-white">
           {t('Organisms.LoggedInHeader.HomeLink')}
         </NavLink>
       </NavItem>
 
       <UncontrolledDropdown nav inNavbar className="m-1">
-        <DropdownToggle nav caret>
+        <DropdownToggle nav caret className="text-white">
           <FontAwesomeIcon className="mr-1" icon={faUser} />
           {user && user.nickname}
         </DropdownToggle>
@@ -60,12 +60,7 @@ const LoggedInHeaderBase = ({ history }) => {
         </DropdownMenu>
       </UncontrolledDropdown>
       <NavItem>
-        <Button
-          onClick={logoutCallback}
-          outline
-          color="secondary"
-          className="m-1"
-        >
+        <Button onClick={logoutCallback} color="secondary" className="m-1">
           {t('Organisms.LoggedInHeader.LogoutLink')}
 
           <FontAwesomeIcon className="ml-2" icon={faSignOutAlt} />

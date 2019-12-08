@@ -10,6 +10,7 @@ import {
   ListGroup,
   ListGroupItem,
   Col,
+  Badge,
 } from 'reactstrap';
 
 export const LayoutedLobby = ({
@@ -23,6 +24,17 @@ export const LayoutedLobby = ({
 }) => {
   const { t } = useTranslation();
 
+  let lobbyStatusColor = 'danger';
+  let lobbyStatusText = 'Not enough players';
+
+  if (joinedUsers >= minUsers) {
+    lobbyStatusColor = 'warning';
+    lobbyStatusText = 'Ready';
+  } else if (joinedUsers === maxUsers) {
+    lobbyStatusColor = 'success';
+    lobbyStatusText = 'Ready and full';
+  }
+
   return (
     <Col sm="4">
       <Card className="mt-5">
@@ -35,6 +47,9 @@ export const LayoutedLobby = ({
         <CardBody>
           <CardText>
             <ListGroup flush>
+              <ListGroupItem>
+                <Badge color={`${lobbyStatusColor}`}>{lobbyStatusText}</Badge>
+              </ListGroupItem>
               <ListGroupItem>
                 {t('Molecules.LayoutedLobby.LobbyName', { name })}
               </ListGroupItem>

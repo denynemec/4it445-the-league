@@ -1,5 +1,9 @@
 {
-  "Atoms": { "Select": { "Placeholder": "Vyberte hodnotu..." } },
+  "Atoms": {
+    "Select": { "Placeholder": "Vyberte hodnotu..." },
+    "Error": { "ErrorTitle": "Vyskytla se chyba!" },
+    "InfoBox": { "Title": "Informace" }
+  },
   "Molecules": {
     "HeaderBase": {
       "HomeLink": "TheLeague"

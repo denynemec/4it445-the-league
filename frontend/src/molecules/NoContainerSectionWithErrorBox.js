@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { ErrorBox } from '../atoms';
+import { Container } from 'reactstrap';
 
 export const NoContainerSectionWithErrorBox = ({
   children,
@@ -8,7 +9,9 @@ export const NoContainerSectionWithErrorBox = ({
   className,
 }) => (
   <div className={classNames(className)}>
-    <ErrorBox className="pb3" errorList={errorList} />
+    <Container>
+      <ErrorBox className="pb3" errorList={errorList} />
+    </Container>
 
     {children}
   </div>

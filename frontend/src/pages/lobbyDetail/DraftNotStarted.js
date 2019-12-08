@@ -5,10 +5,11 @@ import { Formik, Form } from 'formik';
 
 import ENDPOINTS from '../../endpoints';
 import PATHNAMES from '../../pathnames';
-import { Button, Layout } from '../../atoms';
+import { Layout } from '../../atoms';
 import { Field } from '../../organisms';
 import { translatedValidations } from '../../utils';
 import { LobbyAvailablePlayersTable } from './LobbyAvailablePlayersTable';
+import { Button } from 'reactstrap';
 
 export const DraftNotStarted = ({
   lobbyPlayersList,
@@ -64,7 +65,7 @@ export const DraftNotStarted = ({
               />
 
               <Layout flex justify-center>
-                <Button submit primary>
+                <Button submit color="primary">
                   {t('Page.LobbyDetail.DraftNotStarted.StartDraft')}
                 </Button>
               </Layout>

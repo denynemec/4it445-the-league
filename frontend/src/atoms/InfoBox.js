@@ -1,25 +1,22 @@
 import React from 'react';
-import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
-export const InfoBox = ({ className, infoList }) => (
-  <div
-    className={classNames(
-      'red w-100 pa2 bg-spring-green ba br4 b--dark-green shadow-5 flex items-center',
-      className,
-    )}
-  >
-    <FontAwesomeIcon
-      className={classNames('ph2 black fa-2x')}
-      icon={faInfoCircle}
-    />
-    <div className={classNames('flex flex-column')}>
+import { UncontrolledAlert } from 'reactstrap';
+
+export const InfoBox = ({ className, infoList }) => {
+  const { t } = useTranslation();
+
+  return (
+    <UncontrolledAlert color="info">
+      <h2>
+        <FontAwesomeIcon icon={faInfoCircle} />
+        {t('Atoms.InfoBox.Title')}
+      </h2>
       {infoList.map(({ info, id }) => (
-        <div key={id} className={classNames('pa3 black')}>
-          {info}
-        </div>
+        <div key={id}>{info}</div>
       ))}
-    </div>
-  </div>
-);
+    </UncontrolledAlert>
+  );
+};
