@@ -14,7 +14,9 @@ export const NotLoggedInPageLayout = ({ children, errorList }) => (
       className="notLoggedBackground p-5"
     >
       <div>
-        <Container className="p-5 backgroundLight">{children}</Container>
+        <Container className="p-5 backgroundLightNotLogged">
+          {children}
+        </Container>
       </div>
     </NoContainerSectionWithErrorBox>
   </>
