@@ -38,6 +38,9 @@ export const LobbyDetail = () => {
               positions={positonsEnumState.data}
               userIsGroupOwner={lobbyState.data.userIsGroupOwner}
               draftState={draftState}
+              lobbyDetailInfo={lobbyState.data.lobbyDetailInfo}
+              userCount={lobbyState.data.userCount}
+              notAcceptedInvitation={lobbyState.data.notAcceptedInvitation}
             />
           )}
 
