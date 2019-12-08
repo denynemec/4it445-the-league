@@ -8,7 +8,6 @@ import { useFetchRequest, useRequest } from '../../utils';
 import { DraftFinished } from './DraftFinished';
 import { DraftInProgress } from './DraftInProgress';
 import { DraftNotStarted } from './DraftNotStarted';
-import { AfterDraftLobbyDetail } from './AfterDraftLobbyDetail';
 
 export const LobbyDetail = () => {
   const { lobbyId } = useParams();

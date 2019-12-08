@@ -65,7 +65,7 @@ export const DraftNotStarted = ({
               />
 
               <Layout flex justify-center>
-                <Button submit color="primary">
+                <Button type="submit" color="primary">
                   {t('Page.LobbyDetail.DraftNotStarted.StartDraft')}
                 </Button>
               </Layout>

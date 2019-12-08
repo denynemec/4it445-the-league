@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -7,18 +8,25 @@ import { MultiSelect } from 'primereact/multiselect';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'reactstrap';
 
+import { useRequest } from '../../utils/request';
+import ENDPOINTS from '../../endpoints';
+
 export const DraftPlayersTable = ({
   draftPlayersList,
   positions,
   isDisabled,
+  userOnTurn,
 }) => {
   const { t } = useTranslation();
+  const { lobbyId } = useParams();
 
   const [filterDraftPlayers, setFilterDraftPlayers] = useState('');
   const [filterPositions, setFilterPositions] = useState(null);
   const [selectedRow, setSelectedRow] = useState('');
 
   const dataTableRef = useRef('');
+
+  const pickPlayerState = useRequest();
 
   const positionFilter = (
     <MultiSelect
@@ -34,10 +42,21 @@ export const DraftPlayersTable = ({
     />
   );
 
-  const footer = (
+  const footer = userOnTurn && (
     <Button
       color="primary"
-      disabled={!selectedRow || selectedRow.selected || isDisabled}
+      disabled={
+        !selectedRow ||
+        selectedRow.selected ||
+        isDisabled ||
+        pickPlayerState.isLoading
+      }
+      onClick={() =>
+        pickPlayerState.request(ENDPOINTS.pickPlayer(lobbyId), {
+          method: 'POST',
+          data: { playerId: selectedRow.playerId },
+        })
+      }
     >
       {t('Page.Draft.DraftPlayersTable.PickDraftPlayer')}
     </Button>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -6,7 +6,7 @@ import ENDPOINTS from '../../endpoints';
 import { LoadingSpinner, Heading, Layout } from '../../atoms';
 import { LoggedInPageLayout } from '../../templates';
 import { DraftPlayersTable } from './DraftPlayersTable';
-import { useFetchRequest } from '../../utils';
+import { useFetchRequest, useRequest } from '../../utils';
 import { DraftOrder } from './DraftOrder';
 import { MyTeam } from './MyTeam';
 
@@ -14,10 +14,87 @@ export const DraftDetail = () => {
   const { t } = useTranslation();
   const { lobbyId } = useParams();
 
-  const fetchDraftState = useFetchRequest(ENDPOINTS.fetchDraft(lobbyId));
+  const refrestDraftState = useRequest();
+
+  const [draftStateData, setDraftStateData] = useState(undefined);
+
+  const onSuccessFetchDraftState = response => {
+    updateDraftState(
+      response,
+      response.data.draftOrder,
+      response.data.draftPlayersList,
+    );
+  };
+
+  const fetchDraftState = useFetchRequest(ENDPOINTS.fetchDraft(lobbyId), {
+    onSuccess: onSuccessFetchDraftState,
+  });
   const positonsEnumState = useFetchRequest(
     ENDPOINTS.enumLobbyPositions(lobbyId),
   );
+
+  const updateDraftState = useCallback(
+    (
+      {
+        data: {
+          activeDraftOrder,
+          isPaused,
+          timeLeft,
+          myTeamIdList,
+          selectedPlayersIdList,
+          userOnTurn,
+        },
+      },
+      draftOrder,
+      draftPlayersListRaw,
+    ) => {
+      setDraftStateData({
+        activeDraftOrder,
+        draftOrder,
+        isPaused,
+        timeLeft,
+        myTeam: getMyTeam(draftPlayersListRaw, myTeamIdList),
+        draftPlayersList: getDraftPlayers(
+          draftPlayersListRaw,
+          selectedPlayersIdList,
+        ),
+        userOnTurn,
+        refreshDraftState: true,
+        draftPlayersListRaw,
+      });
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (
+      typeof draftStateData !== 'undefined' &&
+      draftStateData.refreshDraftState
+    ) {
+      setDraftStateData(prevState => ({
+        ...prevState,
+        refreshDraftState: false,
+      }));
+
+      setTimeout(() => {
+        refrestDraftState.request(ENDPOINTS.refrestDraftState(lobbyId), {
+          method: 'GET',
+          onSuccess: response =>
+            updateDraftState(
+              response,
+              draftStateData.draftOrder,
+              draftStateData.draftPlayersListRaw,
+            ),
+        });
+      }, 3000);
+    }
+  }, [
+    draftStateData,
+    updateDraftState,
+    refrestDraftState,
+    lobbyId,
+    setDraftStateData,
+  ]);
 
   return (
     <LoggedInPageLayout
@@ -30,18 +107,16 @@ export const DraftDetail = () => {
         <LoadingSpinner />
       )}
 
-      {fetchDraftState.data && positonsEnumState.data && (
+      {typeof draftStateData !== 'undefined' && positonsEnumState.data && (
         <>
           <Heading className="flex justify-center pb2">
             {t('Page.Draft.Heading')}
           </Heading>
 
-          {/* Static text for now, in future re-design and circular timer or something like that? */}
-          <Layout flex justify-center>
-            {`Zbyvajici cas: ${fetchDraftState.data.timeLeft} s${
-              fetchDraftState.data.isPaused ? ' (Draft pozastaven)' : ''
-            }`}
-          </Layout>
+          <TimerCountdown
+            timeLeft={draftStateData.timeLeft}
+            isPaused={draftStateData.isPaused}
+          />
 
           <Layout pt3>
             <Heading className="flex justify-center pb2" size="md">
@@ -49,8 +124,8 @@ export const DraftDetail = () => {
             </Heading>
 
             <DraftOrder
-              data={fetchDraftState.data.draftOrder}
-              activeDraftOrder={fetchDraftState.data.activeDraftOrder}
+              data={draftStateData.draftOrder}
+              activeDraftOrder={draftStateData.activeDraftOrder}
             />
           </Layout>
 
@@ -59,7 +134,7 @@ export const DraftDetail = () => {
               {t('Page.Draft.MyTeamHeading')}
             </Heading>
 
-            <MyTeam data={fetchDraftState.data.myTeam} />
+            <MyTeam data={draftStateData.myTeam} />
           </Layout>
 
           <Layout pt3>
@@ -69,7 +144,8 @@ export const DraftDetail = () => {
 
             <DraftPlayersTable
               positions={positonsEnumState.data}
-              draftPlayersList={fetchDraftState.data.draftPlayersList}
+              draftPlayersList={draftStateData.draftPlayersList}
+              userOnTurn={draftStateData.userOnTurn}
             />
           </Layout>
         </>
@@ -77,3 +153,24 @@ export const DraftDetail = () => {
     </LoggedInPageLayout>
   );
 };
+
+const getMyTeam = (draftPlayers, myTeamIdList) =>
+  draftPlayers.filter(({ playerId }) => myTeamIdList.includes(playerId));
+
+const getDraftPlayers = (draftPlayers, selectedPlayersIdList) =>
+  draftPlayers.map(draftPlayer => {
+    let selected = false;
+
+    if (selectedPlayersIdList.includes(draftPlayer.playerId)) {
+      selected = true;
+    }
+
+    return { ...draftPlayer, selected };
+  });
+
+// Static text for now, in future re-design and circular timer or something like that?
+const TimerCountdown = ({ timeLeft, isPaused }) => (
+  <Layout flex justify-center>
+    {`Zbyvajici cas: ${timeLeft} s${isPaused ? ' (Draft pozastaven)' : ''}`}
+  </Layout>
+);
