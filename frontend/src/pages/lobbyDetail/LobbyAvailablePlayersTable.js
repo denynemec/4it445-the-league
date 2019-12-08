@@ -60,6 +60,7 @@ export const LobbyAvailablePlayersTable = ({
       globalFilter={filterDraftPlayers}
       ref={dataTableRef}
       loading={loading}
+      responsive
     >
       <Column
         field="firstName"
