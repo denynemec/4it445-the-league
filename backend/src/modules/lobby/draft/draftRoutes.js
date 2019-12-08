@@ -44,30 +44,11 @@ router.get('/state', [check('lobbyId').isNumeric()], async (req, res, next) => {
     dbConnection,
     draftState,
   });
-  const {
-    userOnTurn,
-    timeLeft,
-    timeOfNextRound,
-    totalRounds,
-    activeDraftOrder,
-  } = state;
 
-  // All already drafted players (picked by all users in lobby)
-  const dbResponseDraft = await dbConnection.query(
-    'SELECT player_id FROM draft WHERE lobby_id = ?',
-    [lobbyId],
-  );
-  const selectedPlayerIdList = dbResponseDraft.map(player => player.player_id);
-
-  // My already drafted players (picked by me)
-  const dbResponseMyDraft = await dbConnection.query(
-    'SELECT player_id FROM draft WHERE lobby_id = ? AND user_id = ?',
-    [lobbyId, userId],
-  );
-  const myDraftPlayerIdList = dbResponseMyDraft.map(player => player.player_id);
-
-  if (userOnTurn && timeLeft < 0) {
+  if (state.userOnTurn && state.timeLeft < 0) {
     let dbRandomPlayer;
+    // TODO connect to DB
+    const pickedPlayerList = [];
     if (pickedPlayerList.length > 0) {
       dbRandomPlayer = await dbConnection.query(
         'SELECT player_id FROM player_game WHERE game_id = ? AND player_id NOT IN ? ORDER BY RAND() LIMIT 1',
@@ -84,7 +65,7 @@ router.get('/state', [check('lobbyId').isNumeric()], async (req, res, next) => {
       [userId, lobbyId, dbRandomPlayer[0].player_id],
     );
 
-    const draftDelay = draftState.draft_time_offset + Math.abs(timeLeft);
+    const draftDelay = draftState.draft_time_offset + Math.abs(state.timeLeft);
 
     dbConnection.query(
       'UPDATE lobby SET draft_time_offset = ? WHERE lobby_id = ?;',
@@ -93,13 +74,7 @@ router.get('/state', [check('lobbyId').isNumeric()], async (req, res, next) => {
   }
 
   res.json({
-    timeOfNextRound,
-    totalRounds,
-    activeDraftOrder,
-    userOnTurn,
-    timeLeft,
-    selectedPlayerIdList,
-    myDraftPlayerIdList,
+    ...state,
   });
 });
 
@@ -167,35 +142,8 @@ router.get(
       dbConnection,
       draftState,
     });
-    const { userOnTurn, timeLeft, activeDraftOrder } = state;
 
-    // current user team
-    const dbResponsePlayerUser = await dbConnection.query(
-      'SELECT draft.player_id, firstname, lastname, number, player_game.post_abbr, player_game.team_ID, team.name FROM draft LEFT JOIN player_game ON draft.player_id = player_game.player_id INNER JOIN player ON draft.player_id = player.player_id LEFT JOIN team ON player_game.team_id = team.team_id LEFT JOIN player_role ON player_game.post_abbr = player_role.post_abbr WHERE draft.lobby_id = ? AND user_id = ? AND active = true;',
-      [lobbyId, userId],
-    );
-    const myTeam = dbResponsePlayerUser.map(
-      ({
-        player_id: playerId,
-        firstname: firstName,
-        lastname: lastName,
-        name: team,
-        team_id: teamId,
-        post_abbr: position,
-        ...rest
-      }) => ({
-        playerId,
-        firstName,
-        lastName,
-        team,
-        teamId,
-        position,
-        selected: true,
-        ...rest,
-      }),
-    );
-
-    // All players with disabled for already picked (picked by all users in lobby)
+    // All players
     const dbResponsePlayer = await dbConnection.query(
       'SELECT player_game.player_id, firstname, lastname, number, player_game.post_abbr, player_game.team_ID, team.name FROM player_game INNER JOIN player ON player_game.player_id = player.player_id LEFT JOIN team ON player_game.team_id = team.team_id LEFT JOIN player_role ON player_game.post_abbr = player_role.post_abbr WHERE game_id = ? AND active = true;',
       [draftState.game_id],
@@ -220,27 +168,14 @@ router.get(
       }),
     );
 
-    // All already drafted players (picked by all users in lobby)
-    const dbResponseDraft = await dbConnection.query(
-      'SELECT player_id FROM draft WHERE lobby_id = ?',
-      [lobbyId],
-    );
-    const selectedPlayerIdList = dbResponseDraft.map(
-      player => player.player_id,
-    );
-
     // draft in progress or paused - set pause and continue can only group owner
     const isPaused = draftState.draft_paused == 0 ? false : true;
 
     res.json({
+      ...state,
       draftOrder,
-      activeDraftOrder,
-      userOnTurn,
-      timeLeft,
       isPaused,
-      myTeam,
       draftPlayersList,
-      selectedPlayerIdList,
     });
   },
 );

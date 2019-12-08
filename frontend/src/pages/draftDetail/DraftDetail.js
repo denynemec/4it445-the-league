@@ -19,7 +19,11 @@ export const DraftDetail = () => {
   const [draftStateData, setDraftStateData] = useState(undefined);
 
   const onSuccessFetchDraftState = response => {
-    updateDraftState(response, response.data.draftPlayersList);
+    updateDraftState(
+      response,
+      response.data.draftOrder,
+      response.data.draftPlayersList,
+    );
   };
 
   const fetchDraftState = useFetchRequest(ENDPOINTS.fetchDraft(lobbyId), {
@@ -34,13 +38,14 @@ export const DraftDetail = () => {
       {
         data: {
           activeDraftOrder,
-          draftOrder,
           isPaused,
           timeLeft,
-          myTeamIdList = [],
-          selectedPlayersIdList = [],
+          myTeamIdList,
+          selectedPlayersIdList,
+          userOnTurn,
         },
       },
+      draftOrder,
       draftPlayersListRaw,
     ) => {
       setDraftStateData({
@@ -53,6 +58,7 @@ export const DraftDetail = () => {
           draftPlayersListRaw,
           selectedPlayersIdList,
         ),
+        userOnTurn,
         refreshDraftState: true,
         draftPlayersListRaw,
       });
@@ -71,10 +77,14 @@ export const DraftDetail = () => {
       }));
 
       setTimeout(() => {
-        refrestDraftState.request(ENDPOINTS.fetchDraft(lobbyId), {
+        refrestDraftState.request(ENDPOINTS.refrestDraftState(lobbyId), {
           method: 'GET',
           onSuccess: response =>
-            updateDraftState(response, draftStateData.draftPlayersListRaw),
+            updateDraftState(
+              response,
+              draftStateData.draftOrder,
+              draftStateData.draftPlayersListRaw,
+            ),
         });
       }, 3000);
     }
@@ -135,6 +145,7 @@ export const DraftDetail = () => {
             <DraftPlayersTable
               positions={positonsEnumState.data}
               draftPlayersList={draftStateData.draftPlayersList}
+              userOnTurn={draftStateData.userOnTurn}
             />
           </Layout>
         </>
@@ -144,13 +155,13 @@ export const DraftDetail = () => {
 };
 
 const getMyTeam = (draftPlayers, myTeamIdList) =>
-  draftPlayers.filter(({ id }) => myTeamIdList.includes(id));
+  draftPlayers.filter(({ playerId }) => myTeamIdList.includes(playerId));
 
 const getDraftPlayers = (draftPlayers, selectedPlayersIdList) =>
   draftPlayers.map(draftPlayer => {
     let selected = false;
 
-    if (selectedPlayersIdList.includes(draftPlayer.id)) {
+    if (selectedPlayersIdList.includes(draftPlayer.playerId)) {
       selected = true;
     }
 

@@ -88,12 +88,28 @@ export const getDraftState = async ({
   );
   const timeLeft = (timeOfNextRound - Date.now()) / 1000;
 
+  // All already drafted players (picked by all users in lobby)
+  const dbResponseDraft = await dbConnection.query(
+    'SELECT player_id FROM draft WHERE lobby_id = ?',
+    [lobbyId],
+  );
+  const selectedPlayersIdList = dbResponseDraft.map(player => player.player_id);
+
+  // My already drafted players (picked by me)
+  const dbResponseMyDraft = await dbConnection.query(
+    'SELECT player_id FROM draft WHERE lobby_id = ? AND user_id = ?',
+    [lobbyId, userId],
+  );
+  const myTeamIdList = dbResponseMyDraft.map(player => player.player_id);
+
   return {
     timeLeft,
     userOnTurn,
     timeOfNextRound,
     totalRounds,
     activeDraftOrder,
+    selectedPlayersIdList,
+    myTeamIdList,
   };
 };
 

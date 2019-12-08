@@ -89,13 +89,16 @@ export const NewLobbyForm = ({
             label={t('Organisms.NewLobbyForm.Emails')}
             placeholder={t('Organisms.NewLobbyForm.EmailsPlaceholder', {
               min: minEmails,
-
               max: maxEmails,
             })}
           />
 
           <Layout flex justify-center>
-            <Button submit color="primary" disabled={newLobbyState.isLoading}>
+            <Button
+              type="submit"
+              color="primary"
+              disabled={newLobbyState.isLoading}
+            >
               {t('Organisms.NewLobbyForm.SubmitNewLobbyForm')}
             </Button>
           </Layout>

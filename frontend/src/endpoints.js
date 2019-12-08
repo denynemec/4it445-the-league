@@ -14,8 +14,9 @@ export default {
   updatePassword: () => `${apiPrefix}/settings/update-password`,
   getEventDetail: id => `${apiPrefix}/event/${id}`,
   getLobbyDetail: id => `${apiPrefix}/lobby/${id}`,
-  fetchDraft: id => `${apiPrefix}/lobby/${id}/fetchDraft`,
-  refrestDraftState: id => `${apiPrefix}/lobby/${id}/refrestDraftState`,
+  fetchDraft: id => `${apiPrefix}/lobby/${id}/draft/fullState`,
+  refrestDraftState: id => `${apiPrefix}/lobby/${id}/draft/state`,
+  pickPlayer: id => `${apiPrefix}/lobby/${id}/draft/pickplayer`,
   startDraft: id => `${apiPrefix}/lobby/${id}/startDraft`,
   resetPassword: () => `${apiPrefix}/auth/reset-password`,
   getJoinToLobbyDetail: lobbyHash =>
