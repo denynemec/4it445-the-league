@@ -134,6 +134,7 @@ router.get(
 
     const { lobbyId } = req.params;
     const dbConnection = req[DB_CONNECTION_KEY];
+    const { userId } = req.jwtDecoded;
 
     const dbResponseLobby = await dbConnection.query(
       'SELECT lobby_id FROM lobby WHERE lobby_id = ? AND active = true;',
@@ -144,6 +145,18 @@ router.get(
       return res.status(422).json({ error: 'Lobby is not exist.' });
     }
 
+    const dbResponseAccesLobby = await dbConnection.query(
+      'SELECT lobby_id FROM lobby_user WHERE lobby_id = ? AND user_id = ?;',
+      [lobbyId, userId],
+    );
+
+    if (dbResponseAccesLobby.length === 0) {
+      return res
+        .status(403)
+        .json({ error: 'You are not allowed to view this lobby' });
+    }
+
+    //TODO: other way of this check
     const dbResponsePlayersWithoutDrafOrder = await dbConnection.query(
       `SELECT user_id FROM lobby_user WHERE draft_order IS NULL and lobby_id = ?;`,
       [lobbyId],
@@ -182,8 +195,8 @@ router.get(
     // SELECT player_id,firstname,lastname,note,goal,assist
     //   ,win,clean_sheet FROM matches INNER JOIN result USING(match_id) INNER JOIN player USING(player_id)
 
-  const bonificationForGame = await dbConnection.query(
-    `SELECT goal,assist,clean_sheet_goalkeeper,clean_sheet_defender,win_mid_fielders,win_defender,
+    const bonificationForGame = await dbConnection.query(
+      `SELECT goal,assist,clean_sheet_goalkeeper,clean_sheet_defender,win_mid_fielders,win_defender,
   minimal_time FROM lobby INNER JOIN game USING(game_id) INNER JOIN bonification ON game.bonification_id = bonification.config_id WHERE lobby_id = ?;`,
       [lobbyId],
     );
@@ -224,14 +237,14 @@ router.get(
       }),
     );
 
-  //After Draft Lobby Detail - selecty + kalkulace
-  const usersInNomination = await dbConnection.query(
-    `SELECT DISTINCT users.user_id, users.nickname FROM nomination nom LEFT JOIN users users on nom.user_id = users.user_id WHERE lobby_id = ? ORDER BY users.user_id ASC`,
-    [lobbyId],
-  );
+    //After Draft Lobby Detail - selecty + kalkulace
+    const usersInNomination = await dbConnection.query(
+      `SELECT DISTINCT users.user_id, users.nickname FROM nomination nom LEFT JOIN users users on nom.user_id = users.user_id WHERE lobby_id = ? ORDER BY users.user_id ASC`,
+      [lobbyId],
+    );
 
-  const dbResponseRevenuesResults = await dbConnection.query(
-    `SELECT users.user_id, matches.note,
+    const dbResponseRevenuesResults = await dbConnection.query(
+      `SELECT users.user_id, matches.note,
     SUM(result.goal * bon.goal + result.assist * bon.assist + result.win * bon.win_mid_fielders + result.clean_sheet * clean_sheet_defender) * (user_count.count - 1) AS result
     FROM nomination nom
     LEFT JOIN (SELECT lobby_id, COUNT(DISTINCT user_id) AS count from nomination GROUP BY lobby_id) user_count on nom.lobby_id = user_count.lobby_id
@@ -243,80 +256,86 @@ router.get(
     WHERE nom.lobby_id = ?
     GROUP BY matches.note, users.user_id
     ORDER BY matches.note ASC, users.user_id ASC`,
-    [lobbyId],
-  );
+      [lobbyId],
+    );
 
-  const revenuesPerRound = dbResponseRevenuesResults.reduce(
-    (noteMap, { result, note, user_id }) => {
-      note = 'Page.AfterDraftLobbyDetail.Notes.' + note;
+    const revenuesPerRound = dbResponseRevenuesResults.reduce(
+      (noteMap, { result, note, user_id }) => {
+        note = 'Page.AfterDraftLobbyDetail.Notes.' + note;
 
-      const currentPlayerResult = { [user_id]: result };
+        const currentPlayerResult = { [user_id]: result };
 
-      const currentNoteValues = noteMap.get(note);
+        const currentNoteValues = noteMap.get(note);
 
-      if (typeof currentNoteValues !== 'undefined') {
-        const updatedCurrentNote = {
-          ...currentNoteValues,
-          ...currentPlayerResult,
-          note,
-        };
+        if (typeof currentNoteValues !== 'undefined') {
+          const updatedCurrentNote = {
+            ...currentNoteValues,
+            ...currentPlayerResult,
+            note,
+          };
 
-        return noteMap.set(note, updatedCurrentNote);
-      } else {
-        return noteMap.set(note, {
-          ...currentPlayerResult,
-          note,
-        });
-      }
-    },
-    new Map(),
-  );
-
-  const sortedRevenues = Array.from(revenuesPerRound.values()).sort(
-    (a, b) => a.note - b.note,
-  );
-
-  const profitsPerRound = sortedRevenues.map(({ note, ...results }) => {
-    const newResult = { note };
-
-    const otherPlayersCount = Object.keys(results).length;
-
-    for (let key in results) {
-      if (results.hasOwnProperty(key)) {
-        const resultWithoutCurrentUserValue = { ...results, [key]: 0 };
-
-        const otherUsersSum = Object.values(
-          resultWithoutCurrentUserValue,
-        ).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-
-        const newResultValue =
-          results[key] - otherUsersSum / (otherPlayersCount - 1);
-
-        newResult[key] = newResultValue;
-      }
-    }
-
-    return newResult;
-  });
-
-  const cumulatedProfitsArr = profitsPerRound.reduce((accumulatorArr, data) => {
-    Object.entries(data).forEach(([key, value]) => {
-      if (key !== 'note') {
-        if (typeof accumulatorArr[key] !== 'undefined') {
-          accumulatorArr[key] += value;
+          return noteMap.set(note, updatedCurrentNote);
         } else {
-          accumulatorArr[key] = value;
+          return noteMap.set(note, {
+            ...currentPlayerResult,
+            note,
+          });
         }
-      } else {
-        accumulatorArr[key] = 'Page.AfterDraftLobbyDetail.Notes.total';
+      },
+      new Map(),
+    );
+
+    const sortedRevenues = Array.from(revenuesPerRound.values()).sort(
+      (a, b) => a.note - b.note,
+    );
+
+    const profitsPerRound = sortedRevenues.map(({ note, ...results }) => {
+      const newResult = { note };
+
+      const otherPlayersCount = Object.keys(results).length;
+
+      for (let key in results) {
+        if (results.hasOwnProperty(key)) {
+          const resultWithoutCurrentUserValue = { ...results, [key]: 0 };
+
+          const otherUsersSum = Object.values(
+            resultWithoutCurrentUserValue,
+          ).reduce(
+            (accumulator, currentValue) => accumulator + currentValue,
+            0,
+          );
+
+          const newResultValue =
+            results[key] - otherUsersSum / (otherPlayersCount - 1);
+
+          newResult[key] = newResultValue;
+        }
       }
+
+      return newResult;
     });
-    return accumulatorArr;
-  }, {});
 
-  profitsPerRound.push(cumulatedProfitsArr);
+    const cumulatedProfitsArr = profitsPerRound.reduce(
+      (accumulatorArr, data) => {
+        Object.entries(data).forEach(([key, value]) => {
+          if (key !== 'note') {
+            if (typeof accumulatorArr[key] !== 'undefined') {
+              accumulatorArr[key] += value;
+            } else {
+              accumulatorArr[key] = value;
+            }
+          } else {
+            accumulatorArr[key] = 'Page.AfterDraftLobbyDetail.Notes.total';
+          }
+        });
+        return accumulatorArr;
+      },
+      {},
+    );
 
-  const draftStarted = dbResponsePlayersWithoutDrafOrder.length === 0;
+    profitsPerRound.push(cumulatedProfitsArr);
+
+    const draftStarted = dbResponsePlayersWithoutDrafOrder.length === 0;
 
     // TODO map - currently mocked for demo
     const draftStatus = draftStarted ? 'FINISHED' : 'NOT_STARTED';
@@ -324,17 +343,18 @@ router.get(
     // TODO
     const userIsGroupOwner = true;
 
-  res.json({
-    lobbyPlayersList,
-    draftStatus,
-    playersInLobby,
-    bonificationForGame,
-    usersInLobby,
-    userIsGroupOwner,
-    usersInNomination,
-    profitsPerRound,
-  });
-});
+    res.json({
+      lobbyPlayersList,
+      draftStatus,
+      playersInLobby,
+      bonificationForGame,
+      usersInLobby,
+      userIsGroupOwner,
+      usersInNomination,
+      profitsPerRound,
+    });
+  },
+);
 
 router.post(
   '/:lobbyId/startDraft',
