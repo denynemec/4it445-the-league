@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { check, validationResult } from 'express-validator';
 import { formatErrors } from '../../../utils';
+import { getDraftState } from './draftState';
 
 import { DB_CONNECTION_KEY } from '../../../libs/connection';
 
@@ -37,73 +38,9 @@ router.get('/state', [check('lobbyId').isNumeric()], async (req, res, next) => {
     return res.status(409).json({ error: '409: Draft have not started yet.' });
   }
 
-  const dbPlayerOrder = await dbConnection.query(
-    'SELECT user_id, draft_order FROM lobby_user WHERE lobby_id = ?;',
-    [lobbyId],
-  );
 
-  const draftOrder = dbPlayerOrder.find(({ user_id }) => user_id === userId);
-
-  const dbPlayerRound = await dbConnection.query(
-    'SELECT user_id, count(user_id) as draftRound FROM draft WHERE lobby_id = ? group by user_id;',
-    [lobbyId],
-  );
-  let draftUser = dbPlayerRound.find(({ user_id }) => user_id === userId);
-  if (!draftUser) {
-    draftUser = { draftRound: 0 };
-  }
-
-  let totalRounds = dbPlayerRound.reduce(function(prev, cur) {
-    return prev + cur.draftRound;
-  }, 0);
-
-  let secondsToNextRound = 0;
-  let userOnTurn = false;
-  if (isEven(draftUser.draftRound + 1) === true) {
-    if (totalRounds > draftUser.draftRound * draftState.max_players) {
-      if (
-        totalRounds % draftState.max_players ==
-        draftState.max_players - draftOrder.draft_order
-      ) {
-        userOnTurn = true;
-      }
-    }
-    if (userOnTurn) {
-      secondsToNextRound = (totalRounds + 1) * draftState.draft_round_limit;
-    } else {
-      secondsToNextRound =
-        (draftUser.draftRound * draftState.max_players +
-          draftState.max_players -
-          draftOrder.draft_order) *
-        draftState.draft_round_limit;
-    }
-  } else {
-    let roundsCount;
-    if (totalRounds == 0) {
-      roundsCount = 1;
-    } else {
-      roundsCount = totalRounds;
-    }
-    if (roundsCount > draftUser.draftRound * draftState.max_players) {
-      if (roundsCount % draftState.max_players == draftOrder.draft_order) {
-        userOnTurn = true;
-      }
-    }
-    if (userOnTurn) {
-      secondsToNextRound = (totalRounds + 1) * draftState.draft_round_limit;
-    } else {
-      secondsToNextRound =
-        (draftUser.draftRound * draftState.max_players +
-          draftOrder.draft_order) *
-        draftState.draft_round_limit;
-    }
-  }
-  const timeOfNextRound = new Date(
-    draftState.draft_start_at.getTime() +
-      1000 * draftState.draft_time_offset +
-      1000 * secondsToNextRound,
-  );
-  const timeLeft = (timeOfNextRound - Date.now()) / 1000;
+  const state = await getDraftState({lobbyId, userId, dbConnection, draftState});
+  const {userOnTurn, timeLeft, timeOfNextRound, totalRounds, activeDraftOrder} = state;
 
   // All already drafted players (picked by all users in lobby)
   const dbResponseDraft = await dbConnection.query(
@@ -112,7 +49,7 @@ router.get('/state', [check('lobbyId').isNumeric()], async (req, res, next) => {
   );
   const pickedPlayerList = dbResponseDraft.map(player => player.player_id);
 
-  // All already drafted players (picked by all users in lobby)
+  // My already drafted players (picked by me)
   const dbResponseMyDraft = await dbConnection.query(
     'SELECT player_id FROM draft WHERE lobby_id = ? AND user_id = ?',
     [lobbyId, userId],
@@ -132,7 +69,7 @@ router.get('/state', [check('lobbyId').isNumeric()], async (req, res, next) => {
         [draftState.game_id],
       );
     }
-
+/*
     dbConnection.query(
       'INSERT INTO draft (user_id, lobby_id, player_id) VALUES (?, ?, ?);',
       [userId, lobbyId, dbRandomPlayer[0].player_id],
@@ -144,15 +81,147 @@ router.get('/state', [check('lobbyId').isNumeric()], async (req, res, next) => {
       'UPDATE lobby SET draft_time_offset = ? WHERE lobby_id = ?;',
       [draftDelay, lobbyId],
     );
+    */
   }
 
   res.json({
     timeOfNextRound,
     totalRounds,
+    activeDraftOrder,
     userOnTurn,
     timeLeft,
     pickedPlayerList,
     myDraftPlayerList,
+  });
+});
+
+router.get('/fullState', [check('lobbyId').isNumeric()], async (req, res, next) => {
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      error: formatErrors(errors),
+    });
+  }
+
+  const { lobbyId } = req.params;
+  const { userId } = req.jwtDecoded;
+
+  const dbConnection = req[DB_CONNECTION_KEY];
+
+  const dbResponseUsers = await dbConnection.query(
+    'SELECT user_id FROM lobby_user WHERE draft_order IS NULL and lobby_id = ?;',
+    [lobbyId],
+  );
+
+  if (dbResponseUsers.length !== 0) {
+    return res.status(409).json({ error: "409: Draft order is not defined" });
+  }
+
+  const dbResponseDraftState = await dbConnection.query(
+    'SELECT lobby.lobby_id, user_id, max_players, draft_start_at, draft_paused, draft_time_offset, draft_round_limit, game_id FROM lobby INNER JOIN lobby_user ON (lobby.lobby_id = lobby_user.lobby_id) WHERE lobby.lobby_id = ? AND user_id = ? AND draft_order IS NOT NULL LIMIT 1;',
+    [lobbyId, userId],
+  );
+
+  if (dbResponseDraftState.length === 0) {
+    return res
+      .status(409)
+      .json({ error: '409: You are not allowed to get data from this draft.' });
+  }
+  const draftState = dbResponseDraftState[0];
+  if (
+    draftState.draft_start_at > Date.now() ||
+    draftState.draft_start_at == null
+  ) {
+    return res.status(409).json({ error: '409: Draft have not started yet.' });
+  }
+
+  const dbResponse = await dbConnection.query(
+    'SELECT users.nickname, lobby_user.user_id, lobby_user.draft, lobby_user.draft_order FROM lobby_user INNER JOIN users ON lobby_user.user_id = users.user_id WHERE lobby_id = ? ORDER BY lobby_user.draft_order;',
+    [lobbyId],
+  );
+
+  const draftOrder = dbResponse.map(
+    ({ user_id: userId, draft_order: draftOrder, ...rest }) => ({
+      userId,
+      draftOrder,
+      ...rest,
+    }),
+  );
+
+  const state = await getDraftState({lobbyId, userId, dbConnection, draftState});
+  const {userOnTurn, timeLeft, timeOfNextRound, totalRounds, activeDraftOrder} = state;
+
+  // current user team
+  const dbResponsePlayerUser = await dbConnection.query(
+    'SELECT draft.player_id, firstname, lastname, number, player_game.post_abbr, player_game.team_ID, team.name FROM draft LEFT JOIN player_game ON draft.player_id = player_game.player_id INNER JOIN player ON draft.player_id = player.player_id LEFT JOIN team ON player_game.team_id = team.team_id LEFT JOIN player_role ON player_game.post_abbr = player_role.post_abbr WHERE draft.lobby_id = ? AND user_id = ? AND active = true;',
+    [lobbyId, userId],
+  );
+  const myTeam = dbResponsePlayerUser.map(
+    ({
+      player_id: playerId,
+      firstname: firstName,
+      lastname: lastName,
+      name: team,
+      team_id: teamId,
+      post_abbr: position,
+      ...rest
+    }) => ({
+      playerId,
+      firstName,
+      lastName,
+      team,
+      teamId,
+      position,
+      selected: true,
+      ...rest,
+    }),
+  );
+
+  // All players with disabled for already picked (picked by all users in lobby)
+  const dbResponsePlayer = await dbConnection.query(
+    'SELECT player_game.player_id, firstname, lastname, number, player_game.post_abbr, player_game.team_ID, team.name FROM player_game INNER JOIN player ON player_game.player_id = player.player_id LEFT JOIN team ON player_game.team_id = team.team_id LEFT JOIN player_role ON player_game.post_abbr = player_role.post_abbr WHERE game_id = ? AND active = true;',
+    [draftState.game_id],
+  );
+  const draftPlayersList = dbResponsePlayer.map(
+    ({
+      player_id: playerId,
+      firstname: firstName,
+      lastname: lastName,
+      name: team,
+      team_id: teamId,
+      post_abbr: position,
+      ...rest
+    }) => ({
+      playerId,
+      firstName,
+      lastName,
+      team,
+      teamId,
+      position,
+      ...rest,
+    }),
+  );
+
+  // All already drafted players (picked by all users in lobby)
+  const dbResponseDraft = await dbConnection.query(
+    'SELECT player_id FROM draft WHERE lobby_id = ?',
+    [lobbyId],
+  );
+  const pickedPlayerList = dbResponseDraft.map(player => player.player_id);
+
+  // draft in progress or paused - set pause and continue can only group owner
+  const isPaused = (draftState.draft_paused == 0) ? false : true;
+
+  res.json({
+    draftOrder,
+    activeDraftOrder,
+    userOnTurn,
+    myTeam,
+    timeLeft,
+    draftPlayersList,
+    pickedPlayerList,
+    isPaused,
   });
 });
 
@@ -171,6 +240,8 @@ router.post(
     const { playerId } = req.body;
     const { userId } = req.jwtDecoded;
     const dbConnection = req[DB_CONNECTION_KEY];
+
+    //TODO: Check if the user is on turn
 
     // All already drafted players (picked by all users in lobby)
     const dbResponseDraft = await dbConnection.query(
