@@ -27,7 +27,7 @@ export const LayoutedLobby = ({
   let lobbyStatusColor = 'danger';
   let lobbyStatusText = t('Molecules.LayoutedLobby.NotEnough');
 
-  if (joinedUsers >= minUsers) {
+  if (joinedUsers >= minUsers && joinedUsers < maxUsers) {
     lobbyStatusColor = 'warning';
     lobbyStatusText = t('Molecules.LayoutedLobby.Enough');
   } else if (joinedUsers === maxUsers) {
