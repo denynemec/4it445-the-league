@@ -11,7 +11,10 @@
     "LayoutedLobby": {
       "LobbyName": "Název: {{name}}",
       "EventName": "Událost: {{eventName}}",
-      "Players": "Hráči: {{joinedUsers}}/{{maxUsers}}"
+      "Players": "Hráči: {{joinedUsers}}/{{maxUsers}}",
+      "NotEnough": "Nedostatek hráčů",
+      "Enough": "Dostatek hráčů",
+      "Full": "Maximální možný počet hráčů"
     }
   },
   "Organisms": {
