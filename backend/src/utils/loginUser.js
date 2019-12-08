@@ -8,8 +8,12 @@ export const getLoginSuccessPayload = async ({ userId, dbConnection }) => {
     [userId],
   );
 
-  // currently mocked - not sure with these names
-  const privileges = ['AdministrationPage', 'UploadPlayersToEvent'];
+  const dbPrivilegesResponse = await dbConnection.query(
+    'SELECT permission.permission_id, name FROM permission INNER JOIN role_permission ON (permission.permission_id = role_permission.permission_id) INNER JOIN user_role ON (user_role.role_id = role_permission.role_id) WHERE user_role.user_id = ?;',
+    [userId],
+  );
+
+  const privileges = dbPrivilegesResponse.map(privilege => privilege.name);
 
   const loginSuccessPayload = {
     token,

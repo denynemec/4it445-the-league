@@ -3,8 +3,14 @@ import { check, validationResult } from 'express-validator';
 
 import { DB_CONNECTION_KEY } from '../../libs/connection';
 import { formatErrors, Hashids, sendEmail } from '../../utils';
+import draftRoutes from './draft/draftRoutes';
+import nominationRoutes from './nomination/nominationRoutes';
 
 const router = Router();
+
+// Link all submodules here
+router.use('/:lobbyId/draft', draftRoutes);
+router.use('/:lobbyId/nomination', nominationRoutes);
 
 router.get('/list', async (req, res, next) => {
   const dbConnection = req[DB_CONNECTION_KEY];
@@ -115,91 +121,108 @@ router.post(
   },
 );
 
-router.get('/:lobbyId', async (req, res, next) => {
-  const { lobbyId } = req.params;
+router.get(
+  '/:lobbyId',
+  [check('lobbyId').isNumeric()],
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: formatErrors(errors),
+      });
+    }
 
-  const dbConnection = req[DB_CONNECTION_KEY];
+    const { lobbyId } = req.params;
+    const dbConnection = req[DB_CONNECTION_KEY];
 
-  const dbResponsePlayersWithoutDrafOrder = await dbConnection.query(
-    `SELECT user_id FROM lobby_user WHERE draft_order IS NULL and lobby_id = ?;`,
-    [lobbyId],
-  );
+    const dbResponseLobby = await dbConnection.query(
+      'SELECT lobby_id FROM lobby WHERE lobby_id = ? AND active = true;',
+      [lobbyId],
+    );
 
-  // const allAvailableRoles = await dbConnection.query(
-  //   `SELECT name FROM player_role WHERE sport_id = 1;`
-  // );
+    if (dbResponseLobby.length === 0) {
+      return res.status(422).json({ error: 'Lobby is not exist.' });
+    }
 
-  // selects all players roles based on a game in the lobby
+    const dbResponsePlayersWithoutDrafOrder = await dbConnection.query(
+      `SELECT user_id FROM lobby_user WHERE draft_order IS NULL and lobby_id = ?;`,
+      [lobbyId],
+    );
 
-  // const allAvailableRoles = await dbConnection.query(
-  //   `SELECT player_role.name,player_role.post_abbr FROM lobby INNER JOIN game USING(game_id)
-  //   INNER JOIN sport USING(sport_id)
-  //   INNER JOIN player_role USING(sport_id) WHERE lobby_id = ?;`,
-  //   [lobbyId],
-  // );
+    // const allAvailableRoles = await dbConnection.query(
+    //   `SELECT name FROM player_role WHERE sport_id = 1;`
+    // );
 
-  // const playersInLobby = await dbConnection.query(`SELECT firstname,lastname,team.name,post_abbr FROM game INNER JOIN player_game USING(game_id)
-  // INNER JOIN player USING(player_id) INNER JOIN team USING(team_id);`);
+    // selects all players roles based on a game in the lobby
 
-  // const playersInLobby = await dbConnection.query(`SELECT firstname, lastname,team.name AS team ,post_abbr,player_role.name as post FROM game
-  //   // INNER JOIN player_game USING(game_id) INNER JOIN player USING(player_id) INNER JOIN
-  //   // team USING(team_id) INNER JOIN player_role USING(post_abbr);`);
+    // const allAvailableRoles = await dbConnection.query(
+    //   `SELECT player_role.name,player_role.post_abbr FROM lobby INNER JOIN game USING(game_id)
+    //   INNER JOIN sport USING(sport_id)
+    //   INNER JOIN player_role USING(sport_id) WHERE lobby_id = ?;`,
+    //   [lobbyId],
+    // );
 
-  const playersInLobby = await dbConnection.query(
-    `SELECT player_id,firstname, lastname,team.name AS team ,post_abbr,player_role.name as post,goal,assist,win,clean_sheet,note FROM
+    // const playersInLobby = await dbConnection.query(`SELECT firstname,lastname,team.name,post_abbr FROM game INNER JOIN player_game USING(game_id)
+    // INNER JOIN player USING(player_id) INNER JOIN team USING(team_id);`);
+
+    // const playersInLobby = await dbConnection.query(`SELECT firstname, lastname,team.name AS team ,post_abbr,player_role.name as post FROM game
+    //   // INNER JOIN player_game USING(game_id) INNER JOIN player USING(player_id) INNER JOIN
+    //   // team USING(team_id) INNER JOIN player_role USING(post_abbr);`);
+
+    const playersInLobby = await dbConnection.query(
+      `SELECT player_id,firstname, lastname,team.name AS team ,post_abbr,player_role.name as post,goal,assist,win,clean_sheet,note FROM
   game INNER JOIN player_game USING(game_id) INNER JOIN player USING(player_id) INNER JOIN team USING(team_id)
   INNER JOIN player_role USING(post_abbr) INNER JOIN result USING(player_id) INNER JOIN matches USING(match_id);`,
-  );
+    );
 
-  // SELECT firstname, lastname,team.name AS team ,post_abbr,player_role.name as post,goal,assist,win,clean_sheet,note FROM
-  // game INNER JOIN player_game USING(game_id) INNER JOIN player USING(player_id) INNER JOIN team USING(team_id)
-  // INNER JOIN player_role USING(post_abbr) INNER JOIN result USING(player_id) INNER JOIN matches USING(match_id)
+    // SELECT firstname, lastname,team.name AS team ,post_abbr,player_role.name as post,goal,assist,win,clean_sheet,note FROM
+    // game INNER JOIN player_game USING(game_id) INNER JOIN player USING(player_id) INNER JOIN team USING(team_id)
+    // INNER JOIN player_role USING(post_abbr) INNER JOIN result USING(player_id) INNER JOIN matches USING(match_id)
 
-  // SELECT player_id,firstname,lastname,note,goal,assist
-  //   ,win,clean_sheet FROM matches INNER JOIN result USING(match_id) INNER JOIN player USING(player_id)
+    // SELECT player_id,firstname,lastname,note,goal,assist
+    //   ,win,clean_sheet FROM matches INNER JOIN result USING(match_id) INNER JOIN player USING(player_id)
 
   const bonificationForGame = await dbConnection.query(
     `SELECT goal,assist,clean_sheet_goalkeeper,clean_sheet_defender,win_mid_fielders,win_defender,
-  minimal_time FROM lobby INNER JOIN game USING(game_id) INNER JOIN bonification ON game.bonification_id = bonification.config_id
-  WHERE lobby_id = ?;`,
-    [lobbyId],
-  );
+  minimal_time FROM lobby INNER JOIN game USING(game_id) INNER JOIN bonification ON game.bonification_id = bonification.config_id WHERE lobby_id = ?;`,
+      [lobbyId],
+    );
 
-  const usersInLobby = await dbConnection.query(
-    `SELECT nickname FROM lobby INNER JOIN lobby_user USING(lobby_id) INNER JOIN users USING(user_id) WHERE lobby_id = ?;`,
-    [lobbyId],
-  );
+    const usersInLobby = await dbConnection.query(
+      `SELECT nickname FROM lobby INNER JOIN lobby_user USING(lobby_id) INNER JOIN users USING(user_id) WHERE lobby_id = ?;`,
+      [lobbyId],
+    );
 
-  const dbLobby = await dbConnection.query(
-    'SELECT lobby.game_id, sport_id FROM lobby INNER JOIN game ON game.game_id = lobby.game_id WHERE lobby_id = ? AND lobby.active = true;',
-    [lobbyId],
-  );
-  const { game_id: gameId } = dbLobby[0];
+    const dbLobby = await dbConnection.query(
+      'SELECT lobby.game_id, sport_id FROM lobby INNER JOIN game ON game.game_id = lobby.game_id WHERE lobby_id = ? AND lobby.active = true;',
+      [lobbyId],
+    );
+    const { game_id: gameId } = dbLobby[0];
 
-  const dbResponsePlayer = await dbConnection.query(
-    'SELECT player_game.player_id, firstname, lastname, number, player_game.post_abbr, player_game.team_ID, team.name FROM player_game INNER JOIN player ON player_game.player_id = player.player_id LEFT JOIN team ON player_game.team_id = team.team_id LEFT JOIN player_role ON player_game.post_abbr = player_role.post_abbr WHERE game_id = ? AND active = true;',
-    [gameId],
-  );
+    const dbResponsePlayer = await dbConnection.query(
+      'SELECT player_game.player_id, firstname, lastname, number, player_game.post_abbr, player_game.team_ID, team.name FROM player_game INNER JOIN player ON player_game.player_id = player.player_id LEFT JOIN team ON player_game.team_id = team.team_id LEFT JOIN player_role ON player_game.post_abbr = player_role.post_abbr WHERE game_id = ? AND active = true;',
+      [gameId],
+    );
 
-  const lobbyPlayersList = dbResponsePlayer.map(
-    ({
-      player_id: playerId,
-      firstname: firstName,
-      lastname: lastName,
-      name: team,
-      team_id: teamId,
-      post_abbr: position,
-      ...rest
-    }) => ({
-      playerId,
-      firstName,
-      lastName,
-      team,
-      teamId,
-      position,
-      ...rest,
-    }),
-  );
+    const lobbyPlayersList = dbResponsePlayer.map(
+      ({
+        player_id: playerId,
+        firstname: firstName,
+        lastname: lastName,
+        name: team,
+        team_id: teamId,
+        post_abbr: position,
+        ...rest
+      }) => ({
+        playerId,
+        firstName,
+        lastName,
+        team,
+        teamId,
+        position,
+        ...rest,
+      }),
+    );
 
   //After Draft Lobby Detail - selecty + kalkulace
   const usersInNomination = await dbConnection.query(
@@ -295,11 +318,11 @@ router.get('/:lobbyId', async (req, res, next) => {
 
   const draftStarted = dbResponsePlayersWithoutDrafOrder.length === 0;
 
-  // TODO map - currently mocked for demo
-  const draftStatus = draftStarted ? 'FINISHED' : 'NOT_STARTED';
+    // TODO map - currently mocked for demo
+    const draftStatus = draftStarted ? 'FINISHED' : 'NOT_STARTED';
 
-  // TODO
-  const userIsGroupOwner = true;
+    // TODO
+    const userIsGroupOwner = true;
 
   res.json({
     lobbyPlayersList,
@@ -315,7 +338,7 @@ router.get('/:lobbyId', async (req, res, next) => {
 
 router.post(
   '/:lobbyId/startDraft',
-  [check('draftRoundLimit').isNumeric()],
+  [check('lobbyId').isNumeric(), check('draftRoundLimit').isNumeric()],
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -325,9 +348,20 @@ router.post(
     }
 
     const { lobbyId } = req.params;
-    // todo add check to privilege, if draft starts group owner
-
+    const { draftRoundLimit } = req.body;
+    const { userId } = req.jwtDecoded;
     const dbConnection = req[DB_CONNECTION_KEY];
+
+    const dbResponseUser = await dbConnection.query(
+      'SELECT leader_id FROM lobby WHERE lobby_id = ? AND active = true;',
+      [lobbyId],
+    );
+
+    if (dbResponseUser[0].leader_id !== userId) {
+      return res
+        .status(403)
+        .json({ error: 'You are not allowed to launch the draft.' });
+    }
 
     await dbConnection.query('DELETE FROM invitation WHERE lobby_id = ?;', [
       lobbyId,
@@ -351,112 +385,13 @@ router.post(
       );
     });
 
-    res.json({});
+    await dbConnection.query(
+      'UPDATE lobby SET draft_start_at = ?, draft_round_limit = ? WHERE lobby_id = ?;',
+      [new Date(), draftRoundLimit, lobbyId],
+    );
+
+    res.json({ message: 'Draft started successfully' });
   },
 );
-
-router.get('/:lobbyId/fetchDraft', async (req, res, next) => {
-  const { lobbyId } = req.params;
-  const { userId } = req.jwtDecoded;
-
-  const dbConnection = req[DB_CONNECTION_KEY];
-
-  const dbResponsePlayers = await dbConnection.query(
-    `SELECT user_id FROM lobby_user WHERE draft_order IS NULL and lobby_id = ?;`,
-    [lobbyId],
-  );
-
-  if (dbResponsePlayers.length !== 0) {
-    return res.status(409).json({ error: "409: Draft didn't started" });
-  }
-
-  const dbLobby = await dbConnection.query(
-    'SELECT lobby.game_id, sport_id FROM lobby INNER JOIN game ON game.game_id = lobby.game_id WHERE lobby_id = ? AND lobby.active = true;',
-    [lobbyId],
-  );
-  const { game_id: gameId } = dbLobby[0];
-
-  const dbResponse = await dbConnection.query(
-    `SELECT users.nickname, lobby_user.user_id, lobby_user.draft, lobby_user.draft_order FROM lobby_user JOIN users ON lobby_user.user_id = users.user_id WHERE lobby_id = ? ORDER BY lobby_user.draft_order;`,
-    [lobbyId],
-  );
-
-  const draftOrder = dbResponse.map(
-    ({ user_id: userId, draft_order: draftOrder, ...rest }) => ({
-      userId,
-      draftOrder,
-      ...rest,
-    }),
-  );
-
-  // current user team
-  const dbResponsePlayerUser = await dbConnection.query(
-    'SELECT draft.player_id, firstname, lastname, number, player_game.post_abbr, player_game.team_ID, team.name FROM draft LEFT JOIN player_game ON draft.player_id = player_game.player_id INNER JOIN player ON draft.player_id = player.player_id LEFT JOIN team ON player_game.team_id = team.team_id LEFT JOIN player_role ON player_game.post_abbr = player_role.post_abbr WHERE draft.lobby_id = ? AND user_id = ? AND active = true;',
-    [lobbyId, userId],
-  );
-  const myTeam = dbResponsePlayerUser.map(
-    ({
-      player_id: playerId,
-      firstname: firstName,
-      lastname: lastName,
-      name: team,
-      team_id: teamId,
-      post_abbr: position,
-      ...rest
-    }) => ({
-      playerId,
-      firstName,
-      lastName,
-      team,
-      teamId,
-      position,
-      selected: true,
-      ...rest,
-    }),
-  );
-
-  // Time left to next draft round (next user)
-  const timeLeft = 66;
-
-  // All players with disabled for already picked (picked by all users in lobby)
-  const dbResponsePlayer = await dbConnection.query(
-    'SELECT player_game.player_id, firstname, lastname, number, player_game.post_abbr, player_game.team_ID, team.name FROM player_game INNER JOIN player ON player_game.player_id = player.player_id LEFT JOIN team ON player_game.team_id = team.team_id LEFT JOIN player_role ON player_game.post_abbr = player_role.post_abbr WHERE game_id = ? AND active = true;',
-    [gameId],
-  );
-  const draftPlayersList = dbResponsePlayer.map(
-    ({
-      player_id: playerId,
-      firstname: firstName,
-      lastname: lastName,
-      name: team,
-      team_id: teamId,
-      post_abbr: position,
-      ...rest
-    }) => ({
-      playerId,
-      firstName,
-      lastName,
-      team,
-      teamId,
-      position,
-      ...rest,
-    }),
-  );
-
-  // index + 1 - current user, who is on turn in draft process
-  const activeDraftOrder = 1;
-
-  // draft in progress or paused - set pause and continue can only group owner
-  const isPaused = true;
-
-  res.json({
-    draftOrder,
-    activeDraftOrder,
-    myTeam,
-    timeLeft,
-    draftPlayersList,
-    isPaused,
-  });
-});
 
 export default router;
