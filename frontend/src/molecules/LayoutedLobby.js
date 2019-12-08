@@ -25,14 +25,14 @@ export const LayoutedLobby = ({
   const { t } = useTranslation();
 
   let lobbyStatusColor = 'danger';
-  let lobbyStatusText = 'Not enough players';
+  let lobbyStatusText = t('Molecules.LayoutedLobby.NotEnough');
 
   if (joinedUsers >= minUsers) {
     lobbyStatusColor = 'warning';
-    lobbyStatusText = 'Ready';
+    lobbyStatusText = t('Molecules.LayoutedLobby.Enough');
   } else if (joinedUsers === maxUsers) {
     lobbyStatusColor = 'success';
-    lobbyStatusText = 'Ready and full';
+    lobbyStatusText = t('Molecules.LayoutedLobby.Full');
   }
 
   return (
