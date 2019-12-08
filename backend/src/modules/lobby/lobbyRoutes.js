@@ -42,7 +42,7 @@ router.post(
     }
 
     const dbConnection = req[DB_CONNECTION_KEY];
-    const { eventId, lobbyName, emails } = req.body;
+    const { eventId, lobbyName, emails, draftStartTime } = req.body;
     const { userId } = req.jwtDecoded;
 
     const eventDetail = await dbConnection.query(
@@ -57,6 +57,11 @@ router.post(
       if ((emails.length < minEmails, emails.length > maxEmails)) {
         return res.status(422).json({
           error: '422: Emails are not in interval <minEmails, maxEmails>',
+        });
+      }
+      if(draftStartTime < Date.now) {
+        return res.status(422).json({
+          error: 'Draft time must be in the future',
         });
       }
     } else {
@@ -78,8 +83,8 @@ router.post(
 
     // add lobby to DB
     const lobbyResponse = await dbConnection.query(
-      'INSERT INTO lobby (game_id, leader_id, name, max_players, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW());',
-      [eventId, userId, lobbyName, emails.length + 1],
+      'INSERT INTO lobby (game_id, leader_id, name, max_players, draft_start_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW());',
+      [eventId, userId, lobbyName, emails.length + 1, draftStartTime],
     );
     const lobbyId = lobbyResponse.insertId;
 

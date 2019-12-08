@@ -28,6 +28,8 @@
       "ModalHeaderLabel": "Vytvořit skupinu pro událost {{eventName}}",
       "LobbyName": "Jméno nové skupiny",
       "LobbyNamePlaceholder": "Vyplňte jméno skupiny",
+      "DraftStartTime": "Začátek draftu",
+      "DraftTimePlaceholder": "Vyplňte začátek draftu",
       "SubmitNewLobbyForm": "Vytvořit skupinu",
       "Emails": "Emaily pro ostatní členy skupiny",
       "EmailsPlaceholder": "Zadejte emaily oddělené ',' - minimálně {{min}} a maximálně {{max}}"
@@ -220,6 +222,7 @@
     "EmailsMinMax": "Počet emailů musí být minimálně {{min}} a maximálně {{max}}",
     "SelectRequired": "Musíte vybrat hodnotu",
     "FileRequired": "Nahrajte soubor",
-    "NumberMin": "Zadejte číslo větší než {{min}}"
+    "NumberMin": "Zadejte číslo větší než {{min}}",
+    "Date": "Neplatný datum"
   }
 }
