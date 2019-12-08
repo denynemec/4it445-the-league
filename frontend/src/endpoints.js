@@ -15,6 +15,7 @@ export default {
   getEventDetail: id => `${apiPrefix}/event/${id}`,
   getLobbyDetail: id => `${apiPrefix}/lobby/${id}`,
   fetchDraft: id => `${apiPrefix}/lobby/${id}/fetchDraft`,
+  refrestDraftState: id => `${apiPrefix}/lobby/${id}/refrestDraftState`,
   startDraft: id => `${apiPrefix}/lobby/${id}/startDraft`,
   resetPassword: () => `${apiPrefix}/auth/reset-password`,
   getJoinToLobbyDetail: lobbyHash =>
