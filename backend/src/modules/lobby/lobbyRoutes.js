@@ -246,7 +246,7 @@ router.get(
 
 router.post(
   '/:lobbyId/startDraft',
-  [check('draftRoundLimit').isNumeric()],
+  [check('lobbyId').isNumeric(), check('draftRoundLimit').isNumeric()],
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -256,9 +256,20 @@ router.post(
     }
 
     const { lobbyId } = req.params;
-    // todo add check to privilege, if draft starts group owner
-
+    const { draftRoundLimit } = req.body;
+    const { userId } = req.jwtDecoded;
     const dbConnection = req[DB_CONNECTION_KEY];
+
+    const dbResponseUser = await dbConnection.query(
+      'SELECT leader_id FROM lobby WHERE lobby_id = ? AND active = true;',
+      [lobbyId],
+    );
+
+    if (dbResponseUser[0].leader_id !== userId) {
+      return res
+        .status(403)
+        .json({ error: 'You are not allowed to launch the draft.' });
+    }
 
     await dbConnection.query('DELETE FROM invitation WHERE lobby_id = ?;', [
       lobbyId,
@@ -282,7 +293,12 @@ router.post(
       );
     });
 
-    res.json({});
+    await dbConnection.query(
+      'UPDATE lobby SET draft_start_at = ?, draft_round_limit = ? WHERE lobby_id = ?;',
+      [new Date(), draftRoundLimit, lobbyId],
+    );
+
+    res.json({ message: 'Draft started successfully' });
   },
 );
 

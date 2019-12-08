@@ -28,13 +28,6 @@ export const getDraftState = async ({
   let userOnTurn = false;
   let activeDraftOrder;
   if (isEven(draftUser.draftRound + 1) === true) {
-    activeDraftOrder =
-      (totalRounds + 1) % draftState.max_players !== 0
-        ? draftState.max_players +
-          1 -
-          ((totalRounds + 1) % draftState.max_players)
-        : draftState.max_players;
-        console.log("tady")
     if (totalRounds > draftUser.draftRound * draftState.max_players) {
       if (
         totalRounds % draftState.max_players ==
@@ -74,6 +67,20 @@ export const getDraftState = async ({
         draftState.draft_round_limit;
     }
   }
+
+  const evenRound = totalRounds / draftState.max_players + 1;
+  if (totalRounds == 0) {
+    activeDraftOrder = 1;
+  } else {
+    activeDraftOrder =
+      (totalRounds + 1) % draftState.max_players !== 0
+        ? (totalRounds + 1) % draftState.max_players
+        : draftState.max_players;
+  }
+  if (evenRound % 2 < 1) {
+    activeDraftOrder = draftState.max_players - activeDraftOrder + 1;
+  }
+
   const timeOfNextRound = new Date(
     draftState.draft_start_at.getTime() +
       1000 * draftState.draft_time_offset +
