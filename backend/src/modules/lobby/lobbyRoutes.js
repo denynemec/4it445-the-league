@@ -145,12 +145,12 @@ router.get(
       return res.status(422).json({ error: 'Lobby is not exist.' });
     }
 
-    const dbResponseAccesLobby = await dbConnection.query(
+    const dbResponseAccessLobby = await dbConnection.query(
       'SELECT lobby_id FROM lobby_user WHERE lobby_id = ? AND user_id = ?;',
       [lobbyId, userId],
     );
 
-    if (dbResponseAccesLobby.length === 0) {
+    if (dbResponseAccessLobby.length === 0) {
       return res
         .status(403)
         .json({ error: 'You are not allowed to view this lobby' });

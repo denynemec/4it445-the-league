@@ -33,7 +33,7 @@ router.get('/state', [check('lobbyId').isNumeric()], async (req, res, next) => {
   const draftState = dbResponseDraftState[0];
   if (
     draftState.draft_start_at > Date.now() ||
-    draftState.draft_start_at == null
+    draftState.draft_start_at === null
   ) {
     return res.status(409).json({ error: '409: Draft have not started yet.' });
   }
