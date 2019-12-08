@@ -161,6 +161,7 @@
     },
     "Draft": {
       "Heading": "Draft ",
+      "DraftOrderHeading": "Pořadí hráčů v draftu",
       "DraftTableHeading": "Hráči",
       "DraftPlayersTable": {
         "FirstName": "Jméno",
@@ -177,6 +178,27 @@
         "LastName": "Příjmení",
         "Position": "Pozice",
         "Team": "Tým"
+      }
+    },
+    "AfterDraftLobbyDetail": {
+      "Header": "Čistý zisk / ztráta za jednotlivá kola",
+      "Note": "Kolo",
+      "Users": "Uživatelé ve skupině",
+      "Notes": {
+        "1": "1. kolo",
+        "2": "2. kolo",
+        "3": "3. kolo",
+        "4": "4. kolo",
+        "5": "5. kolo",
+        "6": "6. kolo",
+        "7": "7. kolo",
+        "8": "8. kolo",
+        "9": "9. kolo",
+        "10": "10. kolo",
+        "quarterfinals": "Čtvrtfinále",
+        "semifinals": "Semifinále",
+        "final": "Finále",
+        "total": "Celkem"
       }
     },
     "PlayersTableHeader": {

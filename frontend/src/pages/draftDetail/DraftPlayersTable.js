@@ -77,6 +77,7 @@ export const DraftPlayersTable = ({
       globalFilter={filterDraftPlayers}
       ref={dataTableRef}
       rowClassName={disabledRowsClass}
+      responsive
     >
       <Column
         field="firstName"
