@@ -32,7 +32,7 @@ export const NewLobbyForm = ({
   const maxEmails = maxUsers - 1;
 
   const onSubmitMemoized = useCallback(
-    ({ lobbyName, emails }) => {
+    ({ lobbyName, draftStartTime, emails }) => {
       newLobbyState.request(ENDPOINTS.newLobby(), {
         method: 'POST',
         onSuccess: ({ data: { lobbyId } }) => {
@@ -41,6 +41,7 @@ export const NewLobbyForm = ({
         },
         data: {
           lobbyName,
+          draftStartTime,
           emails: Object.values(emailsStringToEmailArray(emails)),
           eventId,
         },
@@ -50,13 +51,16 @@ export const NewLobbyForm = ({
     [newLobbyState, history, eventId, alert],
   );
 
-  const { object, uniqueMinMaxEmails, requiredString } = translatedValidations(
-    t,
-  );
+  const {
+    object,
+    uniqueMinMaxEmails,
+    requiredString,
+    requiredDate,
+  } = translatedValidations(t);
 
   const schema = object({
     lobbyName: requiredString,
-
+    draftStartTime: requiredDate,
     emails: uniqueMinMaxEmails({ min: minEmails, max: maxEmails }),
   });
 
@@ -71,7 +75,7 @@ export const NewLobbyForm = ({
       <ErrorBox errorList={[{ id: 1, error: newLobbyState.error }]} />
 
       <Formik
-        initialValues={{ lobbyName: '', emails: '' }}
+        initialValues={{ lobbyName: '', emails: '', draftStartTime: '' }}
         validationSchema={schema}
         onSubmit={onSubmitMemoized}
       >
@@ -81,6 +85,13 @@ export const NewLobbyForm = ({
             name="lobbyName"
             label={t('Organisms.NewLobbyForm.LobbyName')}
             placeholder={t('Organisms.NewLobbyForm.LobbyNamePlaceholder')}
+          />
+
+          <Field
+            type="datetime-local"
+            name="draftStartTime"
+            label={t('Organisms.NewLobbyForm.DraftStartTime')}
+            placeholder={t('Organisms.NewLobbyForm.DraftTimePlaceholder')}
           />
 
           <Field

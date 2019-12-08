@@ -12,17 +12,22 @@ export const translatedValidations = t => ({
   selectRequired: selectRequired(t),
   fileRequired: fileRequired(t),
   numberMin: numberMin(t),
+  requiredDate: requiredDate(t),
 });
 
 const string = () => yup.string();
 
 const number = () => yup.number();
 
+const date = () => yup.date();
+
 const requiredString = t => string(t).required(t('Validations.Required'));
 
 const email = t => string(t).email(t('Validations.Email'));
 
 const requiredEmail = t => requiredString(t).email(t('Validations.Email'));
+
+const requiredDate = t => date(t).required(t('Validations.Date'));
 
 const passwordsDontMatch = t => passwordFieldName =>
   requiredString(t).oneOf(
