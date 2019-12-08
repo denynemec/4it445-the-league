@@ -65,7 +65,7 @@ router.post(
           error: '422: Emails are not in interval <minEmails, maxEmails>',
         });
       }
-      if(draftStartTime < Date.now) {
+      if (draftStartTime < Date.now) {
         return res.status(422).json({
           error: 'Draft time must be in the future',
         });
@@ -378,14 +378,26 @@ router.post(
     const dbConnection = req[DB_CONNECTION_KEY];
 
     const dbResponseUser = await dbConnection.query(
-      'SELECT leader_id FROM lobby WHERE lobby_id = ? AND active = true;',
+      'SELECT leader_id, count(user_id) as userCount, min_users FROM lobby LEFT JOIN lobby_user ON lobby.lobby_id = lobby_user.lobby_id LEFT JOIN game USING (game_id) WHERE lobby.lobby_id = ? AND lobby.active = true;',
       [lobbyId],
     );
 
     if (dbResponseUser[0].leader_id !== userId) {
       return res
         .status(403)
-        .json({ error: 'You are not allowed to launch the draft.' });
+        .json({
+          error:
+            'You are not allowed to launch this draft because you are not the leader.',
+        });
+    }
+
+    if (dbResponseUser[0].userCount < dbResponseUser[0].min_users) {
+      return res
+        .status(422)
+        .json({
+          error:
+            'You can not start this draft because there are not enough users.',
+        });
     }
 
     await dbConnection.query('DELETE FROM invitation WHERE lobby_id = ?;', [
