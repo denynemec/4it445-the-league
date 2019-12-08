@@ -5,7 +5,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { MultiSelect } from 'primereact/multiselect';
 import { InputText } from 'primereact/inputtext';
-import { Button } from '../../atoms';
+import { Button } from 'reactstrap';
 
 export const DraftPlayersTable = ({
   draftPlayersList,
@@ -36,7 +36,7 @@ export const DraftPlayersTable = ({
 
   const footer = (
     <Button
-      primary
+      color="primary"
       disabled={!selectedRow || selectedRow.selected || isDisabled}
     >
       {t('Page.Draft.DraftPlayersTable.PickDraftPlayer')}

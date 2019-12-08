@@ -10,13 +10,13 @@ export const NotLoggedInHeader = () => {
   return (
     <HeaderBase homeLinkTo={PATHNAMES.login()}>
       <NavItem className="m-1">
-        <NavLink href={PATHNAMES.login()}>
+        <NavLink href={PATHNAMES.login()} className="text-white">
           {t('Organisms.NotLoggedInHeader.LoginLink')}
         </NavLink>
       </NavItem>
 
       <NavItem className="m-1">
-        <NavLink href={PATHNAMES.registration()}>
+        <NavLink href={PATHNAMES.registration()} className="text-white">
           {t('Organisms.NotLoggedInHeader.RegisterLink')}
         </NavLink>
       </NavItem>

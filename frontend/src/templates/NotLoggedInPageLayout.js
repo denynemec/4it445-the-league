@@ -2,7 +2,7 @@ import React from 'react';
 
 import { NoContainerSectionWithErrorBox } from '../molecules';
 import { NotLoggedInHeader } from '../organisms';
-import { Col } from 'reactstrap';
+import { Container } from 'reactstrap';
 import './customStyles.css';
 
 export const NotLoggedInPageLayout = ({ children, errorList }) => (
@@ -13,10 +13,10 @@ export const NotLoggedInPageLayout = ({ children, errorList }) => (
       errorList={errorList || []}
       className="notLoggedBackground p-5"
     >
-      <div className="notLoggedBack">
-        <Col sm={{ size: 6, offset: 3 }} className="p-5 backgroundLight">
+      <div>
+        <Container className="p-5 backgroundLightNotLogged">
           {children}
-        </Col>
+        </Container>
       </div>
     </NoContainerSectionWithErrorBox>
   </>

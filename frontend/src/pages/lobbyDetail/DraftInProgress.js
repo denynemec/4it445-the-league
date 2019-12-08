@@ -3,7 +3,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import PATHNAMES from '../../pathnames';
-import { Button, Layout } from '../../atoms';
+import { Layout } from '../../atoms';
+import { Button } from 'reactstrap';
 
 export const DraftInProgress = ({ draftState }) => {
   const { t } = useTranslation();
@@ -13,7 +14,7 @@ export const DraftInProgress = ({ draftState }) => {
   return (
     <Layout pt3 flex justify-center>
       <Button
-        primary
+        color="primary"
         onClick={() => history.push(PATHNAMES.getDraftDetail(lobbyId))}
         disabled={draftState.loading}
       >
