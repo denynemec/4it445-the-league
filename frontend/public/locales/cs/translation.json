@@ -240,6 +240,6 @@
     "SelectRequired": "Musíte vybrat hodnotu",
     "FileRequired": "Nahrajte soubor",
     "NumberMin": "Zadejte číslo větší než {{min}}",
-    "Date": "Neplatný datum"
+    "Date": "Neplatné datum"
   }
 }
