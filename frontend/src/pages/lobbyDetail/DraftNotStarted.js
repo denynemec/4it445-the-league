@@ -10,12 +10,16 @@ import { Field } from '../../organisms';
 import { translatedValidations } from '../../utils';
 import { LobbyAvailablePlayersTable } from './LobbyAvailablePlayersTable';
 import { Button } from 'reactstrap';
+import { BeforeDraftLobbyDetail } from './BeforeDraftLobbyDetail';
 
 export const DraftNotStarted = ({
   lobbyPlayersList,
   draftState,
   userIsGroupOwner,
   positions,
+  lobbyDetailInfo,
+  userCount,
+  notAcceptedInvitation,
 }) => {
   const { t } = useTranslation();
   const history = useHistory();
@@ -42,6 +46,11 @@ export const DraftNotStarted = ({
 
   return (
     <>
+    <BeforeDraftLobbyDetail
+      lobbyDetailInfo={lobbyDetailInfo}
+      userCount={userCount}
+      notAcceptedInvitation={notAcceptedInvitation}
+    />
       <LobbyAvailablePlayersTable
         lobbyPlayersList={lobbyPlayersList}
         positions={positions}

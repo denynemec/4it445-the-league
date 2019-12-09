@@ -65,7 +65,7 @@ router.post(
           error: '422: Emails are not in interval <minEmails, maxEmails>',
         });
       }
-      if(draftStartTime < Date.now) {
+      if (draftStartTime < Date.now) {
         return res.status(422).json({
           error: 'Draft time must be in the future',
         });
@@ -142,7 +142,7 @@ router.get(
     const { userId } = req.jwtDecoded;
 
     const dbResponseLobby = await dbConnection.query(
-      'SELECT lobby_id FROM lobby WHERE lobby_id = ? AND active = true;',
+      'SELECT lobby_id, lobby.name as lobbyName, draft_start_at, max_players, lobby.game_id, game.name as event, sport_id, sport.name as sport, firstname, lastname, min_users FROM lobby LEFT JOIN users ON lobby.leader_id = users.user_id INNER JOIN game ON game.game_id = lobby.game_id LEFT JOIN sport USING (sport_id) WHERE lobby_id = ? AND lobby.active = true;',
       [lobbyId],
     );
 
@@ -160,6 +160,36 @@ router.get(
         .status(403)
         .json({ error: 'You are not allowed to view this lobby' });
     }
+
+    const { game_id: gameId } = dbResponseLobby[0];
+    const lobbyDetailInfo = dbResponseLobby.map(
+      ({
+        lobby_id: lobbyId,
+        draft_start_at: draftStartAt,
+        max_players: maxUsers,
+        min_users: minUsers,
+        ...rest
+      }) => ({
+        lobbyId,
+        draftStartAt,
+        maxUsers,
+        minUsers,
+        ...rest,
+      }),
+    );
+
+    const dbResponseUsers = await dbConnection.query(
+      'SELECT count(user_id) as userCount FROM lobby_user WHERE lobby_id = ?;',
+      [lobbyId],
+    );
+    const { userCount } = dbResponseUsers[0];
+
+    const dbInvitationResponse = await dbConnection.query(
+      'SELECT email FROM invitation WHERE lobby_id = ?;',
+      [lobbyId],
+    );
+    
+    const notAcceptedInvitation = dbInvitationResponse.map(invitation => invitation.email);
 
     //TODO: other way of this check
     const dbResponsePlayersWithoutDrafOrder = await dbConnection.query(
@@ -210,12 +240,6 @@ router.get(
       `SELECT nickname FROM lobby INNER JOIN lobby_user USING(lobby_id) INNER JOIN users USING(user_id) WHERE lobby_id = ?;`,
       [lobbyId],
     );
-
-    const dbLobby = await dbConnection.query(
-      'SELECT lobby.game_id, sport_id FROM lobby INNER JOIN game ON game.game_id = lobby.game_id WHERE lobby_id = ? AND lobby.active = true;',
-      [lobbyId],
-    );
-    const { game_id: gameId } = dbLobby[0];
 
     const dbResponsePlayer = await dbConnection.query(
       'SELECT player_game.player_id, firstname, lastname, number, player_game.post_abbr, player_game.team_ID, team.name FROM player_game INNER JOIN player ON player_game.player_id = player.player_id LEFT JOIN team ON player_game.team_id = team.team_id LEFT JOIN player_role ON player_game.post_abbr = player_role.post_abbr WHERE game_id = ? AND active = true;',
@@ -357,6 +381,9 @@ router.get(
       userIsGroupOwner,
       usersInNomination,
       profitsPerRound,
+      lobbyDetailInfo,
+      userCount,
+      notAcceptedInvitation,
     });
   },
 );

@@ -210,6 +210,16 @@
         "total": "Celkem"
       }
     },
+    "BeforeDraftLobbyDetail": {
+      "Heading": "Lobby {{name}}",
+      "DraftStartTime": "Začátek draftu {{date}}",
+      "MinUsers": "Minimální počet uživatelů: {{minUsers}}",
+      "MaxUsers": "Maximální počet uživatelů: {{maxUsers}}",
+      "UserCount": "Počet připojených uživatelů: {{userCount}}",
+      "NotAcceptedInvitation": "Nepřijaté pozvánky: {{email}}",
+      "SendReminder": "Poslat upomínku",
+      "Sport": "Sport: {{name}}"
+    },
     "PlayersTableHeader": {
       "PlayerName": "Jméno hráče",
       "Team": "Tým",
