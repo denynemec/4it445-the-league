@@ -81,6 +81,8 @@ export const getDraftState = async ({
     activeDraftOrder = draftState.max_players - activeDraftOrder + 1;
   }
 
+  userOnTurn = activeDraftOrder === draftOrder.draft_order ? true : false;
+
   const timeOfNextRound = new Date(
     draftState.draft_start_at.getTime() +
       1000 * draftState.draft_time_offset +
