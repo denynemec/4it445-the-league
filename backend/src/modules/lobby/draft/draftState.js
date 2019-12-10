@@ -27,6 +27,7 @@ export const getDraftState = async ({
   let secondsToNextRound = 0;
   let userOnTurn = false;
   let activeDraftOrder;
+  //TODO: necessary refactoring
   if (isEven(draftUser.draftRound + 1) === true) {
     if (totalRounds > draftUser.draftRound * draftState.max_players) {
       if (
@@ -81,12 +82,27 @@ export const getDraftState = async ({
     activeDraftOrder = draftState.max_players - activeDraftOrder + 1;
   }
 
+  userOnTurn = activeDraftOrder === draftOrder.draft_order;
+
+  if (userOnTurn) {
+    secondsToNextRound = (totalRounds + 1) * draftState.draft_round_limit;
+  }
+
   const timeOfNextRound = new Date(
     draftState.draft_start_at.getTime() +
       1000 * draftState.draft_time_offset +
       1000 * secondsToNextRound,
   );
   const timeLeft = (timeOfNextRound - Date.now()) / 1000;
+
+  const dbGameResponse = await dbConnection.query(
+    'SELECT draft_players FROM game WHERE game_id = ?;',
+    [draftState.game_id],
+  );
+  let finished = false;
+  if (totalRounds >= draftState.max_players * dbGameResponse[0].draft_players) {
+    finished = true;
+  }
 
   // All already drafted players (picked by all users in lobby)
   const dbResponseDraft = await dbConnection.query(
@@ -105,6 +121,7 @@ export const getDraftState = async ({
   return {
     timeLeft,
     userOnTurn,
+    finished,
     timeOfNextRound,
     totalRounds,
     activeDraftOrder,

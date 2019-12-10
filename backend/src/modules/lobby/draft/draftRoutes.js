@@ -47,12 +47,10 @@ router.get('/state', [check('lobbyId').isNumeric()], async (req, res, next) => {
 
   if (state.userOnTurn && state.timeLeft < 0) {
     let dbRandomPlayer;
-    // TODO connect to DB
-    const pickedPlayerList = [];
-    if (pickedPlayerList.length > 0) {
+    if (state.selectedPlayersIdList.length > 0) {
       dbRandomPlayer = await dbConnection.query(
         'SELECT player_id FROM player_game WHERE game_id = ? AND player_id NOT IN ? ORDER BY RAND() LIMIT 1',
-        [draftState.game_id, pickedPlayerList],
+        [draftState.game_id, state.selectedPlayersIdList],
       );
     } else {
       dbRandomPlayer = await dbConnection.query(
