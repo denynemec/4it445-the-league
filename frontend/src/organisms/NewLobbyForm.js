@@ -36,6 +36,7 @@ export const NewLobbyForm = ({
       newLobbyState.request(ENDPOINTS.newLobby(), {
         method: 'POST',
         onSuccess: ({ data: { lobbyId } }) => {
+          onCloseClick();
           alert.success('Lobby created successfully');
           history.push(PATHNAMES.getLobbyDetail(lobbyId));
         },
