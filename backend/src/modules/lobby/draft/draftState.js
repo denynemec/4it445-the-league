@@ -82,7 +82,7 @@ export const getDraftState = async ({
     activeDraftOrder = draftState.max_players - activeDraftOrder + 1;
   }
 
-  userOnTurn = activeDraftOrder === draftOrder.draft_order ? true : false;
+  userOnTurn = activeDraftOrder === draftOrder.draft_order;
 
   if (userOnTurn) {
     secondsToNextRound = (totalRounds + 1) * draftState.draft_round_limit;
@@ -94,8 +94,13 @@ export const getDraftState = async ({
       1000 * secondsToNextRound,
   );
   const timeLeft = (timeOfNextRound - Date.now()) / 1000;
+
+  const dbGameResponse = await dbConnection.query(
+    'SELECT draft_players FROM game WHERE game_id = ?;',
+    [draftState.game_id],
+  );
   let finished = false;
-  if (totalRounds >= draftState.max_players * 18) {
+  if (totalRounds >= draftState.max_players * dbGameResponse[0].draft_players) {
     finished = true;
   }
 
