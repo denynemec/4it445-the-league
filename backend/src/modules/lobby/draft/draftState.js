@@ -102,6 +102,7 @@ export const getDraftState = async ({
   let finished = false;
   if (totalRounds >= draftState.max_players * dbGameResponse[0].draft_players) {
     finished = true;
+    userOnTurn = false;
   }
 
   // All already drafted players (picked by all users in lobby)
