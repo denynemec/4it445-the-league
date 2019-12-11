@@ -9,6 +9,7 @@ export const BeforeDraftLobbyDetail = ({
   lobbyDetailInfo,
   userCount,
   notAcceptedInvitation,
+  userIsGroupOwner,
 }) => {
   const { t } = useTranslation();
   return (
@@ -48,9 +49,11 @@ export const BeforeDraftLobbyDetail = ({
           email: notAcceptedInvitation,
         })}
       </Paragraph>
-      <Button color="primary">
-        {t('Page.BeforeDraftLobbyDetail.SendReminder')}
-      </Button>
+      {userIsGroupOwner && (
+        <Button color="primary">
+          {t('Page.BeforeDraftLobbyDetail.SendReminder')}
+        </Button>
+      )}
     </Jumbo>
   );
 };

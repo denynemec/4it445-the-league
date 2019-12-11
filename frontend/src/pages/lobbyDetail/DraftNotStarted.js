@@ -46,11 +46,12 @@ export const DraftNotStarted = ({
 
   return (
     <>
-    <BeforeDraftLobbyDetail
-      lobbyDetailInfo={lobbyDetailInfo}
-      userCount={userCount}
-      notAcceptedInvitation={notAcceptedInvitation}
-    />
+      <BeforeDraftLobbyDetail
+        lobbyDetailInfo={lobbyDetailInfo}
+        userCount={userCount}
+        notAcceptedInvitation={notAcceptedInvitation}
+        userIsGroupOwner={userIsGroupOwner}
+      />
       <LobbyAvailablePlayersTable
         lobbyPlayersList={lobbyPlayersList}
         positions={positions}

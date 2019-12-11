@@ -76,17 +76,15 @@ export const DraftDetail = () => {
         refreshDraftState: false,
       }));
 
-      setTimeout(() => {
-        refrestDraftState.request(ENDPOINTS.refrestDraftState(lobbyId), {
-          method: 'GET',
-          onSuccess: response =>
-            updateDraftState(
-              response,
-              draftStateData.draftOrder,
-              draftStateData.draftPlayersListRaw,
-            ),
-        });
-      }, 3000);
+      refrestDraftState.request(ENDPOINTS.refrestDraftState(lobbyId), {
+        method: 'GET',
+        onSuccess: response =>
+          updateDraftState(
+            response,
+            draftStateData.draftOrder,
+            draftStateData.draftPlayersListRaw,
+          ),
+      });
     }
   }, [
     draftStateData,
@@ -169,8 +167,16 @@ const getDraftPlayers = (draftPlayers, selectedPlayersIdList) =>
   });
 
 // Static text for now, in future re-design and circular timer or something like that?
-const TimerCountdown = ({ timeLeft, isPaused }) => (
-  <Layout flex justify-center>
-    {`Zbyvajici cas: ${timeLeft} s${isPaused ? ' (Draft pozastaven)' : ''}`}
-  </Layout>
-);
+const TimerCountdown = ({ timeLeft, isPaused }) => {
+  const min = Math.round(timeLeft / 60);
+
+  const sec = Math.round(timeLeft % 60);
+
+  return (
+    <Layout flex justify-center>
+      {`Zbyvajici cas: ${min} min ${sec} s${
+        isPaused ? ' (Draft pozastaven)' : ''
+      }`}
+    </Layout>
+  );
+};
