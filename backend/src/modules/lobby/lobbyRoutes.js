@@ -65,11 +65,13 @@ router.post(
           error: '422: Emails are not in interval <minEmails, maxEmails>',
         });
       }
-      if (Date.parse(draftStartTime) < Date.now()) {
+      /*
+      if (draftStartTime < Date.now) {
         return res.status(422).json({
           error: 'Draft time must be in the future',
         });
       }
+      */
     } else {
       return res.status(422).json({
         error: '422: The game was cancelled.',
@@ -142,7 +144,7 @@ router.get(
     const { userId } = req.jwtDecoded;
 
     const dbResponseLobby = await dbConnection.query(
-      'SELECT lobby_id, lobby.name as lobbyName, draft_start_at, max_players, lobby.game_id, game.name as event, sport_id, sport.name as sport, firstname, lastname, min_users FROM lobby LEFT JOIN users ON lobby.leader_id = users.user_id INNER JOIN game ON game.game_id = lobby.game_id LEFT JOIN sport USING (sport_id) WHERE lobby_id = ? AND lobby.active = true;',
+      'SELECT lobby_id, lobby.name as lobbyName, draft_start_at, max_players, leader_id, lobby.game_id, game.name as event, sport_id, sport.name as sport, firstname, lastname, min_users FROM lobby LEFT JOIN users ON lobby.leader_id = users.user_id INNER JOIN game ON game.game_id = lobby.game_id LEFT JOIN sport USING (sport_id) WHERE lobby_id = ? AND lobby.active = true;',
       [lobbyId],
     );
 
@@ -168,12 +170,14 @@ router.get(
         draft_start_at: draftStartAt,
         max_players: maxUsers,
         min_users: minUsers,
+        leader_id: leaderId,
         ...rest
       }) => ({
         lobbyId,
         draftStartAt,
         maxUsers,
         minUsers,
+        leaderId,
         ...rest,
       }),
     );
@@ -188,10 +192,8 @@ router.get(
       'SELECT email FROM invitation WHERE lobby_id = ?;',
       [lobbyId],
     );
-
-    const notAcceptedInvitation = dbInvitationResponse.map(
-      invitation => invitation.email,
-    );
+    
+    const notAcceptedInvitation = dbInvitationResponse.map(invitation => invitation.email);
 
     //TODO: other way of this check
     const dbResponsePlayersWithoutDrafOrder = await dbConnection.query(
@@ -371,14 +373,7 @@ router.get(
     // TODO map - currently mocked for demo
     const draftStatus = draftStarted ? 'FINISHED' : 'NOT_STARTED';
 
-    // TODO improve
-    const dbResponseLobbyOwnerUser = await dbConnection.query(
-      'SELECT leader_id FROM lobby LEFT JOIN lobby_user ON lobby.lobby_id = lobby_user.lobby_id LEFT JOIN game USING (game_id) WHERE lobby.lobby_id = ? AND lobby.active = true;',
-      [lobbyId],
-    );
-
-    // TODO
-    const userIsGroupOwner = dbResponseLobbyOwnerUser[0].leader_id === userId;
+    const userIsGroupOwner = lobbyDetailInfo[0].leaderId === userId;
 
     res.json({
       lobbyPlayersList,
@@ -418,17 +413,21 @@ router.post(
     );
 
     if (dbResponseUser[0].leader_id !== userId) {
-      return res.status(403).json({
-        error:
-          'You are not allowed to launch this draft because you are not the leader.',
-      });
+      return res
+        .status(403)
+        .json({
+          error:
+            'You are not allowed to launch this draft because you are not the leader.',
+        });
     }
 
     if (dbResponseUser[0].userCount < dbResponseUser[0].min_users) {
-      return res.status(422).json({
-        error:
-          'You can not start this draft because there are not enough users.',
-      });
+      return res
+        .status(422)
+        .json({
+          error:
+            'You can not start this draft because there are not enough users.',
+        });
     }
 
     await dbConnection.query('DELETE FROM invitation WHERE lobby_id = ?;', [
