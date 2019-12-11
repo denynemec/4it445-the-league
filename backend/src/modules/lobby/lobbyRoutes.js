@@ -188,8 +188,10 @@ router.get(
       'SELECT email FROM invitation WHERE lobby_id = ?;',
       [lobbyId],
     );
-    
-    const notAcceptedInvitation = dbInvitationResponse.map(invitation => invitation.email);
+
+    const notAcceptedInvitation = dbInvitationResponse.map(
+      invitation => invitation.email,
+    );
 
     //TODO: other way of this check
     const dbResponsePlayersWithoutDrafOrder = await dbConnection.query(
@@ -369,8 +371,14 @@ router.get(
     // TODO map - currently mocked for demo
     const draftStatus = draftStarted ? 'FINISHED' : 'NOT_STARTED';
 
+    // TODO improve
+    const dbResponseLobbyOwnerUser = await dbConnection.query(
+      'SELECT leader_id FROM lobby LEFT JOIN lobby_user ON lobby.lobby_id = lobby_user.lobby_id LEFT JOIN game USING (game_id) WHERE lobby.lobby_id = ? AND lobby.active = true;',
+      [lobbyId],
+    );
+
     // TODO
-    const userIsGroupOwner = true;
+    const userIsGroupOwner = dbResponseLobbyOwnerUser[0].leader_id === userId;
 
     res.json({
       lobbyPlayersList,
@@ -410,21 +418,17 @@ router.post(
     );
 
     if (dbResponseUser[0].leader_id !== userId) {
-      return res
-        .status(403)
-        .json({
-          error:
-            'You are not allowed to launch this draft because you are not the leader.',
-        });
+      return res.status(403).json({
+        error:
+          'You are not allowed to launch this draft because you are not the leader.',
+      });
     }
 
     if (dbResponseUser[0].userCount < dbResponseUser[0].min_users) {
-      return res
-        .status(422)
-        .json({
-          error:
-            'You can not start this draft because there are not enough users.',
-        });
+      return res.status(422).json({
+        error:
+          'You can not start this draft because there are not enough users.',
+      });
     }
 
     await dbConnection.query('DELETE FROM invitation WHERE lobby_id = ?;', [
