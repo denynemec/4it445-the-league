@@ -65,13 +65,12 @@ router.post(
           error: '422: Emails are not in interval <minEmails, maxEmails>',
         });
       }
-      /*
-      if (draftStartTime < Date.now) {
+
+      if (Date.parse(draftStartTime) < Date.now()) {
         return res.status(422).json({
           error: 'Draft time must be in the future',
         });
       }
-      */
     } else {
       return res.status(422).json({
         error: '422: The game was cancelled.',
