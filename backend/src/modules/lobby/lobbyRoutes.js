@@ -431,6 +431,11 @@ router.post(
       lobbyId,
     ]);
 
+    await dbConnection.query(
+      'UPDATE lobby SET max_players = ? WHERE lobby_id = ?;',
+      [dbResponseUser[0].userCount, lobbyId],
+    );
+
     const dbResponsePlayers = await dbConnection.query(
       `SELECT user_id FROM lobby_user WHERE draft_order IS NULL and lobby_id = ? ORDER BY RAND();`,
       [lobbyId],
