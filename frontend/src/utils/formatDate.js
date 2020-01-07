@@ -12,12 +12,15 @@ export const formatDate = dateOrStringDate => {
   return format(parsedDate, DATE_FORMAT);
 };
 
-
 export const formatDateTime = dateOrStringDate => {
   let parsedDate = dateOrStringDate;
-
-  if (typeof dateOrStringDate === 'string') {
+  if (
+    typeof dateOrStringDate === 'string' &&
+    dateOrStringDate !== 'undefined'
+  ) {
     parsedDate = parseISO(dateOrStringDate);
+    return format(parsedDate, DATETIME_FORMAT);
+  } else {
+    return 'undefined';
   }
-  return format(parsedDate, DATETIME_FORMAT);
 };

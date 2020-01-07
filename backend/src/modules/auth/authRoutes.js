@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { check, validationResult } from 'express-validator';
 
 import { DB_CONNECTION_KEY } from '../../libs/connection';
