@@ -32,6 +32,7 @@ export const DraftDetail = () => {
   const positonsEnumState = useFetchRequest(
     ENDPOINTS.enumLobbyPositions(lobbyId),
   );
+  const teamsEnumState = useFetchRequest(ENDPOINTS.enumLobbyTeams(lobbyId));
 
   const updateDraftState = useCallback(
     (
@@ -99,55 +100,59 @@ export const DraftDetail = () => {
       errorList={[
         { id: 1, error: fetchDraftState.error },
         { id: 2, error: positonsEnumState.error },
+        { id: 3, error: teamsEnumState.error },
       ]}
     >
-      {(fetchDraftState.isLoading || positonsEnumState.isLoading) && (
-        <LoadingSpinner />
-      )}
+      {(fetchDraftState.isLoading ||
+        positonsEnumState.isLoading ||
+        teamsEnumState.isLoading) && <LoadingSpinner />}
 
-      {typeof draftStateData !== 'undefined' && positonsEnumState.data && (
-        <>
-          <Heading className="flex justify-center pb2">
-            {t('Page.Draft.Heading')}
-          </Heading>
-
-          <TimerCountdown
-            timeLeft={draftStateData.timeLeft}
-            isPaused={draftStateData.isPaused}
-          />
-
-          <Layout pt3>
-            <Heading className="flex justify-center pb2" size="md">
-              {t('Page.Draft.DraftOrderHeading')}
+      {typeof draftStateData !== 'undefined' &&
+        positonsEnumState.data &&
+        teamsEnumState.data && (
+          <>
+            <Heading className="flex justify-center pb2">
+              {t('Page.Draft.Heading')}
             </Heading>
 
-            <DraftOrder
-              data={draftStateData.draftOrder}
-              activeDraftOrder={draftStateData.activeDraftOrder}
+            <TimerCountdown
+              timeLeft={draftStateData.timeLeft}
+              isPaused={draftStateData.isPaused}
             />
-          </Layout>
 
-          <Layout pt3>
-            <Heading className="flex justify-center pb2" size="md">
-              {t('Page.Draft.MyTeamHeading')}
-            </Heading>
+            <Layout pt3>
+              <Heading className="flex justify-center pb2" size="md">
+                {t('Page.Draft.DraftOrderHeading')}
+              </Heading>
 
-            <MyTeam data={draftStateData.myTeam} />
-          </Layout>
+              <DraftOrder
+                data={draftStateData.draftOrder}
+                activeDraftOrder={draftStateData.activeDraftOrder}
+              />
+            </Layout>
 
-          <Layout pt3>
-            <Heading className="flex justify-center pb2" size="md">
-              {t('Page.Draft.DraftTableHeading')}
-            </Heading>
+            <Layout pt3>
+              <Heading className="flex justify-center pb2" size="md">
+                {t('Page.Draft.MyTeamHeading')}
+              </Heading>
 
-            <DraftPlayersTable
-              positions={positonsEnumState.data}
-              draftPlayersList={draftStateData.draftPlayersList}
-              userOnTurn={draftStateData.userOnTurn}
-            />
-          </Layout>
-        </>
-      )}
+              <MyTeam data={draftStateData.myTeam} />
+            </Layout>
+
+            <Layout pt3>
+              <Heading className="flex justify-center pb2" size="md">
+                {t('Page.Draft.DraftTableHeading')}
+              </Heading>
+
+              <DraftPlayersTable
+                positions={positonsEnumState.data}
+                teams={teamsEnumState.data}
+                draftPlayersList={draftStateData.draftPlayersList}
+                userOnTurn={draftStateData.userOnTurn}
+              />
+            </Layout>
+          </>
+        )}
     </LoggedInPageLayout>
   );
 };
