@@ -32,7 +32,7 @@ export const DraftDetail = () => {
   const positonsEnumState = useFetchRequest(
     ENDPOINTS.enumLobbyPositions(lobbyId),
   );
-  const teamsEnumState = useFetchRequest(ENDPOINTS.enumLobbyTeams(lobbyId));
+  const teamsEnumState = useFetchRequest(ENDPOINTS.enumTeamsPositions(lobbyId));
 
   const updateDraftState = useCallback(
     (
