@@ -11,3 +11,4 @@ export { ResetPassword } from './resetPassword';
 export { SettingsPage } from './settings';
 export { DraftDetail } from './draftDetail';
 export { ResetPasswordConfirmationPage } from './resetPasswordConfirmation';
+export { NominationDetailPage } from './nominationDetail';

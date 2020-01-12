@@ -208,7 +208,8 @@
         "semifinals": "Semifinále",
         "final": "Finále",
         "total": "Celkem"
-      }
+      },
+      "NextRoundNomination": "Nominace hráčů pro nejbližší zápas"
     },
     "BeforeDraftLobbyDetail": {
       "Heading": "Lobby {{name}}",

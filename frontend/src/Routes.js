@@ -16,6 +16,7 @@ import {
   DraftDetail,
   ResetPasswordConfirmationPage,
   AdministrationPage,
+  NominationDetailPage,
 } from './pages';
 import { useAuth, hasPrivilege } from './utils';
 
@@ -69,6 +70,11 @@ export function Routes() {
         path={PATHNAMES.draftDetail()}
         exact
         component={DraftDetail}
+      />
+      <PrivateRoute
+        path={PATHNAMES.nominationDetail()}
+        exact
+        component={NominationDetailPage}
       />
 
       {/* Login and privilege required routes */}

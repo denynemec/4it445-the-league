@@ -21,6 +21,8 @@ export default {
   draftDetail: () => '/lobby/:lobbyId/draft',
   getDraftDetail: id => `/lobby/${id}/draft`,
   administration: () => '/administration',
+  nominationDetail: () => '/lobby/:lobbyId/nomination',
+  getNominationDetail: id => `/lobby/${id}/nomination`,
 };
 
 const registrationBase = '/registration';

@@ -1,17 +1,22 @@
 import React from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import PATHNAMES from '../../pathnames';
 
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { ColumnGroup } from 'primereact/columngroup';
 import { Row } from 'primereact/row';
 import { Heading, Layout } from '../../atoms';
+import { Button } from 'reactstrap';
 
 export const AfterDraftLobbyDetail = ({
   profitsPerRound,
   usersInNomination,
 }) => {
   const { t } = useTranslation();
+  const history = useHistory();
+  const { lobbyId } = useParams();
 
   const roundColumn = {
     key: 'note',
@@ -73,6 +78,15 @@ export const AfterDraftLobbyDetail = ({
 
   return (
     <>
+      <Layout pt3 flex justify-center>
+        <Button
+          color="primary"
+          onClick={() => history.push(PATHNAMES.getNominationDetail(lobbyId))}
+        >
+          {t('Page.AfterDraftLobbyDetail.NextRoundNomination')}
+        </Button>
+      </Layout>
+
       <Layout pt3>
         <Heading className="flex justify-center pb2" size="md">
           {t('Page.AfterDraftLobbyDetail.Header')}
