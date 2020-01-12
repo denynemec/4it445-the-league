@@ -7,24 +7,13 @@ import PATHNAMES from '../../pathnames';
 import { Layout } from '../../atoms';
 import { Button } from 'reactstrap';
 
-export const DraftInProgress = ({
-  draftState,
-  lobbyDetailInfo,
-  userCount,
-  notAcceptedInvitation,
-  userIsGroupOwner,
-}) => {
+export const DraftInProgressTmpButton = ({ draftState }) => {
   const { t } = useTranslation();
   const { lobbyId } = useParams();
   const history = useHistory();
 
   return (
     <Layout pt3 flex justify-center>
-      <InDraftLobbyDetail
-        lobbyDetailInfo={lobbyDetailInfo}
-        userCount={userCount}
-        notAcceptedInvitation={notAcceptedInvitation}
-      />
       <Button
         color="primary"
         onClick={() => history.push(PATHNAMES.getDraftDetail(lobbyId))}

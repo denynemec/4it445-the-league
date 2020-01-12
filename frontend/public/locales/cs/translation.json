@@ -226,6 +226,14 @@
       "SendReminder": "Poslat upomínku",
       "Sport": "Sport: {{name}}"
     },
+    "InDraftLobbyDetail": {
+      "Heading": "Lobby {{name}}",
+      "DraftStatus": "Probíhá draft",
+      "MinUsers": "Minimální počet uživatelů: {{minUsers}}",
+      "MaxUsers": "Maximální počet uživatelů: {{maxUsers}}",
+      "UserCount": "Počet připojených uživatelů: {{userCount}}",
+      "Sport": "Sport: {{name}}"
+    },
     "PlayersTableHeader": {
       "PlayerName": "Jméno hráče",
       "Team": "Tým",

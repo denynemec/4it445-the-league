@@ -8,6 +8,7 @@ import { useFetchRequest, useRequest } from '../../utils';
 import { DraftFinished } from './DraftFinished';
 import { DraftInProgress } from './DraftInProgress';
 import { DraftNotStarted } from './DraftNotStarted';
+import { DraftInProgressTmpButton } from './DraftInProgressTmpButton';
 
 export const LobbyDetail = () => {
   const { lobbyId } = useParams();
@@ -45,11 +46,17 @@ export const LobbyDetail = () => {
           )}
 
           {lobbyState.data.draftStatus === 'IN_PROGRESS' && (
-            <DraftInProgress draftState={draftState} />
+            <DraftInProgress
+              draftState={draftState}
+              lobbyDetailInfo={lobbyState.data.lobbyDetailInfo}
+              userCount={lobbyState.data.userCount}
+              notAcceptedInvitation={lobbyState.data.notAcceptedInvitation}
+              userIsGroupOwner={lobbyState.data.userIsGroupOwner}
+            />
           )}
 
           {/* TMP solution for show to draft button */}
-          <DraftInProgress draftState={draftState} />
+          <DraftInProgressTmpButton draftState={draftState} />
 
           {lobbyState.data.draftStatus === 'FINISHED' && (
             <DraftFinished
