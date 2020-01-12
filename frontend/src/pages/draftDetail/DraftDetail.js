@@ -173,11 +173,9 @@ const getDraftPlayers = (draftPlayers, selectedPlayersIdList) =>
 
 // Static text for now, in future re-design and circular timer or something like that?
 const TimerCountdown = ({ timeLeft, isPaused }) => {
-  const timeLeftFloor = Math.floor(timeLeft);
+  const min = Math.floor(timeLeft / 60);
 
-  const min = timeLeftFloor / 60;
-
-  const sec = timeLeftFloor % 60;
+  const sec = Math.floor(timeLeft % 60);
 
   return (
     <Layout flex justify-center>
