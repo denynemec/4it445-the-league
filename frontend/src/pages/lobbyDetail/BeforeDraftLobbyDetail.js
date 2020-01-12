@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Jumbo } from '../../molecules';
 import { Paragraph } from '../../atoms';
 import { formatDateTime } from '../../utils';
-import { Button } from 'reactstrap';
+import { Button, Badge } from 'reactstrap';
 
 export const BeforeDraftLobbyDetail = ({
   lobbyDetailInfo,
@@ -20,15 +20,20 @@ export const BeforeDraftLobbyDetail = ({
       mainBody={lobbyDetailInfo[0].event}
     >
       <Paragraph>
+        <h2>
+          <Badge color="danger" pill>
+            {t('Page.BeforeDraftLobbyDetail.DraftStartTime', {
+              date: formatDateTime(lobbyDetailInfo[0].draftStartAt),
+            })}
+          </Badge>
+        </h2>
+      </Paragraph>
+      <Paragraph>
         {t('Page.BeforeDraftLobbyDetail.Sport', {
           name: lobbyDetailInfo[0].sport,
         })}
       </Paragraph>
-      <Paragraph>
-        {t('Page.BeforeDraftLobbyDetail.DraftStartTime', {
-          date: formatDateTime(lobbyDetailInfo[0].draftStartAt),
-        })}
-      </Paragraph>
+
       <Paragraph>
         {t('Page.BeforeDraftLobbyDetail.MinUsers', {
           minUsers: lobbyDetailInfo[0].minUsers,

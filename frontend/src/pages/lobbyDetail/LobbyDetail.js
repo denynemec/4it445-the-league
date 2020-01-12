@@ -57,6 +57,13 @@ export const LobbyDetail = () => {
               playersInLobby={lobbyState.data.playersInLobby}
               usersInNomination={lobbyState.data.usersInNomination}
               profitsPerRound={lobbyState.data.profitsPerRound}
+              lobbyPlayersList={lobbyState.data.lobbyPlayersList}
+              positions={positonsEnumState.data}
+              userIsGroupOwner={lobbyState.data.userIsGroupOwner}
+              draftState={draftState}
+              lobbyDetailInfo={lobbyState.data.lobbyDetailInfo}
+              userCount={lobbyState.data.userCount}
+              notAcceptedInvitation={lobbyState.data.notAcceptedInvitation}
             />
           )}
         </>

@@ -208,11 +208,17 @@
         "semifinals": "Semifinále",
         "final": "Finále",
         "total": "Celkem"
-      }
+      },
+      "Heading": "Lobby {{name}}",
+      "DraftStatus": "Hra v průběhu, draft již proběhl",
+      "MinUsers": "Minimální počet uživatelů: {{minUsers}}",
+      "MaxUsers": "Maximální počet uživatelů: {{maxUsers}}",
+      "UserCount": "Počet připojených uživatelů: {{userCount}}",
+      "Sport": "Sport: {{name}}"
     },
     "BeforeDraftLobbyDetail": {
       "Heading": "Lobby {{name}}",
-      "DraftStartTime": "Začátek draftu {{date}}",
+      "DraftStartTime": "Hra zatím nezačala, začátek draftu {{date}}",
       "MinUsers": "Minimální počet uživatelů: {{minUsers}}",
       "MaxUsers": "Maximální počet uživatelů: {{maxUsers}}",
       "UserCount": "Počet připojených uživatelů: {{userCount}}",
