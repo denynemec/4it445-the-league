@@ -3,7 +3,6 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Jumbo } from '../../molecules';
 import { Paragraph } from '../../atoms';
-import { formatDateTime } from '../../utils';
 import { Button, Badge } from 'reactstrap';
 
 import PATHNAMES from '../../pathnames';

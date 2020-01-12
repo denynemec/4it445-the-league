@@ -1,7 +1,6 @@
 import React from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { InDraftLobbyDetail } from './InDraftLobbyDetail';
 
 import PATHNAMES from '../../pathnames';
 import { Layout } from '../../atoms';

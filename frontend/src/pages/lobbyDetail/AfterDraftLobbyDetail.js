@@ -7,8 +7,7 @@ import { ColumnGroup } from 'primereact/columngroup';
 import { Row } from 'primereact/row';
 import { Heading, Layout, Paragraph } from '../../atoms';
 import { Jumbo } from '../../molecules';
-import { Button, Badge } from 'reactstrap';
-import { formatDateTime } from '../../utils';
+import { Badge } from 'reactstrap';
 
 export const AfterDraftLobbyDetail = ({
   profitsPerRound,
