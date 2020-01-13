@@ -39,4 +39,22 @@ router.get('/positions/:lobbyId', async (req, res, next) => {
   res.json(positions);
 });
 
+router.get('/teams/:lobbyId', async (req, res, next) => {
+  const { lobbyId } = req.params;
+  const dbConnection = req[DB_CONNECTION_KEY];
+
+  // TODO better connection please
+
+  const dbTeams = await dbConnection.query('SELECT name FROM team');
+
+  const teams = dbTeams
+    .map(({ name: label }) => ({
+      label,
+      value: label,
+    }))
+    .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
+
+  res.json(teams);
+});
+
 export default router;

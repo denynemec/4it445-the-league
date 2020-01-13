@@ -17,6 +17,7 @@ export const DraftNotStarted = ({
   draftState,
   userIsGroupOwner,
   positions,
+  teams,
   lobbyDetailInfo,
   userCount,
   notAcceptedInvitation,
@@ -55,6 +56,7 @@ export const DraftNotStarted = ({
       <LobbyAvailablePlayersTable
         lobbyPlayersList={lobbyPlayersList}
         positions={positions}
+        teams={teams}
       />
 
       {userIsGroupOwner && (

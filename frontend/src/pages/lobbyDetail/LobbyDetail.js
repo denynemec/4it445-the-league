@@ -19,24 +19,28 @@ export const LobbyDetail = () => {
     ENDPOINTS.enumLobbyPositions(lobbyId),
   );
 
+  const teamsEnumState = useFetchRequest(ENDPOINTS.enumTeamsPositions(lobbyId));
+
   return (
     <LoggedInPageLayout
       errorList={[
         { id: 1, error: lobbyState.error },
         { id: 2, error: draftState.error },
         { id: 3, error: positonsEnumState.error },
+        { id: 4, error: teamsEnumState.error },
       ]}
     >
-      {(lobbyState.isLoading || positonsEnumState.isLoading) && (
-        <LoadingSpinner />
-      )}
+      {(lobbyState.isLoading ||
+        positonsEnumState.isLoading ||
+        teamsEnumState.isLoading) && <LoadingSpinner />}
 
-      {lobbyState.data && positonsEnumState.data && (
+      {lobbyState.data && positonsEnumState.data && teamsEnumState.data && (
         <>
           {lobbyState.data.draftStatus === 'NOT_STARTED' && (
             <DraftNotStarted
               lobbyPlayersList={lobbyState.data.lobbyPlayersList}
               positions={positonsEnumState.data}
+              teams={teamsEnumState.data}
               userIsGroupOwner={lobbyState.data.userIsGroupOwner}
               draftState={draftState}
               lobbyDetailInfo={lobbyState.data.lobbyDetailInfo}
@@ -54,10 +58,7 @@ export const LobbyDetail = () => {
               userIsGroupOwner={lobbyState.data.userIsGroupOwner}
             />
           )}
-
-          {/* TMP solution for show to draft button */}
-          <DraftInProgressTmpButton draftState={draftState} />
-
+  
           {lobbyState.data.draftStatus === 'FINISHED' && (
             <DraftFinished
               usersInLobby={lobbyState.data.usersInLobby}

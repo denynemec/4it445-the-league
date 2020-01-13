@@ -9,12 +9,14 @@ import { InputText } from 'primereact/inputtext';
 export const LobbyAvailablePlayersTable = ({
   lobbyPlayersList,
   positions,
+  teams,
   loading,
 }) => {
   const { t } = useTranslation();
 
   const [filterDraftPlayers, setFilterDraftPlayers] = useState('');
   const [filterPositions, setFilterPositions] = useState(null);
+  const [filterTeams, setFilterTeams] = useState(null);
 
   const dataTableRef = useRef('');
 
@@ -28,6 +30,20 @@ export const LobbyAvailablePlayersTable = ({
         setFilterPositions(event.target.value);
 
         dataTableRef.current.filter(event.target.value, 'position', 'in');
+      }}
+    />
+  );
+
+  const teamsFilter = (
+    <MultiSelect
+      style={{ width: '100%' }}
+      className="ui-column-filter"
+      value={filterTeams}
+      options={teams}
+      onChange={event => {
+        setFilterTeams(event.target.value);
+
+        dataTableRef.current.filter(event.target.value, 'team', 'in');
       }}
     />
   );
@@ -86,6 +102,7 @@ export const LobbyAvailablePlayersTable = ({
         header={t('Page.LobbyDetail.LobbyAvailablePlayersTable.Team')}
         sortable
         filter
+        filterElement={teamsFilter}
       />
     </DataTable>
   );
