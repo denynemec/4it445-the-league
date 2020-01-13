@@ -8,7 +8,6 @@ import { useFetchRequest, useRequest } from '../../utils';
 import { DraftFinished } from './DraftFinished';
 import { DraftInProgress } from './DraftInProgress';
 import { DraftNotStarted } from './DraftNotStarted';
-import { DraftInProgressTmpButton } from './DraftInProgressTmpButton';
 
 export const LobbyDetail = () => {
   const { lobbyId } = useParams();
@@ -58,7 +57,7 @@ export const LobbyDetail = () => {
               userIsGroupOwner={lobbyState.data.userIsGroupOwner}
             />
           )}
-  
+
           {lobbyState.data.draftStatus === 'FINISHED' && (
             <DraftFinished
               usersInLobby={lobbyState.data.usersInLobby}
