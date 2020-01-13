@@ -209,6 +209,7 @@
         "final": "Finále",
         "total": "Celkem"
       },
+      "NextRoundNomination": "Nominace hráčů pro nejbližší zápas"
       "Heading": "Lobby {{name}}",
       "DraftStatus": "Hra v průběhu, draft již proběhl",
       "MinUsers": "Minimální počet uživatelů: {{minUsers}}",
@@ -242,6 +243,15 @@
       "EarningsPercent": "% na výdělku",
       "ProfitLoss": "Ušlý zisk",
       "Round": "Kolo"
+    },
+    "Nomination": {
+      "Drafted": "Dostupní hráči",
+      "Nominated": "Nominovaní hráči",
+      "ConfirmedNomination": "Odeslaná nominace",
+      "Selected": "Vybráno {{selectedRows.length}} hráčů",
+      "ConfirmNomination": "Odeslat nominaci",
+      "NominatePlayer": "Vybrat hráče",
+      "RemovePlayerNomination": "Odebrat hráče"
     }
   },
   "Validations": {

@@ -1,10 +1,13 @@
 import React from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import PATHNAMES from '../../pathnames';
 
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { ColumnGroup } from 'primereact/columngroup';
 import { Row } from 'primereact/row';
+import { Button } from 'reactstrap';
 import { Heading, Layout, Paragraph } from '../../atoms';
 import { Jumbo } from '../../molecules';
 import { Badge } from 'reactstrap';
@@ -18,6 +21,8 @@ export const AfterDraftLobbyDetail = ({
   userIsGroupOwner,
 }) => {
   const { t } = useTranslation();
+  const history = useHistory();
+  const { lobbyId } = useParams();
 
   const roundColumn = {
     key: 'note',
@@ -79,6 +84,15 @@ export const AfterDraftLobbyDetail = ({
 
   return (
     <>
+      <Layout pt3 flex justify-center>
+        <Button
+          color="primary"
+          onClick={() => history.push(PATHNAMES.getNominationDetail(lobbyId))}
+        >
+          {t('Page.AfterDraftLobbyDetail.NextRoundNomination')}
+        </Button>
+      </Layout>
+
       <Layout pt3>
         <Jumbo
           header={t('Page.AfterDraftLobbyDetail.Heading', {

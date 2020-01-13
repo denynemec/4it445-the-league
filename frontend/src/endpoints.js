@@ -26,6 +26,12 @@ export default {
     `${apiPrefix}/auth/reset-password-confirmation`,
   uploadPlayersToEvent: () =>
     `${apiPrefix}/administration/upload-players-to-event`,
+  getNominationDetail: id => `${apiPrefix}/lobby/${id}/nomination/currentUser`,
+  nominatePlayer: id => `${apiPrefix}/lobby/${id}/nomination/nominatePlayers`,
+  removePlayerNomination: id =>
+    `${apiPrefix}/lobby/${id}/nomination/removePlayerNomination`,
+  validateNomination: id => `${apiPrefix}/lobby/${id}/nomination/validate`,
+  submitNomination: id => `${apiPrefix}/lobby/${id}/nomination/submit`,
 
   // enums
   enumEvents: () => `${enumPrefix}/events`,
