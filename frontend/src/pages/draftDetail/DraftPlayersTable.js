@@ -14,6 +14,7 @@ import ENDPOINTS from '../../endpoints';
 export const DraftPlayersTable = ({
   draftPlayersList,
   positions,
+  teams,
   isDisabled,
   userOnTurn,
 }) => {
@@ -22,6 +23,7 @@ export const DraftPlayersTable = ({
 
   const [filterDraftPlayers, setFilterDraftPlayers] = useState('');
   const [filterPositions, setFilterPositions] = useState(null);
+  const [filterTeams, setFilterTeams] = useState(null);
   const [selectedRow, setSelectedRow] = useState('');
 
   const dataTableRef = useRef('');
@@ -38,6 +40,20 @@ export const DraftPlayersTable = ({
         setFilterPositions(event.target.value);
 
         dataTableRef.current.filter(event.target.value, 'position', 'in');
+      }}
+    />
+  );
+
+  const teamFilter = (
+    <MultiSelect
+      style={{ width: '100%' }}
+      className="ui-column-filter"
+      value={filterTeams}
+      options={teams}
+      onChange={event => {
+        setFilterTeams(event.target.value);
+
+        dataTableRef.current.filter(event.target.value, 'team', 'in');
       }}
     />
   );
@@ -122,6 +138,7 @@ export const DraftPlayersTable = ({
         header={t('Page.Draft.DraftPlayersTable.Team')}
         sortable
         filter
+        filterElement={teamFilter}
       />
     </DataTable>
   );

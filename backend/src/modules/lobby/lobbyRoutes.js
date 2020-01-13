@@ -370,9 +370,25 @@ router.get(
     profitsPerRound.push(cumulatedProfitsArr);
 
     const draftStarted = dbResponsePlayersWithoutDrafOrder.length === 0;
-
-    // TODO map - currently mocked for demo
-    const draftStatus = draftStarted ? 'FINISHED' : 'NOT_STARTED';
+    const dbPickedPLayers = await dbConnection.query(
+      'SELECT count(player_id) as pickedPlayers FROM draft WHERE lobby_id = ?',
+      [lobbyId],
+    );
+    const dbGameResponse = await dbConnection.query(
+      'SELECT draft_players FROM game WHERE game_id = ?;',
+      [gameId],
+    );
+    let draftStatus;
+    if (!draftStarted) {
+      draftStatus = 'NOT_STARTED';
+    } else if (
+      dbPickedPLayers[0].pickedPlayers >=
+      lobbyDetailInfo.maxUsers * dbGameResponse[0].draft_players
+    ) {
+      draftStatus = 'FINISHED';
+    } else {
+      draftStatus = 'IN_PROGRESS';
+    }
 
     const userIsGroupOwner = lobbyDetailInfo[0].leaderId === userId;
 
