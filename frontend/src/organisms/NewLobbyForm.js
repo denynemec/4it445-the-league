@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field as FieldOrigin } from 'formik';
 import ENDPOINTS from '../endpoints';
 import PATHNAMES from '../pathnames';
 import { Layout, ErrorBox } from '../atoms';
-import { Field } from '../organisms';
+import { Field, FlatpickrField } from '../organisms';
 import { Modal } from '../molecules';
 import { Button } from 'reactstrap';
 import { useAlert } from 'react-alert';
@@ -49,7 +49,7 @@ export const NewLobbyForm = ({
       });
     },
 
-    [newLobbyState, history, eventId, alert],
+    [newLobbyState, history, eventId, alert, onCloseClick],
   );
 
   const {
@@ -88,11 +88,14 @@ export const NewLobbyForm = ({
             placeholder={t('Organisms.NewLobbyForm.LobbyNamePlaceholder')}
           />
 
-          <Field
-            type="datetime-local"
+          <FieldOrigin
             name="draftStartTime"
             label={t('Organisms.NewLobbyForm.DraftStartTime')}
             placeholder={t('Organisms.NewLobbyForm.DraftTimePlaceholder')}
+            format={'d.m.Y H:i'}
+            mode={'single'}
+            time={'true'}
+            component={FlatpickrField}
           />
 
           <Field

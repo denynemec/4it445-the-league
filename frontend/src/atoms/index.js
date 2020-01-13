@@ -1,6 +1,7 @@
 export { Button } from './Button';
 export { Error } from './Error';
 export { ErrorBox } from './ErrorBox';
+export { Flatpickr } from './Flatpickr';
 export { Form } from './Form';
 export { Heading } from './Heading';
 export { InfoBox } from './InfoBox';
