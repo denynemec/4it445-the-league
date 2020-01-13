@@ -24,6 +24,7 @@ export const DraftInProgress = ({
         lobbyDetailInfo={lobbyDetailInfo}
         userCount={userCount}
         notAcceptedInvitation={notAcceptedInvitation}
+        draftState={draftState}
       />
       <Button
         color="primary"
