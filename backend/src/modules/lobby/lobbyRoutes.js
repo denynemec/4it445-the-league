@@ -383,7 +383,7 @@ router.get(
       draftStatus = 'NOT_STARTED';
     } else if (
       dbPickedPLayers[0].pickedPlayers >=
-      lobbyDetailInfo.maxUsers * dbGameResponse[0].draft_players
+      lobbyDetailInfo[0].maxUsers * dbGameResponse[0].draft_players
     ) {
       draftStatus = 'FINISHED';
     } else {
