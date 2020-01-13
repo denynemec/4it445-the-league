@@ -16,8 +16,9 @@ export const NominationTable = ({
   positions,
   isDisabled,
   matchId,
-  action,
-  onChange,
+  currentTab,
+  onChangeUpdateState,
+  switchTo,
 }) => {
   const { t } = useTranslation();
   const { lobbyId } = useParams();
@@ -80,40 +81,41 @@ export const NominationTable = ({
     });
   };
 
-  const updateNominationState = () => {
-    onChange();
-  };
-
-  const onClick = () => {
-    if (action === 'nominate') nominatePlayer();
-    else if (action === 'unnominate') removePlayerNomination();
-    updateNominationState();
+  const updateTable = (oldTab, newTab) => {
+    if (oldTab.value === 'Drafted') nominatePlayer();
+    else if (oldTab.value === 'Nominated') removePlayerNomination();
+    onChangeUpdateState(newTab);
   };
 
   const footer = (
-    <Button
-      color="primary"
-      disabled={
-        !selectedRows ||
-        !selectedRows.length ||
-        selectedRows.selected ||
-        isDisabled ||
-        nominationRequest.isLoading
-      }
-      onClick={onClick}
-    >
-      {t('Page.Draft.DraftPlayersTable.PickDraftPlayer')}
-    </Button>
+    <>
+      <Button
+        color="primary"
+        disabled={
+          !selectedRows ||
+          !selectedRows.length ||
+          selectedRows.selected ||
+          isDisabled ||
+          nominationRequest.isLoading
+        }
+        onClick={() => updateTable(currentTab, switchTo)}
+      >
+        {currentTab.value === 'Drafted'
+          ? t('Page.Nomination.NominatePlayer')
+          : currentTab.value === 'Nominated'
+          ? t('Page.Nomination.RemovePlayerNomination')
+          : t('Page.Nomination.Other')}
+      </Button>
+      <div style={{ textAlign: 'left' }}>{selectedRows.length}</div>
+    </>
   );
 
   return (
     <DataTable
       value={playersList}
       header={header}
-      footer={footer}
-      paginator
-      rows={10}
-      rowsPerPageOptions={[10, 20, 50, 100]}
+      footer={currentTab.value === 'ConfirmedNomination' ? null : footer}
+      rows={18}
       currentPageReportTemplate={t('Page.Draft.DraftPlayersTable.PageReport')}
       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
       selectionMode="multiple"

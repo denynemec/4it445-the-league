@@ -30,6 +30,8 @@ export default {
   nominatePlayer: id => `${apiPrefix}/lobby/${id}/nomination/nominatePlayers`,
   removePlayerNomination: id =>
     `${apiPrefix}/lobby/${id}/nomination/removePlayerNomination`,
+  validateNomination: id => `${apiPrefix}/lobby/${id}/nomination/validate`,
+  submitNomination: id => `${apiPrefix}/lobby/${id}/nomination/submit`,
 
   // enums
   enumEvents: () => `${enumPrefix}/events`,
