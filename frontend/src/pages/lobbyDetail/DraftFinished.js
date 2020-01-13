@@ -9,11 +9,22 @@ export const DraftFinished = ({
   playersInLobby,
   usersInNomination,
   profitsPerRound,
+  lobbyPlayersList,
+  draftState,
+  userIsGroupOwner,
+  positions,
+  lobbyDetailInfo,
+  userCount,
+  notAcceptedInvitation,
 }) => (
   <>
     <UsersMenu usersInLobby={usersInLobby} />
 
     <AfterDraftLobbyDetail
+      lobbyDetailInfo={lobbyDetailInfo}
+      userCount={userCount}
+      notAcceptedInvitation={notAcceptedInvitation}
+      userIsGroupOwner={userIsGroupOwner}
       profitsPerRound={profitsPerRound}
       usersInNomination={usersInNomination}
     />

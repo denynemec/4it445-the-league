@@ -1,64 +1,64 @@
 import React from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Jumbo } from '../../molecules';
 import { Paragraph } from '../../atoms';
-import { formatDateTime } from '../../utils';
 import { Button, Badge } from 'reactstrap';
 
-export const BeforeDraftLobbyDetail = ({
+import PATHNAMES from '../../pathnames';
+
+export const InDraftLobbyDetail = ({
+  draftState,
   lobbyDetailInfo,
   userCount,
   notAcceptedInvitation,
   userIsGroupOwner,
 }) => {
   const { t } = useTranslation();
+  const { lobbyId } = useParams();
+  const history = useHistory();
   return (
     <Jumbo
-      header={t('Page.BeforeDraftLobbyDetail.Heading', {
+      header={t('Page.InDraftLobbyDetail.Heading', {
         name: lobbyDetailInfo[0].lobbyName,
       })}
       mainBody={lobbyDetailInfo[0].event}
     >
       <Paragraph>
         <h2>
-          <Badge color="danger" pill>
-            {t('Page.BeforeDraftLobbyDetail.DraftStartTime', {
-              date: formatDateTime(lobbyDetailInfo[0].draftStartAt),
-            })}
+          <Badge color="warning" pill>
+            {t('Page.InDraftLobbyDetail.DraftStatus')}
           </Badge>
         </h2>
       </Paragraph>
       <Paragraph>
-        {t('Page.BeforeDraftLobbyDetail.Sport', {
+        {t('Page.InDraftLobbyDetail.Sport', {
           name: lobbyDetailInfo[0].sport,
         })}
       </Paragraph>
 
       <Paragraph>
-        {t('Page.BeforeDraftLobbyDetail.MinUsers', {
+        {t('Page.InDraftLobbyDetail.MinUsers', {
           minUsers: lobbyDetailInfo[0].minUsers,
         })}
       </Paragraph>
       <Paragraph>
-        {t('Page.BeforeDraftLobbyDetail.MaxUsers', {
+        {t('Page.InDraftLobbyDetail.MaxUsers', {
           maxUsers: lobbyDetailInfo[0].maxUsers,
         })}
       </Paragraph>
       <Paragraph>
-        {t('Page.BeforeDraftLobbyDetail.UserCount', {
+        {t('Page.InDraftLobbyDetail.UserCount', {
           userCount: userCount,
         })}
       </Paragraph>
-      <Paragraph>
-        {t('Page.BeforeDraftLobbyDetail.NotAcceptedInvitation', {
-          email: notAcceptedInvitation,
-        })}
-      </Paragraph>
-      {userIsGroupOwner && (
-        <Button color="primary">
-          {t('Page.BeforeDraftLobbyDetail.SendReminder')}
-        </Button>
-      )}
+      <Button
+        color="primary"
+        onClick={() => history.push(PATHNAMES.getDraftDetail(lobbyId))}
+        disabled={draftState.loading}
+      >
+        {t('Page.LobbyDetail.DraftInProgress.ToDraft')}
+      </Button>
     </Jumbo>
   );
 };

@@ -5,11 +5,17 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { ColumnGroup } from 'primereact/columngroup';
 import { Row } from 'primereact/row';
-import { Heading, Layout } from '../../atoms';
+import { Heading, Layout, Paragraph } from '../../atoms';
+import { Jumbo } from '../../molecules';
+import { Badge } from 'reactstrap';
 
 export const AfterDraftLobbyDetail = ({
   profitsPerRound,
   usersInNomination,
+  lobbyDetailInfo,
+  userCount,
+  notAcceptedInvitation,
+  userIsGroupOwner,
 }) => {
   const { t } = useTranslation();
 
@@ -74,6 +80,43 @@ export const AfterDraftLobbyDetail = ({
   return (
     <>
       <Layout pt3>
+        <Jumbo
+          header={t('Page.AfterDraftLobbyDetail.Heading', {
+            name: lobbyDetailInfo[0].lobbyName,
+          })}
+          mainBody={lobbyDetailInfo[0].event}
+        >
+          <Paragraph>
+            <h2>
+              <Badge color="success" pill>
+                {t('Page.AfterDraftLobbyDetail.DraftStatus', {
+                  name: lobbyDetailInfo[0].status,
+                })}
+              </Badge>
+            </h2>
+          </Paragraph>
+          <Paragraph>
+            {t('Page.AfterDraftLobbyDetail.Sport', {
+              name: lobbyDetailInfo[0].sport,
+            })}
+          </Paragraph>
+
+          <Paragraph>
+            {t('Page.AfterDraftLobbyDetail.MinUsers', {
+              minUsers: lobbyDetailInfo[0].minUsers,
+            })}
+          </Paragraph>
+          <Paragraph>
+            {t('Page.AfterDraftLobbyDetail.MaxUsers', {
+              maxUsers: lobbyDetailInfo[0].maxUsers,
+            })}
+          </Paragraph>
+          <Paragraph>
+            {t('Page.AfterDraftLobbyDetail.UserCount', {
+              userCount: userCount,
+            })}
+          </Paragraph>
+        </Jumbo>
         <Heading className="flex justify-center pb2" size="md">
           {t('Page.AfterDraftLobbyDetail.Header')}
         </Heading>
