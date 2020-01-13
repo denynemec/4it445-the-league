@@ -210,15 +210,29 @@
         "total": "Celkem"
       },
       "NextRoundNomination": "Nominace hráčů pro nejbližší zápas"
+      "Heading": "Lobby {{name}}",
+      "DraftStatus": "Hra v průběhu, draft již proběhl",
+      "MinUsers": "Minimální počet uživatelů: {{minUsers}}",
+      "MaxUsers": "Maximální počet uživatelů: {{maxUsers}}",
+      "UserCount": "Počet připojených uživatelů: {{userCount}}",
+      "Sport": "Sport: {{name}}"
     },
     "BeforeDraftLobbyDetail": {
       "Heading": "Lobby {{name}}",
-      "DraftStartTime": "Začátek draftu {{date}}",
+      "DraftStartTime": "Hra zatím nezačala, začátek draftu {{date}}",
       "MinUsers": "Minimální počet uživatelů: {{minUsers}}",
       "MaxUsers": "Maximální počet uživatelů: {{maxUsers}}",
       "UserCount": "Počet připojených uživatelů: {{userCount}}",
       "NotAcceptedInvitation": "Nepřijaté pozvánky: {{email}}",
       "SendReminder": "Poslat upomínku",
+      "Sport": "Sport: {{name}}"
+    },
+    "InDraftLobbyDetail": {
+      "Heading": "Lobby {{name}}",
+      "DraftStatus": "Probíhá draft",
+      "MinUsers": "Minimální počet uživatelů: {{minUsers}}",
+      "MaxUsers": "Maximální počet uživatelů: {{maxUsers}}",
+      "UserCount": "Počet připojených uživatelů: {{userCount}}",
       "Sport": "Sport: {{name}}"
     },
     "PlayersTableHeader": {

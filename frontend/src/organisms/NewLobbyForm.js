@@ -49,7 +49,7 @@ export const NewLobbyForm = ({
       });
     },
 
-    [newLobbyState, history, eventId, alert],
+    [newLobbyState, history, eventId, alert, onCloseClick],
   );
 
   const {
