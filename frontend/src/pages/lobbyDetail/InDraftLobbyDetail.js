@@ -11,8 +11,6 @@ export const InDraftLobbyDetail = ({
   draftState,
   lobbyDetailInfo,
   userCount,
-  notAcceptedInvitation,
-  userIsGroupOwner,
 }) => {
   const { t } = useTranslation();
   const { lobbyId } = useParams();
