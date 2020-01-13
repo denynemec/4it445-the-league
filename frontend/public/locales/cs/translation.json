@@ -209,7 +209,7 @@
         "final": "Finále",
         "total": "Celkem"
       },
-      "NextRoundNomination": "Nominace hráčů pro nejbližší zápas"
+      "NextRoundNomination": "Nominace hráčů pro nejbližší zápas",
       "Heading": "Lobby {{name}}",
       "DraftStatus": "Hra v průběhu, draft již proběhl",
       "MinUsers": "Minimální počet uživatelů: {{minUsers}}",
